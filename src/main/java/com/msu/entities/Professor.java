@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name="professor")
 public class Professor {
-	
+	// hi
 	@Id
 	private int id;
 	
