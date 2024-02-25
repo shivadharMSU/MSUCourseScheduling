@@ -32,6 +32,7 @@ public class ProfessorController {
     
     @GetMapping("/professors")
     public String getProfessorList(Model model) {
+        //professors
             List<Professor> list = new ArrayList<Professor>();
             Iterable<Professor> ans = professorService.findAll();
             for(Professor prof:ans) {
