@@ -31,8 +31,11 @@ public class ProfessorServiceImpl implements ProfessorService{
 
 	@Override
 	public void saveProfessorDetails(ProfessorDetails professorDetails) {
-		
-		
+		try {
+			professorRegistry.save(professorDetails);
+		}catch(Exception ex) {
+			System.out.println("Exception while saving professorDetails "+ex);
+		}
 	}
 
 
