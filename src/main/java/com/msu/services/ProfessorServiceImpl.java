@@ -1,10 +1,12 @@
 package com.msu.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.msu.entities.Professor;
-import com.msu.repositories.ProfessorRepository;
+import com.msu.entities.ProfessorDetails;
+import com.msu.repositories.ProfessorDetailsRepository;
 
 
 
@@ -12,21 +14,26 @@ import com.msu.repositories.ProfessorRepository;
 public class ProfessorServiceImpl implements ProfessorService{
 	
 	@Autowired
-	private ProfessorRepository professorRegistry;
+	private ProfessorDetailsRepository	 professorRegistry;
 
 	@Override
-	public Iterable<Professor> findAll() {
-		// TODO Auto-generated method stub
-		Iterable<Professor> all = professorRegistry.findAll();
-	return all;
-	}
-
-	@Override
-	public void save(Professor professor) {
-		professor.setId(2);
-		professorRegistry.save(professor);
+	public List<ProfessorDetails> findAll() {
+		try {
+			return professorRegistry.findAll();
+			
+		}catch(Exception ex) {
+			System.out.println("Exception while fetching "+ex);
+		}
+		return null;
 		
 	}
+
+	@Override
+	public void saveProfessorDetails(ProfessorDetails professorDetails) {
+		
+		
+	}
+
 
 	
 }

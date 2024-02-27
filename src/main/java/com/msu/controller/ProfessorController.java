@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import com.msu.entities.Professor;
 import com.msu.services.ProfessorService;
 
 @Controller
@@ -30,20 +29,16 @@ public class ProfessorController {
 //        return "products";
 //    }
     
-    @GetMapping("/professors")
+    @GetMapping("/getProfessors")
     public String getProfessorList(Model model) {
-        //professors
-            List<Professor> list = new ArrayList<Professor>();
-            Iterable<Professor> ans = professorService.findAll();
-            for(Professor prof:ans) {
-            	list.add(prof);
-            }
-            model.addAttribute("professors", list);
-            return "professors";
+       
+    	
+    	model.addAttribute("professors", professorService.findAll());
+		return "professors";
             
     }
     
-    @GetMapping("/create")
+   /* @GetMapping("/create")
     public String showCreateForm(Model model) {
         model.addAttribute("professor", new Professor());
         return "createProfessor";
@@ -54,5 +49,5 @@ public class ProfessorController {
     	professorService.save(professor);
         return "/create";
     }
-
+*/
 }

@@ -1,11 +1,13 @@
 package com.msu.services;
 
-import com.msu.entities.Professor;
+import java.util.List;
+
+import com.msu.entities.ProfessorDetails;
 
 public interface ProfessorService {
 	
-	public Iterable<Professor> findAll();
-	public void save(Professor professor);
+     public List<ProfessorDetails> findAll();
+     public void saveProfessorDetails(ProfessorDetails professorDetails);
 	
 
 }

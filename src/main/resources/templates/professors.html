@@ -23,10 +23,9 @@
         <tbody>
         <tr th:each="professor : ${professors}">
             <td th:text="${professor.name}"></td>
+            <td th:text="${professor.courseLoad}"></td>
+            <td th:text="${professor.schedule}"></td>
             <td th:text="${professor.professorType}"></td>
-            <td th:text="${professor.listOfCourses}"></td>
-            <td th:text="${professor.availableTime}"></td>
-             <td th:text="${professor.availableDay}"></td>
          
         </tr>
         </tbody>
