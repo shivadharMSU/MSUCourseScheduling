@@ -1,27 +1,142 @@
-/* CSS (detailsManagement.css) */
-.btn-outline-primary {
-    margin-right: 5px; /* Spacing between buttons */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.btn-outline-primary.active {
-    background-color: #007bff;
-    color: white;
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    padding: 20px;
 }
 
-/* Ensure that input fields are not too wide */
-#startTime, #endTime {
-    width: auto;
+/* Styling the form container */
+.form-container {
+    background-color: #fff;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    margin-bottom: 20px;
+    margin-top: 30px;
 }
 
-/* Remove float and use modern CSS */
-#submitBtn {
+/* Input fields and labels */
+label {
     display: block;
-    width: fit-content;
-    margin-left: auto; /* Aligns the button to the right */
+    font-size: 16px;
+    margin-bottom: 5px;
+    color: #333;
 }
 
-/* Style for the professors list, if needed */
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* Styling the suggestion box */
+.suggestions {
+    display: none;
+    position: absolute;
+    border: 1px solid #ccc;
+    border-top: none;
+    z-index: 1000;
+    width: calc(100% - 40px);
+    background-color: #fff;
+}
+
+.suggestions div {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
+
+.suggestions div:last-child {
+    border-bottom: none;
+}
+
+.suggestions div:hover {
+    background-color: #f9f9f9;
+}
+
+/* Styling for dynamic time slot entries */
+#timeSlots {
+    margin-top: 10px;
+}
+
+#timeSlots div {
+    padding: 10px;
+    background-color: #f9f9f9;
+    margin-bottom: 8px;
+    border-radius: 4px;
+}
+
+/* Button styles */
+button {
+    padding: 10px 15px;
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+button:hover {
+    background-color: #4cae4c;
+}
+
+#submitBtn {
+    background-color: #337ab7;
+    margin-left: 366px; /* This can be adjusted or removed based on layout */
+    margin-bottom: 5px;
+}
+
+#submitBtn:hover {
+    background-color: #286090;
+}
+
+/* Styling for professors' display */
 #professorsContainer {
-    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
 }
 
+.professor-box {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    display: flex;
+    justify-content: space-between; /* Separate name and buttons */
+    align-items: center;
+    width: 100%; /* Full width within container */
+    max-width: 1000px;
+    margin-bottom: 10px;
+}
+
+.professor-box .buttons-container {
+    display: flex;
+    gap: 5px;
+}
+
+.professor-box button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.professor-box:hover {
+    background-color: #e9e9e9;
+}
