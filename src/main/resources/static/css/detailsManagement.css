@@ -25,3 +25,9 @@
     margin-top: 20px;
 }
 
+.active-day {
+    background-color: #0d6efd; /* This is the Bootstrap primary color */
+    color: white;
+}
+
+

@@ -99,57 +99,59 @@ function displayProfessors() {
 
         const buttonCol = document.createElement('div');
         buttonCol.classList.add('col', 'text-end');
-        const updateButton = document.createElement('button');
-        updateButton.classList.add('btn', 'btn-primary', 'btn-sm', 'me-2');
-        updateButton.textContent = 'Update';
-        // Add event listeners for update functionality
-        const deleteButton = document.createElement('button');
-        deleteButton.classList.add('btn', 'btn-danger', 'btn-sm');
-        deleteButton.textContent = 'Delete';
-        // Add event listeners for delete functionality
-        buttonCol.appendChild(updateButton);
-        buttonCol.appendChild(deleteButton);
+
+
         row.appendChild(buttonCol);
 
         container.appendChild(row);
     });
 }
 
+function toggleDaySelection(dayId) {
+    var element = document.getElementById('label' + dayId.charAt(0).toUpperCase() + dayId.slice(1));
+    element.classList.toggle('active-day'); // You'll need to define this class in your CSS
+}
+
+
+
 // Function to dynamically add new time slots for professor availability
 // JavaScript Function to add new time slots
 function addAvailabilitySlot() {
-    let timeSlotsDiv = document.getElementById('timeSlots');
+    let timeSlotsDiv = document.getElementById('timeSlotsContainer'); // Corrected ID
+    let index = timeSlotsDiv.children.length + 1; // Adjust to start from 2, assuming 1 is already present in HTML
+
     let newTimeSlotDiv = document.createElement('div');
-    newTimeSlotDiv.classList.add('input-group', 'mb-3');
+    newTimeSlotDiv.classList.add('row', 'align-items-center', 'mb-3');
 
     newTimeSlotDiv.innerHTML = `
-    <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-    <input type="checkbox" class="btn-check" id="mon" autocomplete="off">
-    <label class="btn btn-outline-primary" for="mon">Mon</label>
-    <input type="checkbox" class="btn-check" id="tue" autocomplete="off">
-    <label class="btn btn-outline-primary" for="tue">Tue</label>
-    <input type="checkbox" class="btn-check" id="wed" autocomplete="off">
-    <label class="btn btn-outline-primary" for="wed">Wed</label>
-    <input type="checkbox" class="btn-check" id="thu" autocomplete="off">
-    <label class="btn btn-outline-primary" for="thu">Thu</label>
-    <input type="checkbox" class="btn-check" id="fri" autocomplete="off">
-    <label class="btn btn-outline-primary" for="fri">Fri</label>
-    <input type="checkbox" class="btn-check" id="sat" autocomplete="off">
-    <label class="btn btn-outline-primary" for="sat">Sat</label>
-</div>
-<input type="time" class="form-control" id="startTime" />
-<input type="time" class="form-control" id="endTime" />
-<button class="btn btn-outline-danger" type="button" onclick="removeTimeSlot(this)">Remove</button>
+        <div class="btn-group col-auto" role="group" aria-label="Day Selection">
+            <!-- Include onclick attributes for new slots -->
+            <button class="btn btn-outline-primary" onclick="toggleDaySelection('mon')">Mon</button>
+            <button class="btn btn-outline-primary" onclick="toggleDaySelection('tue')">Tue</button>
+            <button class="btn btn-outline-primary" onclick="toggleDaySelection('wed')">Wed</button>
+            <button class="btn btn-outline-primary" onclick="toggleDaySelection('thu')">Thu</button>
+            <button class="btn btn-outline-primary" onclick="toggleDaySelection('fri')">Fri</button>
+            <button class="btn btn-outline-primary" onclick="toggleDaySelection('sat')">Sat</button>
+        </div>
+        <div class="col">
+            <input type="time" class="form-control" id="startTime${index}" />
+        </div>
+        <div class="col">
+            <input type="time" class="form-control" id="endTime${index}" />
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-outline-danger" type="button" onclick="removeTimeSlot(this)">Remove</button>
+        </div>
     `;
 
     timeSlotsDiv.appendChild(newTimeSlotDiv);
 }
 
-// Function to remove a time slot
+// Corrected removeTimeSlot function (unchanged, correctly targets '.row')
 function removeTimeSlot(element) {
-    // Remove the input group of the time slot
-    element.closest('.input-group').remove();
+    element.closest('.row').remove();
 }
+
 
 
 // Function to handle form submission for professor details
