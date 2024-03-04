@@ -15,6 +15,7 @@ function fetchAllProfessors() {
         .then(response => response.json())
         .then(data => {
             allProfessors = data; // Store the data in the allProfessors variable
+            console.log(allProfessors);
             displayProfessors();
         })
         .catch(error => {
@@ -128,15 +129,13 @@ function addAvailabilitySlot() {
     let newTimeSlotDiv = document.createElement('div');
     newTimeSlotDiv.classList.add('row', 'align-items-center', 'mb-3');
 
+    let days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    let buttonsHtml = days.map(day => `<button class="btn btn-outline-primary" data-day="${day.toLowerCase()}">${day}</button>`).join('');
+
+
     newTimeSlotDiv.innerHTML = `
         <div class="btn-group col-auto" role="group" aria-label="Day Selection">
-            <!-- Include onclick attributes for new slots -->
-            <button class="btn btn-outline-primary" data-day="mon">Mon</button>
-            <button class="btn btn-outline-primary" data-day="tue">Tue</button>
-            <button class="btn btn-outline-primary" data-day="wed">Wed</button>
-            <button class="btn btn-outline-primary" data-day="thu">Thu</button>
-            <button class="btn btn-outline-primary" data-day="fri">Fri</button>
-            <button class="btn btn-outline-primary" data-day="sat">Sat</button>
+            ${buttonsHtml}
         </div>
         <div class="col">
             <input type="time" class="form-control" id="startTime${index}" />
@@ -153,7 +152,7 @@ function addAvailabilitySlot() {
 
     newTimeSlotDiv.querySelectorAll('.btn-outline-primary').forEach(button => {
         button.addEventListener('click', function () {
-            toggleDaySelection(this.getAttribute('data-day'));
+            toggleDaySelection(this);
         });
     });
 }
@@ -163,14 +162,11 @@ function removeTimeSlot(element) {
     element.closest('.row').remove();
 }
 
-function toggleDaySelection(selectedDay) {
-    // Use the data-day attribute to toggle the active class for the correct button
-    const buttons = document.querySelectorAll(`[data-day='${selectedDay}']`);
-    buttons.forEach(button => {
-        button.classList.toggle('active');
-        button.classList.toggle('btn-primary'); // Assuming 'btn-primary' is the active style
-    });
+function toggleDaySelection(button) {
+    button.classList.toggle('active');
+    button.classList.toggle('btn-primary'); // Bootstrap active class
 }
+
 
 
 
