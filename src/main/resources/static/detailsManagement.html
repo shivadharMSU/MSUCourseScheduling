@@ -20,6 +20,7 @@
                 <label for="professorName" class="col-sm-3 col-form-label">Professor Name:</label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control" id="professorName" oninput="searchProfessor()">
+                    <div id="suggestionBox" class="list-group" style="display: none;"></div>
                 </div>
             </div>
 
@@ -60,10 +61,10 @@
                             <button class="btn btn-outline-primary" id="labelSat" onclick="toggleDaySelection('sat')">Sat</button>
                         </div>
                         <div class="col">
-                            <input type="time" class="form-control" id="startTime1" value="12:37" />
+                            <input type="time" class="form-control" id="startTime1" value="" />
                         </div>
                         <div class="col">
-                            <input type="time" class="form-control" id="endTime1" value="13:37" />
+                            <input type="time" class="form-control" id="endTime1" value="" />
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,13 @@
 // JavaScript (detailsManagement.js)
 
 let allProfessors = [];
+let currentProfessorDetails = {};
+fetchAllProfessors();
+
+
+
+
+document.getElementById('professorName').addEventListener('input', searchProfessor);
 
 // Fetch all professors from the server
 function fetchAllProfessors() {
@@ -14,8 +21,6 @@ function fetchAllProfessors() {
             console.error('Error fetching professors:', error);
         });
 }
-
-fetchAllProfessors();
 
 // Dynamically add day buttons with Bootstrap classes
 document.querySelectorAll('.day-button').forEach(button => {
@@ -61,7 +66,7 @@ function selectProfessor(professor) {
 }
 
 function populateAvailabilities(availabilities) {
-    const timeSlotsDiv = document.getElementById('timeSlots');
+    const timeSlotsDiv = document.getElementById('timeSlotsContainer');
     timeSlotsDiv.innerHTML = '';
     availabilities.forEach(availability => {
         const timeSlotRow = document.createElement('div');
@@ -84,7 +89,7 @@ function populateAvailabilities(availabilities) {
     });
 }
 
-document.getElementById('professorName').addEventListener('input', searchProfessor);
+
 
 function displayProfessors() {
     const container = document.getElementById('professorsContainer');
@@ -117,8 +122,8 @@ function toggleDaySelection(dayId) {
 // Function to dynamically add new time slots for professor availability
 // JavaScript Function to add new time slots
 function addAvailabilitySlot() {
-    let timeSlotsDiv = document.getElementById('timeSlotsContainer'); // Corrected ID
-    let index = timeSlotsDiv.children.length + 1; // Adjust to start from 2, assuming 1 is already present in HTML
+    let timeSlotsDiv = document.getElementById('timeSlotsContainer');
+    let index = timeSlotsDiv.children.length + 1;
 
     let newTimeSlotDiv = document.createElement('div');
     newTimeSlotDiv.classList.add('row', 'align-items-center', 'mb-3');
@@ -126,12 +131,12 @@ function addAvailabilitySlot() {
     newTimeSlotDiv.innerHTML = `
         <div class="btn-group col-auto" role="group" aria-label="Day Selection">
             <!-- Include onclick attributes for new slots -->
-            <button class="btn btn-outline-primary" onclick="toggleDaySelection('mon')">Mon</button>
-            <button class="btn btn-outline-primary" onclick="toggleDaySelection('tue')">Tue</button>
-            <button class="btn btn-outline-primary" onclick="toggleDaySelection('wed')">Wed</button>
-            <button class="btn btn-outline-primary" onclick="toggleDaySelection('thu')">Thu</button>
-            <button class="btn btn-outline-primary" onclick="toggleDaySelection('fri')">Fri</button>
-            <button class="btn btn-outline-primary" onclick="toggleDaySelection('sat')">Sat</button>
+            <button class="btn btn-outline-primary" data-day="mon">Mon</button>
+            <button class="btn btn-outline-primary" data-day="tue">Tue</button>
+            <button class="btn btn-outline-primary" data-day="wed">Wed</button>
+            <button class="btn btn-outline-primary" data-day="thu">Thu</button>
+            <button class="btn btn-outline-primary" data-day="fri">Fri</button>
+            <button class="btn btn-outline-primary" data-day="sat">Sat</button>
         </div>
         <div class="col">
             <input type="time" class="form-control" id="startTime${index}" />
@@ -145,6 +150,12 @@ function addAvailabilitySlot() {
     `;
 
     timeSlotsDiv.appendChild(newTimeSlotDiv);
+
+    newTimeSlotDiv.querySelectorAll('.btn-outline-primary').forEach(button => {
+        button.addEventListener('click', function () {
+            toggleDaySelection(this.getAttribute('data-day'));
+        });
+    });
 }
 
 // Corrected removeTimeSlot function (unchanged, correctly targets '.row')
@@ -152,11 +163,45 @@ function removeTimeSlot(element) {
     element.closest('.row').remove();
 }
 
+function toggleDaySelection(selectedDay) {
+    // Use the data-day attribute to toggle the active class for the correct button
+    const buttons = document.querySelectorAll(`[data-day='${selectedDay}']`);
+    buttons.forEach(button => {
+        button.classList.toggle('active');
+        button.classList.toggle('btn-primary'); // Assuming 'btn-primary' is the active style
+    });
+}
+
+
 
 
 // Function to handle form submission for professor details
 function submitProfessorDetails() {
-    // Form submission logic with Bootstrap styling...
+    // Update the currentProfessorDetails object with the form data
+    currentProfessorDetails = {
+        name: document.getElementById('professorName').value,
+        courseLoad: document.getElementById('courseLoad').value,
+        profType: document.getElementById('profType').value,
+        availabilities: [] // This will be populated below
+    };
+
+    // Get all the availability slots
+    const timeSlotRows = document.getElementById('timeSlotsContainer').querySelectorAll('.row');
+    timeSlotRows.forEach(row => {
+        const dayOfWeek = row.querySelector('button.active').textContent; // Assuming active button has the day
+        const startTime = row.querySelector('input[type="time"]:first-child').value;
+        const endTime = row.querySelector('input[type="time"]:last-child').value;
+        currentProfessorDetails.availabilities.push({ dayOfWeek, startTime, endTime });
+    });
+
+    // TODO: Send currentProfessorDetails to the backend
+    console.log(currentProfessorDetails);
 }
 
-document.getElementById('professorName').addEventListener('input', searchProfessor);
+// Bind the event listener to the form submit event
+document.getElementById('professorForm').addEventListener('submit', function (event) {
+    event.preventDefault();
+    submitProfessorDetails();
+});
+
+

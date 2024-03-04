@@ -30,4 +30,13 @@
     color: white;
 }
 
+#suggestionBox {
+    position: absolute;
+    z-index: 1000;
+    width: calc(100% - 30px); /* Adjust width as needed */
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+
 
