@@ -1,4 +1,5 @@
 package com.msu.entities;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,12 +22,9 @@ public class ProfessorDetails {
     @Column(name = "course_load", columnDefinition = "TEXT")
     private String courseLoad;
 
-    @Column(name = "schedule", columnDefinition = "TEXT")
-    private String schedule;
-
     @Column(name = "professor_type")
     private Integer professorType;
-
+    
     // Getters and setters
     public Long getProfessorId() {
         return professorId;
@@ -52,14 +50,6 @@ public class ProfessorDetails {
         this.courseLoad = courseLoad;
     }
 
-    public String getSchedule() {
-        return schedule;
-    }
-
-    public void setSchedule(String schedule) {
-        this.schedule = schedule;
-    }
-
     public Integer getProfessorType() {
         return professorType;
     }
@@ -67,4 +57,6 @@ public class ProfessorDetails {
     public void setProfessorType(Integer professorType) {
         this.professorType = professorType;
     }
+
+
 }

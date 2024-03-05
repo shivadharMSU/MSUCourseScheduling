@@ -9,3 +9,5 @@ public interface ProfessorDetailsRepository extends JpaRepository<ProfessorDetai
 	
 
 }
+
+
