@@ -6,14 +6,42 @@ let currentProfessorDetails = {};
 fetchAllProfessors();
 fetchAllProfessorsTypes();
 
-// Get the input field and suggestion box
-// let inputField = document.getElementById('professorName');
-// let suggestionBox = document.getElementById('suggestionBox');
+//suggestion box hiding
 
-// // Add a blur event listener to the input field
-// inputField.addEventListener('blur', function () {
-//     suggestionBox.style.display = 'none';
-// });
+let isMouseOverProfSuggestionBox = false;
+let isMouseOverProfTypeSuggestionBox = false;
+
+// Professor Name Suggestion Box
+let profInputField = document.getElementById('professorName');
+let profSuggestionBox = document.getElementById('suggestionBox');
+
+// Professor Type Suggestion Box
+let profTypeInputField = document.getElementById('profType');
+let profTypeSuggestionBox = document.getElementById('suggestionBoxProfType');
+
+// Event listeners for mouse enter/leave for professor name suggestion box
+profSuggestionBox.addEventListener('mouseenter', () => isMouseOverProfSuggestionBox = true);
+profSuggestionBox.addEventListener('mouseleave', () => isMouseOverProfSuggestionBox = false);
+
+// Event listeners for mouse enter/leave for professor type suggestion box
+profTypeSuggestionBox.addEventListener('mouseenter', () => isMouseOverProfTypeSuggestionBox = true);
+profTypeSuggestionBox.addEventListener('mouseleave', () => isMouseOverProfTypeSuggestionBox = false);
+
+// Adjusting the blur event listener on the input field for professor name
+profInputField.addEventListener('blur', function () {
+    if (!isMouseOverProfSuggestionBox) {
+        setTimeout(() => profSuggestionBox.style.display = 'none', 100); // Delay hiding to allow click event
+    }
+});
+
+// Adjusting the blur event listener on the input field for professor type
+profTypeInputField.addEventListener('blur', function () {
+    if (!isMouseOverProfTypeSuggestionBox) {
+        setTimeout(() => profTypeSuggestionBox.style.display = 'none', 100); // Delay hiding to allow click event
+    }
+});
+
+// end of suggestion box hiding
 
 document.getElementById('professorName').addEventListener('input', searchProfessor);
 const profTypeSelect = document.getElementById('profType');
