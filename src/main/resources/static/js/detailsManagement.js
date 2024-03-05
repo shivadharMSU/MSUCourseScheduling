@@ -4,8 +4,14 @@ let allProfessors = [];
 let currentProfessorDetails = {};
 fetchAllProfessors();
 
+// Get the input field and suggestion box
+let inputField = document.getElementById('professorName');
+let suggestionBox = document.getElementById('suggestionBox');
 
-
+// Add a blur event listener to the input field
+inputField.addEventListener('blur', function () {
+    suggestionBox.style.display = 'none';
+});
 
 document.getElementById('professorName').addEventListener('input', searchProfessor);
 
@@ -211,7 +217,6 @@ function clearFields() {
 // Bind the event listener to the form submit event
 document.getElementById('professorForm').addEventListener('submit', function (event) {
     event.preventDefault();
-    // submitProfessorDetails(event);
 });
 
 
