@@ -1,5 +1,12 @@
 package com.msu.servicesImpl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.msu.DTO.ProfessorAvailabilityDTO;
 import com.msu.DTO.getProfessorResponseDTO;
 import com.msu.DTO.getProfessorTypeResponseDTO;
@@ -9,14 +16,6 @@ import com.msu.repositories.ProfessorAvailabilityRepository;
 import com.msu.repositories.ProfessorDetailsRepository;
 import com.msu.repositories.ProfessorTypeRepository;
 import com.msu.services.ProfessorService;
-
-import org.hibernate.mapping.Map;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service("professorService")
 public class ProfessorServiceImpl implements ProfessorService {
