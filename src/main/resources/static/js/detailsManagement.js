@@ -124,7 +124,7 @@ function toggleDaySelection(dayId) {
 // JavaScript Function to add new time slots
 function addAvailabilitySlot() {
     let timeSlotsDiv = document.getElementById('timeSlotsContainer');
-    let index = timeSlotsDiv.children.length + 1;
+    let index = timeSlotsDiv.children.length;
 
     let newTimeSlotDiv = document.createElement('div');
     newTimeSlotDiv.classList.add('row', 'align-items-center', 'mb-3');
@@ -157,7 +157,7 @@ function addAvailabilitySlot() {
     });
 }
 
-// Corrected removeTimeSlot function (unchanged, correctly targets '.row')
+
 function removeTimeSlot(element) {
     element.closest('.row').remove();
 }
@@ -168,11 +168,9 @@ function toggleDaySelection(button) {
 }
 
 
+function submitProfessorDetails(event) {
+    event.preventDefault();  // Prevent page reload
 
-
-
-// Function to handle form submission for professor details
-function submitProfessorDetails() {
     // Update the currentProfessorDetails object with the form data
     currentProfessorDetails = {
         name: document.getElementById('professorName').value,
@@ -184,20 +182,36 @@ function submitProfessorDetails() {
     // Get all the availability slots
     const timeSlotRows = document.getElementById('timeSlotsContainer').querySelectorAll('.row');
     timeSlotRows.forEach(row => {
-        const dayOfWeek = row.querySelector('button.active').textContent; // Assuming active button has the day
-        const startTime = row.querySelector('input[type="time"]:first-child').value;
-        const endTime = row.querySelector('input[type="time"]:last-child').value;
-        currentProfessorDetails.availabilities.push({ dayOfWeek, startTime, endTime });
+        const activeButton = row.querySelector('button.active');
+        if (activeButton) {
+            console.log(activeButton.textContent);
+            const dayOfWeek = activeButton.textContent; // Assuming active button has the day
+            const timeInputs = row.querySelectorAll('input[type="time"]');
+            const startTime = timeInputs[0].value; // First time input is start time
+            const endTime = timeInputs[1].value; // Second time input is end time
+            currentProfessorDetails.availabilities.push({ dayOfWeek, startTime, endTime });
+        }
     });
 
     // TODO: Send currentProfessorDetails to the backend
     console.log(currentProfessorDetails);
+    clearFields();
+}
+
+function clearFields() {
+    document.getElementById('professorName').value = '';
+    document.getElementById('courseLoad').value = '';
+    document.getElementById('profType').value = '';
+    const timeSlotsContainer = document.getElementById('timeSlotsContainer');
+    while (timeSlotsContainer.firstChild) {
+        timeSlotsContainer.removeChild(timeSlotsContainer.firstChild);
+    }
 }
 
 // Bind the event listener to the form submit event
 document.getElementById('professorForm').addEventListener('submit', function (event) {
     event.preventDefault();
-    submitProfessorDetails();
+    // submitProfessorDetails(event);
 });
 
 
