@@ -1,19 +1,22 @@
 // JavaScript (detailsManagement.js)
 
 let allProfessors = [];
+let allProfessorTypes = [];
 let currentProfessorDetails = {};
 fetchAllProfessors();
+fetchAllProfessorsTypes();
 
 // Get the input field and suggestion box
-let inputField = document.getElementById('professorName');
-let suggestionBox = document.getElementById('suggestionBox');
+// let inputField = document.getElementById('professorName');
+// let suggestionBox = document.getElementById('suggestionBox');
 
-// Add a blur event listener to the input field
-inputField.addEventListener('blur', function () {
-    suggestionBox.style.display = 'none';
-});
+// // Add a blur event listener to the input field
+// inputField.addEventListener('blur', function () {
+//     suggestionBox.style.display = 'none';
+// });
 
 document.getElementById('professorName').addEventListener('input', searchProfessor);
+const profTypeSelect = document.getElementById('profType');
 
 // Fetch all professors from the server
 function fetchAllProfessors() {
@@ -23,6 +26,18 @@ function fetchAllProfessors() {
             allProfessors = data; // Store the data in the allProfessors variable
             console.log(allProfessors);
             displayProfessors();
+        })
+        .catch(error => {
+            console.error('Error fetching professors:', error);
+        });
+}
+
+function fetchAllProfessorsTypes() {
+    return fetch('http://localhost:8080/getProfessorType')
+        .then(response => response.json())
+        .then(data => {
+            allProfessorTypes = data; // Store the data in the allProfessorTypes variable
+            console.log(allProfessorTypes);
         })
         .catch(error => {
             console.error('Error fetching professors:', error);
@@ -45,11 +60,11 @@ function searchProfessor() {
     const filteredProfessors = allProfessors.filter(professor =>
         professor.name.toLowerCase().includes(input)
     );
-    showSuggestions(filteredProfessors);
+    showSuggestionsforProf(filteredProfessors);
 }
 
 // Function to show suggestions in the suggestion box with Bootstrap classes
-function showSuggestions(suggestions) {
+function showSuggestionsforProf(suggestions) {
     const suggestionBox = document.getElementById('suggestionBox');
     suggestionBox.innerHTML = '';
     suggestions.forEach(professor => {
@@ -62,6 +77,26 @@ function showSuggestions(suggestions) {
         suggestionBox.appendChild(div);
     });
     suggestionBox.style.display = suggestions.length > 0 ? 'block' : 'none';
+}
+
+function showSuggestionsforProfType() {
+    const suggestionBoxProfType = document.getElementById('suggestionBoxProfType');
+    suggestionBoxProfType.innerHTML = '';
+    allProfessorTypes.forEach(professor => {
+        const div = document.createElement('div');
+        div.classList.add('list-group-item', 'list-group-item-action'); // Bootstrap classes
+        div.textContent = professor.type;
+        div.onclick = function () {
+            selectProfessorType(professor);
+        };
+        suggestionBoxProfType.appendChild(div);
+    });
+    suggestionBoxProfType.style.display = allProfessorTypes.length > 0 ? 'block' : 'none';
+}
+
+function selectProfessorType(professor) {
+    document.getElementById('profType').value = professor.type;
+    document.getElementById('suggestionBoxProfType').style.display = 'none';
 }
 
 function selectProfessor(professor) {
