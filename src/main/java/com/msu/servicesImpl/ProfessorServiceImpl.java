@@ -2,6 +2,7 @@ package com.msu.servicesImpl;
 
 import com.msu.DTO.ProfessorAvailabilityDTO;
 import com.msu.DTO.getProfessorResponseDTO;
+import com.msu.DTO.getProfessorTypeResponseDTO;
 import com.msu.entities.ProfessorDetails;
 import com.msu.entities.ProfessorType;
 import com.msu.repositories.ProfessorAvailabilityRepository;
@@ -13,6 +14,7 @@ import org.hibernate.mapping.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -81,5 +83,20 @@ public class ProfessorServiceImpl implements ProfessorService {
 	public List<ProfessorDetails> findAll() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<getProfessorTypeResponseDTO> findAllProfessorType() {
+	    List<ProfessorType> professorTypes = professorTypeRepository.findAll();
+	    List<getProfessorTypeResponseDTO> dtos = new ArrayList<>();
+
+	    for (ProfessorType professorType : professorTypes) {
+	        getProfessorTypeResponseDTO dto = new getProfessorTypeResponseDTO();
+	        dto.setId(professorType.getId()); // Assuming getProfessorTypesResponseDTO has this field
+	        dto.setName(professorType.getType()); // Assuming getProfessorTypesResponseDTO has this field
+	        dtos.add(dto);
+	    }
+
+	    return dtos;
 	}
 }
