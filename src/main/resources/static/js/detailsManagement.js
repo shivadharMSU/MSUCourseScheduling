@@ -124,6 +124,7 @@ function showSuggestionsforProfType() {
 
 function selectProfessorType(professor) {
     document.getElementById('profType').value = professor.type;
+    document.getElementById('profTypeId').value = professor.id;
     document.getElementById('suggestionBoxProfType').style.display = 'none';
 }
 
@@ -174,10 +175,7 @@ function displayProfessors() {
 
         const buttonCol = document.createElement('div');
         buttonCol.classList.add('col', 'text-end');
-
-
         row.appendChild(buttonCol);
-
         container.appendChild(row);
     });
 }
@@ -244,7 +242,7 @@ function submitProfessorDetails(event) {
     currentProfessorDetails = {
         name: document.getElementById('professorName').value,
         courseLoad: document.getElementById('courseLoad').value,
-        profType: document.getElementById('profType').value,
+        profType: document.getElementById('profTypeId').value,
         availabilities: [] // This will be populated below
     };
 
@@ -262,7 +260,28 @@ function submitProfessorDetails(event) {
         }
     });
 
-    // TODO: Send currentProfessorDetails to the backend
+    const apiUrl = 'http://localhost:8080/submitProfessorDetails';
+
+    // Perform the API call to submit professor details
+    fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(currentProfessorDetails), // Convert the currentProfessorDetails object to a JSON string
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            // Handle success response (e.g., displaying a success message)
+            alert('Professor details submitted successfully!');
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            // Handle errors here (e.g., displaying an error message)
+            alert('An error occurred while submitting professor details.');
+        });
+
     console.log(currentProfessorDetails);
     clearFields();
 }
@@ -281,5 +300,3 @@ function clearFields() {
 document.getElementById('professorForm').addEventListener('submit', function (event) {
     event.preventDefault();
 });
-
-
