@@ -59,6 +59,7 @@ public class ProfessorServiceImpl implements ProfessorService {
 					availabilityDTO.setId(availability.getId());
 					// Omitting setProfessorId to avoid redundancy, assuming it's always the same as
 					// the parent professor's ID
+					availabilityDTO.setProfessorId(availability.getProfessorId()); // Assuming getProfessorAvailabilityDTO has this field
 					availabilityDTO.setSemNameId(availability.getSemNameId());
 					availabilityDTO.setDayOfWeek(availability.getDayOfWeek());
 					availabilityDTO.setStartTime(availability.getStartTime());
