@@ -33,6 +33,8 @@ public class CourseDetailsController {
 			ByteArrayInputStream coursepdfreport = DatabasePDFService.coursepdfreport(coursedetails);
 			System.out.println(coursedetails);
 			
+			
+			
 			HttpHeaders headers = new  HttpHeaders();
 			headers.add("Content-Disposition", "attachment; filename=courses.pdf");
 		
