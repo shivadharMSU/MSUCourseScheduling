@@ -1,9 +1,9 @@
 package com.msu.entities;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+
 import jakarta.persistence.Table;
 
 @Entity
@@ -13,18 +13,30 @@ public class Section {
     @Id
     @Column(name = "section_id")
     private Long sectionId;
+    
+    @Column(name = "section_no")
+    private String sectionNo;
 
-    @Column(name = "course_id")
-    private int courseId;
-
-    @Column(name = "sem_id")
-    private int semId;
 
     @Column(name = "capacity")
     private Integer capacity;
 
     @Column(name = "max_capacity")
     private Integer maxCapacity;
+    
+   
+    @Column(name = "professor_id")
+    private Long professor_id;
+    
+    @Column(name = "room_id")
+    private Integer room_id;
+    
+    @Column(name = "cross_section_id")
+    private Integer crossSectionId;
+    
+    @Column(name = "course_semester_mapping_id")
+    private Long courseSemesterMappingId;
+    
 
 	public Long getSectionId() {
 		return sectionId;
@@ -34,21 +46,6 @@ public class Section {
 		this.sectionId = sectionId;
 	}
 
-	public int getCourseId() {
-		return courseId;
-	}
-
-	public void setCourseId(int courseId) {
-		this.courseId = courseId;
-	}
-
-	public int getSemId() {
-		return semId;
-	}
-
-	public void setSemId(int semId) {
-		this.semId = semId;
-	}
 
 	public Integer getCapacity() {
 		return capacity;
@@ -66,6 +63,51 @@ public class Section {
 		this.maxCapacity = maxCapacity;
 	}
 
+	
+
+	public Long getProfessor_id() {
+		return professor_id;
+	}
+
+	public void setProfessor_id(Long professor_id) {
+		this.professor_id = professor_id;
+	}
+
+	public Integer getRoom_id() {
+		return room_id;
+	}
+
+	public void setRoom_id(Integer room_id) {
+		this.room_id = room_id;
+	}
+
+	public Integer getCrossSectionId() {
+		return crossSectionId;
+	}
+
+	public void setCrossSectionId(Integer crossSectionId) {
+		this.crossSectionId = crossSectionId;
+	}
+
+	public Long getCourseSemesterMappingId() {
+		return courseSemesterMappingId;
+	}
+
+	public void setCourseSemesterMappingId(Long courseSemesterMappingId) {
+		this.courseSemesterMappingId = courseSemesterMappingId;
+	}
+
+	public String getSectionNo() {
+		return sectionNo;
+	}
+
+	public void setSectionNo(String sectionNo) {
+		this.sectionNo = sectionNo;
+	}
+
+	
+
+	
 	
     
 }

@@ -35,4 +35,15 @@ public class SectionServiceImpl implements SectionService {
 		
 	}
 
+	@Override
+	public List<Section> findByCourseSemesterMappingId(Long courseSemesterMappingId) {
+		try {
+			return sectionRepository.findByCourseSemesterMappingId(courseSemesterMappingId);
+
+		}catch(Exception ex) {
+			System.out.println("exception while findByCourseSemesterMappingId "+ex);
+		}
+		return null;
+	}
+
 }

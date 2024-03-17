@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.msu.entities.Coursedetails;
+import com.msu.entities.CourseDetails;
 import com.msu.services.CourseDetailsService;
 import com.msu.servicesImpl.DatabasePDFService;
 
@@ -28,7 +28,7 @@ public class CourseDetailsController {
 	@GetMapping(value = "/getallcourses", produces = MediaType.APPLICATION_PDF_VALUE)
 	public ResponseEntity<InputStreamResource> getallcoursedetails() {
 		
-			List<Coursedetails> coursedetails = coursedetailservicce.getcourselist();
+			List<CourseDetails> coursedetails = coursedetailservicce.getcourselist();
 			
 			ByteArrayInputStream coursepdfreport = DatabasePDFService.coursepdfreport(coursedetails);
 			System.out.println(coursedetails);
@@ -42,7 +42,7 @@ public class CourseDetailsController {
 		
 	}
 	@PostMapping("/savecourse")
-	public void SaveCourseDetails(@RequestBody Coursedetails coursedetails) {
+	public void SaveCourseDetails(@RequestBody CourseDetails coursedetails) {
 		
 		coursedetailservicce.saveCourseDetails(coursedetails);
 		

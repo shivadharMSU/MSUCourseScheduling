@@ -16,14 +16,14 @@ import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
-import com.msu.entities.Coursedetails;
+import com.msu.entities.CourseDetails;
 
 public class DatabasePDFService {
 	
 	
 	
 
-	public static ByteArrayInputStream coursepdfreport(List<Coursedetails> coursedetails) {
+	public static ByteArrayInputStream coursepdfreport(List<CourseDetails> coursedetails) {
 		
 		
 		Document doc = new Document();
@@ -48,7 +48,7 @@ public class DatabasePDFService {
             table.addCell(header);
 		});;
 		
-		for(Coursedetails courses : coursedetails) {
+		for(CourseDetails courses : coursedetails) {
 			PdfPCell idcell = new PdfPCell(new Phrase(String.valueOf(courses.getCourseId())));
 			idcell.setPaddingLeft(4);
             idcell.setVerticalAlignment(Element.ALIGN_MIDDLE);
