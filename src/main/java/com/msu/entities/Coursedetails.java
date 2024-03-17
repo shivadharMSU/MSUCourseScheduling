@@ -10,7 +10,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "course_details")
 public class CourseDetails {
-	
+	// ghfv
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "course_id")
