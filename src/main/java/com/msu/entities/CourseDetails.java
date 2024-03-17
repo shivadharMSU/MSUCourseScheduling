@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "course_details")
-public class Coursedetails {
+public class CourseDetails {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,13 +36,13 @@ public class Coursedetails {
 	
 
 
-    public Coursedetails() {
+    public CourseDetails() {
 		super();
 	}
 
 
 
-	public Coursedetails(long courseId, int courseNumber, int crn, String courseName, int termTenure, int credits, boolean computerRequired) {
+	public CourseDetails(long courseId, int courseNumber, int crn, String courseName, int termTenure, int credits, boolean computerRequired) {
         this.courseId = courseId;
         this.courseNumber = courseNumber;
         this.crn = crn;
