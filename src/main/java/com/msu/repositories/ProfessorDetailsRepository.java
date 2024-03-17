@@ -6,7 +6,7 @@ import com.msu.entities.ProfessorDetails;
 
 public interface ProfessorDetailsRepository extends JpaRepository<ProfessorDetails, Long> {
 	
-	
+	public ProfessorDetails findByProfessorId(Long professorId);
 
 }
 

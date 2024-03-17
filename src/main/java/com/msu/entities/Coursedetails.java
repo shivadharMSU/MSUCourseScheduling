@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "course_details")
-public class Coursedetails {
+public class CourseDetails {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,8 +25,7 @@ public class Coursedetails {
 	@Column(name = "course_name")
     private String courseName; 
 	
-	@Column(name = "term_tenure")
-    private int termTenure;
+	
 	
 	@Column(name = "credits")
     private int credits; 
@@ -36,18 +35,17 @@ public class Coursedetails {
 	
 
 
-    public Coursedetails() {
+    public CourseDetails() {
 		super();
 	}
 
 
 
-	public Coursedetails(long courseId, int courseNumber, int crn, String courseName, int termTenure, int credits, boolean computerRequired) {
+	public CourseDetails(long courseId, int courseNumber, int crn, String courseName, int termTenure, int credits, boolean computerRequired) {
         this.courseId = courseId;
         this.courseNumber = courseNumber;
         this.crn = crn;
         this.courseName = courseName;
-        this.termTenure = termTenure;
         this.credits = credits;
         this.computerRequired = computerRequired;
     }
@@ -86,13 +84,7 @@ public class Coursedetails {
         this.courseName = courseName;
     }
 
-    public int getTermTenure() {
-        return termTenure;
-    }
-
-    public void setTermTenure(int termTenure) {
-        this.termTenure = termTenure;
-    }
+   
 
     public int getCredits() {
         return credits;
@@ -119,7 +111,6 @@ public class Coursedetails {
                 ", courseNumber=" + courseNumber +
                 ", crn=" + crn +
                 ", courseName='" + courseName + '\'' +
-                ", termTenure=" + termTenure +
                 ", credits=" + credits +
                 ", computerRequired=" + computerRequired +
                 '}';

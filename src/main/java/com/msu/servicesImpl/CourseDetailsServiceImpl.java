@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.msu.entities.Coursedetails;
+import com.msu.entities.CourseDetails;
 import com.msu.repositories.CoursedetailsRepository;
 import com.msu.services.CourseDetailsService;
 
@@ -16,16 +16,23 @@ public class CourseDetailsServiceImpl implements CourseDetailsService {
 	private CoursedetailsRepository coursedetailsRepository;
 
 	@Override
-	public List<Coursedetails> getcourselist() {
-	    List<Coursedetails> courseDetailsList = coursedetailsRepository.findAll();
+	public List<CourseDetails> getcourselist() {
+	    List<CourseDetails> courseDetailsList = coursedetailsRepository.findAll();
 	    return courseDetailsList;
 	}
 
 	
 	@Override
-	public void saveCourseDetails(Coursedetails coursedetails) {
+	public void saveCourseDetails(CourseDetails coursedetails) {
 		
 		coursedetailsRepository.save(coursedetails);
+		
+	}
+
+
+	@Override
+	public CourseDetails findCourseDetailsByCourseId(Long courseId) {
+		return coursedetailsRepository.findCourseDetailsByCourseId(courseId);
 		
 	}
 

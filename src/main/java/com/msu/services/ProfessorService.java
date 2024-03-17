@@ -15,5 +15,7 @@ public interface ProfessorService {
 	public void saveProfessorDetails(ProfessorDetails professorDetails);
 
 	public List<getProfessorTypeResponseDTO> findAllProfessorType();
+	
+	public ProfessorDetails findByProfessorId(Long professorId);
 
 }

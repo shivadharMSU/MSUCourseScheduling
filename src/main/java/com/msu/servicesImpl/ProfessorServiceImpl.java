@@ -99,4 +99,10 @@ public class ProfessorServiceImpl implements ProfessorService {
 
 	    return dtos;
 	}
+
+	@Override
+	public ProfessorDetails findByProfessorId(Long professorId) {
+	
+		return professorDetailsRepository.findByProfessorId(professorId);
+	}
 }

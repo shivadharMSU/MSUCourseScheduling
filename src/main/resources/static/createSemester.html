@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Semester Form</title>
+  <link rel="stylesheet" href="./css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="./css/semester.css">
+</head>
+<body>
+  <div class="container mt-5">
+    <form id="semesterForm">
+      <div class="form-group">
+        <label for="year">Year:</label>
+        <select class="form-control" id="year" name="year">
+          <!-- Year options will be populated dynamically -->
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="semester">Semester:</label>
+        <select class="form-control" id="semester" name="semester">
+          <option value="1">Spring</option>
+          <option value="2">Summer</option>
+          <option value="3">Fall</option>
+          <option value="4">Winter</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+
+  <script src="./js/createSemester.js"></script>
+</body>
+</html>
