@@ -295,6 +295,87 @@ function clearFields() {
         timeSlotsContainer.removeChild(timeSlotsContainer.firstChild);
     }
 }
+function displayProfessors() {
+    const container = document.getElementById('professorsContainer');
+    container.innerHTML = allProfessors.map((professor, index) => `
+        <div class="professor-item" data-index="${index}">
+            <div class="professor-name" onclick="toggleDetails(${index})">
+                <span class="arrow-icon">&#9660;</span>
+                ${professor.name}
+            </div>
+            <div class="professor-details" id="details-${index}" style="display: none;">
+                <!-- Display professor details here -->
+                <div>Name: ${professor.name}</div>
+                <div>Course Load: ${professor.courseLoad}</div>
+                <div>Professor Type: ${professor.professorTypeName}</div>
+                <div>Availabilities: ${professor.availabilities.map(availability => `
+                        <div>Day: ${availability.dayOfWeek}, Start Time: ${availability.startTime}, End Time: ${availability.endTime}</div>
+                    `).join('')
+        }</div>
+                <div class="professor-controls">
+                    <button type="button" class="btn btn-primary" onclick="editDetails(${index})">Edit</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteProfessor(${index})">Delete</button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+
+
+// Function to toggle the display of details
+function toggleDetails(index) {
+    // Get all the details and header elements
+    const allDetails = document.querySelectorAll('.professor-details');
+    const allHeaders = document.querySelectorAll('.professor-item');
+
+    // Get the clicked elements
+    const detailsDiv = document.getElementById(`details-${index}`);
+    const headerDiv = allHeaders[index];
+
+    // Check if the clicked section is already expanded
+    const isExpanded = headerDiv.classList.contains('expanded');
+
+    // Close all sections
+    allDetails.forEach(element => {
+        element.style.display = 'none';
+    });
+    allHeaders.forEach(element => {
+        element.classList.remove('expanded');
+    });
+
+    // Toggle the clicked section
+    if (!isExpanded) {
+        detailsDiv.style.display = 'block';
+        headerDiv.classList.add('expanded');
+    }
+}
+
+
+// Function to make details editable
+function editDetails(index) {
+    // Retrieve the professor item and make its details editable
+    const professor = allProfessors[index];
+    selectProfessor(professor);
+    window.scrollTo(0, 0);
+    // Code here depends on the HTML structure of your details
+}
+
+// Function to delete a professor
+function deleteProfessor(index) {
+    if (confirm('Are you sure you want to delete this professor?')) {
+        // Code here to send delete request to your API
+        // On success, remove the item from the DOM or refresh the list
+        console.log(`Delete professor at index ${index}`);
+    }
+}
+
+// Function to submit professor details
+function submitProfessorDetails(event) {
+    event.preventDefault();
+    // Code to submit the new details form
+    // This should already be implemented in your code
+}
 
 // Bind the event listener to the form submit event
 document.getElementById('professorForm').addEventListener('submit', function (event) {
