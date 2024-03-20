@@ -277,6 +277,16 @@ public class SemesterServiceImpl implements SemesterService{
 		return list;
 	}
 
+	@Override
+	public Semester findBySemId(Integer semId) {
+		return semesterRepository.findBySemId(semId);
+	}
+
+	@Override
+	public Semester findBySemNameId(Integer semNameId) {
+		return semesterRepository.findBySemNameId(semNameId);
+	}
+
 	
 
 }

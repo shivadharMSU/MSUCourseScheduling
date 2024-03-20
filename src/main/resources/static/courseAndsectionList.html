@@ -78,8 +78,11 @@
                     sectionList.appendChild(sectionItem);
                 });
                 const sectionItemPlus = document.createElement('li');
-                    sectionItemPlus.classList.add('list-group-item');
-                    sectionItemPlus.textContent = `+ add section`;
+                sectionItemPlus.classList.add('list-group-item');
+                const addSectionLink = document.createElement('a');
+                addSectionLink.textContent = '+ add section';
+                addSectionLink.href = `createSection.html?courseId=${course.courseId}&courseSemesterMappingId=${course.courseSemesterMappingId}&courseName=${course.courseName}`;
+                sectionItemPlus.appendChild(addSectionLink);
                     sectionList.appendChild(sectionItemPlus);
                 sectionCardBody.appendChild(sectionList);
                 sectionDiv.appendChild(sectionCardBody);

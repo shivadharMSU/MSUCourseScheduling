@@ -18,7 +18,7 @@ function renderSemesterDetails(data) {
         const yearCell = row.insertCell();
         yearCell.classList.add('text-center', 'align-middle', 'w-25');
         yearCell.innerHTML = `<h3>${year.year}</h3>`;
-
+// hbbb
         year.semesterList.forEach(semester => {
             const semesterCell = row.insertCell();
             semesterCell.classList.add('text-center', 'align-middle', 'w-25');

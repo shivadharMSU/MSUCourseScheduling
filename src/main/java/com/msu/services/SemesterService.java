@@ -17,4 +17,6 @@ public interface SemesterService {
     public void copySemester(CopySemesterRequestDTO coursedetails);
     public boolean createNewSemester(CreateNewSemesterRequestDTO createnEWSmesterRequestDTO);
     public List<DisplayCourseAndSectionResponseDTO> fetchCourseAndSemesterDetails(Integer semId);
+    public Semester findBySemId(Integer semId);
+	public Semester findBySemNameId(Integer semNameId);
 }

@@ -2,6 +2,8 @@ package com.msu.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 import jakarta.persistence.Table;
@@ -11,8 +13,10 @@ import jakarta.persistence.Table;
 public class Section {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "section_id")
     private Long sectionId;
+    
     
     @Column(name = "section_no")
     private String sectionNo;
@@ -32,7 +36,7 @@ public class Section {
     private Integer room_id;
     
     @Column(name = "cross_section_id")
-    private Integer crossSectionId;
+    private Long crossSectionId;
     
     @Column(name = "course_semester_mapping_id")
     private Long courseSemesterMappingId;
@@ -81,11 +85,11 @@ public class Section {
 		this.room_id = room_id;
 	}
 
-	public Integer getCrossSectionId() {
+	public Long getCrossSectionId() {
 		return crossSectionId;
 	}
 
-	public void setCrossSectionId(Integer crossSectionId) {
+	public void setCrossSectionId(Long crossSectionId) {
 		this.crossSectionId = crossSectionId;
 	}
 

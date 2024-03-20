@@ -8,7 +8,8 @@ import com.msu.entities.SectionSchedule;
 
 public interface SectionScheduleRepository extends JpaRepository<SectionSchedule, Long>  {
 	
-	public List<SectionSchedule> findBySectionId(Long sectionId); 
-
+	public List<SectionSchedule> findBySectionId(Long sectionId);   
+	public SectionSchedule findBySectionScheduledId(Long semNameId); 
+ 
 	
 }

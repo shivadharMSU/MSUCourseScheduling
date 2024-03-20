@@ -44,6 +44,10 @@ public class ProfessorController {
 
 		return professorService.findAllProfessorType();
 	}
+	
+
+	
+
 
 	/*
 	 * @GetMapping("/create") public String showCreateForm(Model model) {

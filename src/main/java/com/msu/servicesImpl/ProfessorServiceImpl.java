@@ -81,8 +81,7 @@ public class ProfessorServiceImpl implements ProfessorService {
 
 	@Override
 	public List<ProfessorDetails> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		return professorDetailsRepository.findAll();
 	}
 
 	@Override

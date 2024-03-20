@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Section Form</title>
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Create Section Form</h2>
+        <form id="sectionForm">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="sectionNo">Section No:</label>
+                        <input type="text" class="form-control" id="sectionNo" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="professor">Professor:</label>
+                        <select class="form-control" id="professor" required>
+                            <!-- Populate options dynamically with JavaScript -->
+                        </select>
+                    </div>
+                </div>
+                 
+                <div class="col">
+                    <div class="form-group">
+                        <label for="startHour">Start Time:</label>
+                        <select class="form-control" id="startHour" required>
+                            <!-- Options populated dynamically with JavaScript -->
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="startMinute">Minutes:</label>
+                        <select class="form-control" id="startMinute" disabled required>
+                            <!-- Options populated dynamically with JavaScript -->
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="startAmPm">AM/PM:</label>
+                        <select class="form-control" id="startAmPm" disabled required>
+                            <option value="AM">AM</option>
+                            <option value="PM">PM</option>
+                        </select>
+                    </div>
+                </div>
+           
+            </div>
+            <div class="row">
+                   
+                <div class="col">
+                    <div class="form-group">
+                        <label for="endHour">End Time:</label>
+                        <select class="form-control" id="endHour" required>
+                            <!-- Options populated dynamically with JavaScript -->
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="endMinute">Minutes:</label>
+                        <select class="form-control" id="endMinute" disabled required>
+                            <!-- Options populated dynamically with JavaScript -->
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="endAmPm">AM/PM:</label>
+                        <select class="form-control" id="endAmPm" disabled required>
+                            <option value="AM">AM</option>
+                            <option value="PM">PM</option>
+                        </select>
+                    </div>
+                </div>
+           
+                <div class="col">
+                    <div class="form-group">
+                        <label for="roomId">Room ID:</label>
+                        <select class="form-control" id="roomId" required>
+                            <!-- Populate options dynamically with JavaScript -->
+                        </select>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="capacity">Capacity:</label>
+                        <input type="number" class="form-control" id="capacity" required>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="maxCapacity">Max Capacity:</label>
+                        <input type="number" class="form-control" id="maxCapacity" required>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="crossSectionId">Cross Section ID:</label>
+                        <input type="text" class="form-control" id="crossSectionId" required>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+             <div class="card mt-4" style="display: none;">
+                <div class="card-header">
+                    Suggestions
+                </div>
+                <div class="card-body" id="suggestionBox">
+                </div>
+            </div>
+        </form>
+    </div>
+    <script src="./js/createSection.js"></script>
+</body>
+</html>

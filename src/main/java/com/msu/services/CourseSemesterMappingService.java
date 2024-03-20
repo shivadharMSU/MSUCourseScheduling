@@ -10,5 +10,7 @@ public interface CourseSemesterMappingService {
 	public List<CourseSemesterMapping> findAll();
 	public void saveCourseSemesterMapping(CourseSemesterMapping courseSemesterMapping);
 	public List<CourseSemesterMapping> findBySemesterId(int semesterId);
+	 public CourseSemesterMapping findByCourseSemesterMappingId(Integer courseSemesterMappingId);
+
 
 }
