@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Details Management</title>
+    <title>D</title>
     <style>
         .navbar-custom {
             background-color: #C8102E;
@@ -40,6 +40,15 @@
         .navbar-toggler {
             border-color: rgba(255, 255, 255, 0.1);
         }
+
+        .course-list-container {
+            background-color: #ffffff; /* White background */
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 00 4px 7px rgba(24, 13, 13, 0.1); /* Shadow effect */
+        }
+
+        
     </style>
     <link rel="stylesheet" href="./css/classes.css">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
@@ -84,6 +93,69 @@
                 <a class="nav-link" href="./classes.html">Classes</a>
             </div>
         </nav>
+    </div>
+    <div class="container my-4">
+        <h2 class="mb-4">Course Details</h2>
+        <form id="courseForm">
+             <!-- Course name -->
+             <div class="row mb-3 align-items-center">
+                <label for="crn" class="col-sm-3 col-form-label">Course Name:</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="crn">
+                </div>
+            </div>
+            <!-- CRN -->
+            <div class="row mb-3 align-items-center">
+                <label for="crn" class="col-sm-3 col-form-label">CRN:</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="crn">
+                </div>
+            </div>
+
+            <!-- Course Number -->
+            <div class="row mb-3 align-items-center">
+                <label for="courseNumber" class="col-sm-3 col-form-label">Course Number:</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="courseNumber">
+                </div>
+            </div>
+
+            <!-- Radio button for Computer number -->
+            <div class="row mb-3 align-items-center">
+                <label class="col-sm-3 col-form-label">Computer number:</label>
+                <div class="col-sm-9">
+                    <input type="radio" id="computerNumberYes" name="computerNumber" value="yes">
+                    <label for="computerNumberYes">Yes</label>
+                    &nbsp;&nbsp;&nbsp;
+                    <input type="radio" id="computerNumberNo" name="computerNumber" value="no">
+                    <label for="computerNumberNo">No</label>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button type="submit" class="btn btn-primary" onclick="submitCourseDetails(event)">Submit</button>
+            </div>
+        </form>
+    </div>
+
+
+    <div class="container my-4">
+        <h2 class="mb-4">Courses List</h2>
+        <div id="coursesListContainer" class="course-list-container">
+            <!-- Dummy Course List -->
+            <div class="course-item">
+                <h3>Course 1</h3>
+                <p>Description of Course 1</p>
+            </div>
+            <div class="course-item">
+                <h3>Course 2</h3>
+                <p>Description of Course 2</p>
+            </div>
+            <div class="course-item">
+                <h3>Course 3</h3>
+                <p>Description of Course 3</p>
+            </div>
+        </div>
     </div>
 
     <script src="./js/jquery-3.7.1.min.js"></script>

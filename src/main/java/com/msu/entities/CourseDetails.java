@@ -25,8 +25,6 @@ public class CourseDetails {
 	@Column(name = "course_name")
     private String courseName; 
 	
-	@Column(name = "term_tenure")
-    private int termTenure;
 	
 	@Column(name = "credits")
     private int credits; 
@@ -42,12 +40,12 @@ public class CourseDetails {
 
 
 
-	public CourseDetails(long courseId, int courseNumber, int crn, String courseName, int termTenure, int credits, boolean computerRequired) {
+	public CourseDetails(long courseId, int courseNumber, int crn, String courseName, int credits, boolean computerRequired) {
         this.courseId = courseId;
         this.courseNumber = courseNumber;
         this.crn = crn;
         this.courseName = courseName;
-        this.termTenure = termTenure;
+   
         this.credits = credits;
         this.computerRequired = computerRequired;
     }
@@ -86,13 +84,7 @@ public class CourseDetails {
         this.courseName = courseName;
     }
 
-    public int getTermTenure() {
-        return termTenure;
-    }
-
-    public void setTermTenure(int termTenure) {
-        this.termTenure = termTenure;
-    }
+  
 
     public int getCredits() {
         return credits;
@@ -119,7 +111,7 @@ public class CourseDetails {
                 ", courseNumber=" + courseNumber +
                 ", crn=" + crn +
                 ", courseName='" + courseName + '\'' +
-                ", termTenure=" + termTenure +
+           
                 ", credits=" + credits +
                 ", computerRequired=" + computerRequired +
                 '}';
