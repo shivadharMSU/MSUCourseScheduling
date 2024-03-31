@@ -146,27 +146,43 @@ function selectProfessor(professor) {
 
 function populateAvailabilities(availabilities) {
     const timeSlotsDiv = document.getElementById('timeSlotsContainer');
-    timeSlotsDiv.innerHTML = '';
+    timeSlotsDiv.innerHTML = ''; // Clear existing slots
+    let index = 0; // Initialize index for unique IDs
+
     availabilities.forEach(availability => {
-        const timeSlotRow = document.createElement('div');
-        timeSlotRow.classList.add('row', 'mb-2'); // Bootstrap row with margin
-        timeSlotRow.innerHTML = `
-            <div class="col-3">
-                <input type="text" class="form-control" placeholder="Day of the Week" value="${availability.dayOfWeek}" />
+        let days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        let buttonsHtml = days.map(day => `<button class="btn btn-outline-primary ${availability.dayOfWeek.toLowerCase() === day.toLowerCase() ? 'active' : ''}" data-day="${day.toLowerCase()}">${day}</button>`).join('');
+
+        const timeSlotDiv = document.createElement('div');
+        timeSlotDiv.classList.add('row', 'align-items-center', 'mb-3');
+        timeSlotDiv.innerHTML = `
+            <div class="btn-group col-auto" role="group" aria-label="Day Selection">
+                ${buttonsHtml}
             </div>
-            <div class="col-3">
+            <div class="col">
                 <input type="time" class="form-control" value="${availability.startTime}" />
             </div>
-            <div class="col-3">
+            <div class="col">
                 <input type="time" class="form-control" value="${availability.endTime}" />
             </div>
-            <div class="col-3">
-                <button class="btn btn-danger" onclick="removeTimeSlot(this)">Remove</button>
+            <div class="col-auto">
+                <button class="btn btn-danger" type="button" onclick="removeTimeSlot(this)">Remove</button>
             </div>
         `;
-        timeSlotsDiv.appendChild(timeSlotRow);
+
+        timeSlotsDiv.appendChild(timeSlotDiv);
+
+        index++; // Increment index for next slot
+        // Re-attach event listeners for day selection toggle if needed
+        timeSlotDiv.querySelectorAll('.btn-outline-primary').forEach(button => {
+            button.addEventListener('click', function () {
+                this.classList.toggle('active');
+                this.classList.toggle('btn-primary');
+            });
+        });
     });
 }
+
 
 
 
