@@ -129,9 +129,17 @@ function selectProfessorType(professor) {
 }
 
 function selectProfessor(professor) {
+    var matchedType = allProfessorTypes.find(type => type.type === professor.professorTypeName);
+    document.getElementById('profId').value = professor.professorId;
     document.getElementById('professorName').value = professor.name;
     document.getElementById('courseLoad').value = professor.courseLoad;
     document.getElementById('profType').value = professor.professorTypeName;
+    if (matchedType) {
+        document.getElementById('profTypeId').value = matchedType.id;
+    } else {
+        console.warn('No matching professor type found.');
+    }
+    // document.getElementById('profTypeId').value = professor.professorTypeId;
     populateAvailabilities(professor.availabilities);
     document.getElementById('suggestionBox').style.display = 'none';
 }
@@ -240,19 +248,21 @@ function submitProfessorDetails(event) {
 
     // Update the currentProfessorDetails object with the form data
     currentProfessorDetails = {
+        professorId: document.getElementById('profId').value,
         name: document.getElementById('professorName').value,
         courseLoad: document.getElementById('courseLoad').value,
-        profType: document.getElementById('profTypeId').value,
+        profTypeId: document.getElementById('profTypeId').value,
         availabilities: [] // This will be populated below
     };
 
     // Get all the availability slots
     const timeSlotRows = document.getElementById('timeSlotsContainer').querySelectorAll('.row');
+    console.log(timeSlotRows);
     timeSlotRows.forEach(row => {
         const activeButton = row.querySelector('button.active');
         if (activeButton) {
-            console.log(activeButton.textContent);
-            const dayOfWeek = activeButton.textContent; // Assuming active button has the day
+            // console.log(activeButton.textContent);
+            const dayOfWeek = activeButton.textContent;
             const timeInputs = row.querySelectorAll('input[type="time"]');
             const startTime = timeInputs[0].value; // First time input is start time
             const endTime = timeInputs[1].value; // Second time input is end time
@@ -260,7 +270,7 @@ function submitProfessorDetails(event) {
         }
     });
 
-    const apiUrl = 'http://localhost:8080/submitProfessorDetails';
+    const apiUrl = 'http://localhost:8080/saveProfessor';
 
     // Perform the API call to submit professor details
     fetch(apiUrl, {
@@ -287,14 +297,17 @@ function submitProfessorDetails(event) {
 }
 
 function clearFields() {
+    document.getElementById('profId').value = '';
     document.getElementById('professorName').value = '';
     document.getElementById('courseLoad').value = '';
     document.getElementById('profType').value = '';
+    document.getElementById('profTypeId').value = '';
     const timeSlotsContainer = document.getElementById('timeSlotsContainer');
     while (timeSlotsContainer.firstChild) {
         timeSlotsContainer.removeChild(timeSlotsContainer.firstChild);
     }
 }
+
 function displayProfessors() {
     const container = document.getElementById('professorsContainer');
     container.innerHTML = allProfessors.map((professor, index) => `
@@ -368,13 +381,6 @@ function deleteProfessor(index) {
         // On success, remove the item from the DOM or refresh the list
         console.log(`Delete professor at index ${index}`);
     }
-}
-
-// Function to submit professor details
-function submitProfessorDetails(event) {
-    event.preventDefault();
-    // Code to submit the new details form
-    // This should already be implemented in your code
 }
 
 // Bind the event listener to the form submit event
