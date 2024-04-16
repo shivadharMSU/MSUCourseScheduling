@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.msu.entities.CourseDetails;
 import com.msu.entities.CourseProfessorMapping;
 import com.msu.repositories.CourseProfessorMappingRepository;
 import com.msu.services.CourseProfessorMappingService;
@@ -35,6 +36,12 @@ public class CourseProfessorMappingServiceImpl implements CourseProfessorMapping
 
 		}
 		
+	}
+
+	@Override
+	public List<CourseProfessorMapping> findCourseProfessorMappingByCourse(Long course) {
+	
+		return courseProfessorMappingRepository.findCourseProfessorMappingByCourse(course);
 	}
 
 }

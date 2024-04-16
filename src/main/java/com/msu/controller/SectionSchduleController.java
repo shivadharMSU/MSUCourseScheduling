@@ -19,6 +19,7 @@ import com.msu.DTO.ProfessorDropDownListResponseDTO;
 import com.msu.DTO.SectionScheduleSaveDTO;
 import com.msu.DTO.SuggestionRequestDTO;
 import com.msu.DTO.SuggestionResponseDTO;
+import com.msu.DTO.SuggestionsResponseDTO;
 import com.msu.services.SectionScheduleService;
 import com.msu.services.SemesterService;
 
@@ -32,7 +33,7 @@ public class SectionSchduleController {
 	private SectionScheduleService sectionScheduleService;
 	
 	@PostMapping("/getProfessorListForDropDown")
-	public ResponseEntity<List<ProfessorDropDownListResponseDTO>> getProfessorListForDropDown(ProfessorDropDownListRequestDTO professorDropDownListRequestDTO) {
+	public ResponseEntity<List<ProfessorDropDownListResponseDTO>> getProfessorListForDropDown(@RequestBody ProfessorDropDownListRequestDTO professorDropDownListRequestDTO) {
 	    try {
 	    	System.out.print(professorDropDownListRequestDTO.getCourseId());
 	    	return ResponseEntity.ok(sectionScheduleService.professorDropDownList(professorDropDownListRequestDTO));
@@ -46,7 +47,8 @@ public class SectionSchduleController {
 	}
 	
 	@PostMapping("/getClassListForDropDown")
-	public ResponseEntity<List<ClassDropDownListResponseDTO>> getClassListForDropDown(ClassDropDownListRequestDTO classDropDownListRequestDTO){
+	public ResponseEntity<List<ClassDropDownListResponseDTO>> getClassListForDropDown(@RequestBody ClassDropDownListRequestDTO classDropDownListRequestDTO){
+		
 		
 		try {
 			System.out.println(classDropDownListRequestDTO.getSemId());
@@ -62,15 +64,13 @@ public class SectionSchduleController {
 	
 	
 	@PostMapping("/getSuggestion")
-	public ResponseEntity<SuggestionResponseDTO> getSuggestion(@RequestBody SuggestionRequestDTO suggestionRequestDTO){
+	public ResponseEntity<SuggestionsResponseDTO> getSuggestion(@RequestBody SuggestionRequestDTO suggestionRequestDTO){
 		
 		try {
-			System.out.println(suggestionRequestDTO.getProfessorId());
-			System.out.println(suggestionRequestDTO.isCreateNew());
-			SuggestionResponseDTO res = new SuggestionResponseDTO();
-			res.setSuggestion("qhwbd ehbd hbndfj ibnfjw hbfhdb hdbfhj ");
+			
+			SuggestionsResponseDTO suggestions = sectionScheduleService.getSuggestions(suggestionRequestDTO);
 		
-			return ResponseEntity.ok(res);
+			return ResponseEntity.ok(suggestions);
 		}catch(Exception ex) {
 	        System.out.println("getClassListForDropDown: " + ex.getMessage());
 
@@ -84,9 +84,9 @@ public class SectionSchduleController {
 		
 		try {
 			sectionScheduleService.saveSectionSchedule(sectionScheduleDTO);
+			return ResponseEntity.ok("success");
+                   
 			
-		
-			return ResponseEntity.ok("Success");
 		}catch(Exception ex) {
 	        System.out.println("getClassListForDropDown: " + ex.getMessage());
 

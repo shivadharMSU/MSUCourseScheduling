@@ -25,6 +25,7 @@ public class CourseDetails {
 	@Column(name = "course_name")
     private String courseName; 
 	
+
 	
 	@Column(name = "credits")
     private int credits; 
@@ -45,7 +46,7 @@ public class CourseDetails {
         this.courseNumber = courseNumber;
         this.crn = crn;
         this.courseName = courseName;
-   
+       
         this.credits = credits;
         this.computerRequired = computerRequired;
     }
@@ -84,7 +85,7 @@ public class CourseDetails {
         this.courseName = courseName;
     }
 
-  
+   
 
     public int getCredits() {
         return credits;
@@ -111,7 +112,7 @@ public class CourseDetails {
                 ", courseNumber=" + courseNumber +
                 ", crn=" + crn +
                 ", courseName='" + courseName + '\'' +
-           
+               
                 ", credits=" + credits +
                 ", computerRequired=" + computerRequired +
                 '}';

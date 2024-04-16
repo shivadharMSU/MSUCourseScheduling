@@ -4,7 +4,7 @@ public class ProfessorDropDownListRequestDTO {
 	
 	private Long courseId;
 	private Integer semId;
-	private int weekDay;
+	private Integer weekDay;
 	private String startTime;
 	private String endTime;
 	public Long getCourseId() {
@@ -19,10 +19,10 @@ public class ProfessorDropDownListRequestDTO {
 	public void setSemId(Integer semId) {
 		this.semId = semId;
 	}
-	public int getWeekDay() {
+	public Integer getWeekDay() {
 		return weekDay;
 	}
-	public void setWeekDay(int weekDay) {
+	public void setWeekDay(Integer weekDay) {
 		this.weekDay = weekDay;
 	}
 	public String getStartTime() {
@@ -37,6 +37,8 @@ public class ProfessorDropDownListRequestDTO {
 	public void setEndTime(String endTime) {
 		this.endTime = endTime;
 	}
+	
+	
 	
 	
 	

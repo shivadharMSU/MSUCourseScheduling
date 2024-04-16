@@ -5,6 +5,8 @@ import java.util.List;
 import com.msu.DTO.CreateNewSemesterRequestDTO;
 import com.msu.DTO.DisplayCourseAndSectionResponseDTO;
 import com.msu.DTO.GetSemesterResponseDTO;
+import com.msu.DTO.PreviousSemesterListDTO;
+import com.msu.DTO.PreviousSemesterListRequestDTO;
 import com.msu.entities.CopySemesterRequestDTO;
 import com.msu.entities.Semester;
 
@@ -19,4 +21,5 @@ public interface SemesterService {
     public List<DisplayCourseAndSectionResponseDTO> fetchCourseAndSemesterDetails(Integer semId);
     public Semester findBySemId(Integer semId);
 	public Semester findBySemNameId(Integer semNameId);
+	public PreviousSemesterListDTO getPrevioussemDetails(PreviousSemesterListRequestDTO previousSemesterListRequestDTO);
 }

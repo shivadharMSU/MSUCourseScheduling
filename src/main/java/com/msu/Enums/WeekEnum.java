@@ -29,5 +29,44 @@ public enum WeekEnum {
         }
         return null; // or throw an exception if value doesn't match any semester
     }
+    
+    public static String getWeekByValue(int value) {
+    	
+    	if(value == 1) {
+    		return "MON";
+    	}else if(value == 2) {
+    		return "TUE";
+    	}else if(value == 3) {
+    		return "WED";
+    	}else if(value == 4) {
+    		return "THUS";
+    	}else if(value == 5) {
+    		return "FRI";
+    	}else if(value == 6) {
+    		return "SAT";
+    	}
+    	return null;
+    	
+    }
+    
+ public static int getWeekIdByWeekName(String name) {
+    	
+    	if(name.equalsIgnoreCase("Mon") ) {
+    		return 1;
+    	}if(name.equalsIgnoreCase("Tue") ) {
+    		return 2;
+    	}if(name.equalsIgnoreCase("Wed") ) {
+    		return 3;
+    	}if(name.equalsIgnoreCase("Thu") ) {
+    		return 4;
+    	}if(name.equalsIgnoreCase("Fri") ) {
+    		return 5;
+    	}if(name.equalsIgnoreCase("Sat") ) {
+    		return 6;
+    	}
+    	return 0;
+    	
+    }
+    
 
 }

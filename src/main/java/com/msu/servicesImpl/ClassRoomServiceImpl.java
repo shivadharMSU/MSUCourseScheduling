@@ -36,4 +36,16 @@ public class ClassRoomServiceImpl implements ClassRomService{
 		}
 	}
 
+	@Override
+	public ClassRoom findByRoomId(Integer roomId) {
+		
+		return classRoomRepository.findByRoomId(roomId);
+	}
+
+	@Override
+	public ClassRoom findByRoomName(String roomName) {
+		// TODO Auto-generated method stub
+		return classRoomRepository.findByRoomName(roomName);
+	}
+
 }

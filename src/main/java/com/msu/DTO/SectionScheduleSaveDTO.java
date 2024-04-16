@@ -15,6 +15,10 @@ public class SectionScheduleSaveDTO {
 	private String startTime;
 	private String endTime;
 	private Long crossSectionId;
+	private TimeSlotsDTO[] timeSlots;
+	
+	
+	
 	public Long getCourseSemesterMappingId() {
 		return courseSemesterMappingId;
 	}
@@ -86,6 +90,12 @@ public class SectionScheduleSaveDTO {
 	}
 	public void setCrossSectionId(Long crossSectionId) {
 		this.crossSectionId = crossSectionId;
+	}
+	public TimeSlotsDTO[] getTimeSlots() {
+		return timeSlots;
+	}
+	public void setTimeSlots(TimeSlotsDTO[] timeSlots) {
+		this.timeSlots = timeSlots;
 	}
 	
 	

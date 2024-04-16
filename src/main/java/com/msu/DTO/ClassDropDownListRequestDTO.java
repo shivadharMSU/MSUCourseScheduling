@@ -7,6 +7,8 @@ public class ClassDropDownListRequestDTO {
 	private String startTime;
 	private String endTime;
 	private Long courseId;
+	private TimeSlotsDTO[] timeSlots;
+	
 	public Long getProfessorId() {
 		return professorId;
 	}
@@ -36,6 +38,12 @@ public class ClassDropDownListRequestDTO {
 	}
 	public void setCourseId(Long courseId) {
 		this.courseId = courseId;
+	}
+	public TimeSlotsDTO[] getTimeSlots() {
+		return timeSlots;
+	}
+	public void setTimeSlots(TimeSlotsDTO[] timeSlots) {
+		this.timeSlots = timeSlots;
 	}
 	
 	

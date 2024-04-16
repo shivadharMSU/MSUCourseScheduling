@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -29,9 +31,10 @@ public class SectionSchedule {
 
     @Column(name = "end_time")
     private LocalTime endTime;
-
+    
    
-    public Long getSectionScheduledId() {
+   
+	public Long getSectionScheduledId() {
         return sectionScheduledId;
     }
 

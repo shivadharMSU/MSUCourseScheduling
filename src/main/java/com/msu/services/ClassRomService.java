@@ -8,5 +8,7 @@ public interface ClassRomService {
 	
 	public List<ClassRoom> findAll();
     public void saveClassRoom(ClassRoom classRoom);
+    public ClassRoom findByRoomId(Integer roomId);
+    public ClassRoom findByRoomName(String roomName);
 
 }

@@ -36,7 +36,7 @@ public class CourseSemesterMappingServiceImpl implements CourseSemesterMappingSe
 	}
 
 	@Override
-	public CourseSemesterMapping findByCourseSemesterMappingId(Integer courseSemesterMappingId) {
+	public CourseSemesterMapping findByCourseSemesterMappingId(Long courseSemesterMappingId) {
 		
 		return customerSemesterMappingRepository.findByCourseSemesterMappingId(courseSemesterMappingId);
 	}
