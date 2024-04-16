@@ -19,9 +19,5 @@ public class GetSemesterResponseDTO {
 	public void setSemesterList(SemesterDTO[] semesterList) {
 		this.semesterList = semesterList;
 	}
-	
-	
-	
-	
 
 }
