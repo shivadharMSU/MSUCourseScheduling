@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.msu.DTO.ProfessorAvailabilityDTO;
+import com.msu.DTO.SaveOrUpdateProfessorRequestDTO;
 import com.msu.DTO.getProfessorResponseDTO;
 import com.msu.DTO.getProfessorTypeResponseDTO;
+import com.msu.Enums.WeekDaysEnum;
 import com.msu.entities.ProfessorDetails;
 import com.msu.entities.ProfessorType;
 import com.msu.repositories.ProfessorAvailabilityRepository;
@@ -60,7 +62,7 @@ public class ProfessorServiceImpl implements ProfessorService {
 					// the parent professor's ID
 					availabilityDTO.setProfessorId(availability.getProfessorId()); // Assuming getProfessorAvailabilityDTO has this field
 					availabilityDTO.setSemNameId(availability.getSemNameId());
-					availabilityDTO.setDayOfWeek(availability.getDayOfWeek());
+					availabilityDTO.setDayOfWeek(WeekDaysEnum.fromNumber(availability.getDayOfWeek()).getDayAbbreviation());
 					availabilityDTO.setStartTime(availability.getStartTime());
 					availabilityDTO.setEndTime(availability.getEndTime());
 					return availabilityDTO;
@@ -103,5 +105,11 @@ public class ProfessorServiceImpl implements ProfessorService {
 	public ProfessorDetails findByProfessorId(Long professorId) {
 	
 		return professorDetailsRepository.findByProfessorId(professorId);
+	}
+
+	@Override
+	public void saveOrUpdateProfessor(SaveOrUpdateProfessorRequestDTO saveOrUpdateProfessorRequestDTO) {
+		//System.out.println("saveOrUpdateProfessorRequestDTO: " + saveOrUpdateProfessorRequestDTO.toString());
+		
 	}
 }

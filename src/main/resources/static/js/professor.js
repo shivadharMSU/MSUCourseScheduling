@@ -129,36 +129,60 @@ function selectProfessorType(professor) {
 }
 
 function selectProfessor(professor) {
+    var matchedType = allProfessorTypes.find(type => type.type === professor.professorTypeName);
+    document.getElementById('profId').value = professor.professorId;
     document.getElementById('professorName').value = professor.name;
     document.getElementById('courseLoad').value = professor.courseLoad;
     document.getElementById('profType').value = professor.professorTypeName;
+    if (matchedType) {
+        document.getElementById('profTypeId').value = matchedType.id;
+    } else {
+        console.warn('No matching professor type found.');
+    }
+    // document.getElementById('profTypeId').value = professor.professorTypeId;
     populateAvailabilities(professor.availabilities);
     document.getElementById('suggestionBox').style.display = 'none';
 }
 
 function populateAvailabilities(availabilities) {
     const timeSlotsDiv = document.getElementById('timeSlotsContainer');
-    timeSlotsDiv.innerHTML = '';
+    timeSlotsDiv.innerHTML = ''; // Clear existing slots
+    let index = 0; // Initialize index for unique IDs
+
     availabilities.forEach(availability => {
-        const timeSlotRow = document.createElement('div');
-        timeSlotRow.classList.add('row', 'mb-2'); // Bootstrap row with margin
-        timeSlotRow.innerHTML = `
-            <div class="col-3">
-                <input type="text" class="form-control" placeholder="Day of the Week" value="${availability.dayOfWeek}" />
+        let days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        let buttonsHtml = days.map(day => `<button class="btn btn-outline-primary ${availability.dayOfWeek.toLowerCase() === day.toLowerCase() ? 'active' : ''}" data-day="${day.toLowerCase()}">${day}</button>`).join('');
+
+        const timeSlotDiv = document.createElement('div');
+        timeSlotDiv.classList.add('row', 'align-items-center', 'mb-3');
+        timeSlotDiv.innerHTML = `
+            <div class="btn-group col-auto" role="group" aria-label="Day Selection">
+                ${buttonsHtml}
             </div>
-            <div class="col-3">
+            <div class="col">
                 <input type="time" class="form-control" value="${availability.startTime}" />
             </div>
-            <div class="col-3">
+            <div class="col">
                 <input type="time" class="form-control" value="${availability.endTime}" />
             </div>
-            <div class="col-3">
-                <button class="btn btn-danger" onclick="removeTimeSlot(this)">Remove</button>
+            <div class="col-auto">
+                <button class="btn btn-danger" type="button" onclick="removeTimeSlot(this)">Remove</button>
             </div>
         `;
-        timeSlotsDiv.appendChild(timeSlotRow);
+
+        timeSlotsDiv.appendChild(timeSlotDiv);
+
+        index++; // Increment index for next slot
+        // Re-attach event listeners for day selection toggle if needed
+        timeSlotDiv.querySelectorAll('.btn-outline-primary').forEach(button => {
+            button.addEventListener('click', function () {
+                this.classList.toggle('active');
+                this.classList.toggle('btn-primary');
+            });
+        });
     });
 }
+
 
 
 
@@ -240,19 +264,21 @@ function submitProfessorDetails(event) {
 
     // Update the currentProfessorDetails object with the form data
     currentProfessorDetails = {
+        professorId: document.getElementById('profId').value,
         name: document.getElementById('professorName').value,
         courseLoad: document.getElementById('courseLoad').value,
-        profType: document.getElementById('profTypeId').value,
+        profTypeId: document.getElementById('profTypeId').value,
         availabilities: [] // This will be populated below
     };
 
     // Get all the availability slots
     const timeSlotRows = document.getElementById('timeSlotsContainer').querySelectorAll('.row');
+    console.log(timeSlotRows);
     timeSlotRows.forEach(row => {
         const activeButton = row.querySelector('button.active');
         if (activeButton) {
-            console.log(activeButton.textContent);
-            const dayOfWeek = activeButton.textContent; // Assuming active button has the day
+            // console.log(activeButton.textContent);
+            const dayOfWeek = activeButton.textContent;
             const timeInputs = row.querySelectorAll('input[type="time"]');
             const startTime = timeInputs[0].value; // First time input is start time
             const endTime = timeInputs[1].value; // Second time input is end time
@@ -260,7 +286,7 @@ function submitProfessorDetails(event) {
         }
     });
 
-    const apiUrl = 'http://localhost:8080/submitProfessorDetails';
+    const apiUrl = 'http://localhost:8080/saveProfessor';
 
     // Perform the API call to submit professor details
     fetch(apiUrl, {
@@ -287,12 +313,89 @@ function submitProfessorDetails(event) {
 }
 
 function clearFields() {
+    document.getElementById('profId').value = '';
     document.getElementById('professorName').value = '';
     document.getElementById('courseLoad').value = '';
     document.getElementById('profType').value = '';
+    document.getElementById('profTypeId').value = '';
     const timeSlotsContainer = document.getElementById('timeSlotsContainer');
     while (timeSlotsContainer.firstChild) {
         timeSlotsContainer.removeChild(timeSlotsContainer.firstChild);
+    }
+}
+
+function displayProfessors() {
+    const container = document.getElementById('professorsContainer');
+    container.innerHTML = allProfessors.map((professor, index) => `
+        <div class="professor-item" data-index="${index}">
+            <div class="professor-name" onclick="toggleDetails(${index})">
+                <span class="arrow-icon">&#9660;</span>
+                ${professor.name}
+            </div>
+            <div class="professor-details" id="details-${index}" style="display: none;">
+                <!-- Display professor details here -->
+                <div>Name: ${professor.name}</div>
+                <div>Course Load: ${professor.courseLoad}</div>
+                <div>Professor Type: ${professor.professorTypeName}</div>
+                <div>Availabilities: ${professor.availabilities.map(availability => `
+                        <div>Day: ${availability.dayOfWeek}, Start Time: ${availability.startTime}, End Time: ${availability.endTime}</div>
+                    `).join('')
+        }</div>
+                <div class="professor-controls">
+                    <button type="button" class="btn btn-primary" onclick="editDetails(${index})">Edit</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteProfessor(${index})">Delete</button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+
+
+// Function to toggle the display of details
+function toggleDetails(index) {
+    // Get all the details and header elements
+    const allDetails = document.querySelectorAll('.professor-details');
+    const allHeaders = document.querySelectorAll('.professor-item');
+
+    // Get the clicked elements
+    const detailsDiv = document.getElementById(`details-${index}`);
+    const headerDiv = allHeaders[index];
+
+    // Check if the clicked section is already expanded
+    const isExpanded = headerDiv.classList.contains('expanded');
+
+    // Close all sections
+    allDetails.forEach(element => {
+        element.style.display = 'none';
+    });
+    allHeaders.forEach(element => {
+        element.classList.remove('expanded');
+    });
+
+    // Toggle the clicked section
+    if (!isExpanded) {
+        detailsDiv.style.display = 'block';
+        headerDiv.classList.add('expanded');
+    }
+}
+
+
+// Function to make details editable
+function editDetails(index) {
+    // Retrieve the professor item and make its details editable
+    const professor = allProfessors[index];
+    selectProfessor(professor);
+    window.scrollTo(0, 0);
+    // Code here depends on the HTML structure of your details
+}
+
+// Function to delete a professor
+function deleteProfessor(index) {
+    if (confirm('Are you sure you want to delete this professor?')) {
+        // Code here to send delete request to your API
+        // On success, remove the item from the DOM or refresh the list
+        console.log(`Delete professor at index ${index}`);
     }
 }
 

@@ -41,10 +41,6 @@
         .navbar-toggler {
             border-color: rgba(255, 255, 255, 0.1);
         }
-
-        /* .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255, 255, 255, 0.5)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-        } */
     </style>
     <link rel="stylesheet" href="./css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="./css/professor.css">
@@ -98,6 +94,7 @@
                 <label for="professorName" class="col-sm-3 col-form-label">Professor Name:</label>
                 <div class="col-sm-9">
                     <input type="text" class="form-control" id="professorName" oninput="searchProfessor()">
+                    <input type="hidden" id="profId">
                     <div id="suggestionBox" class="list-group" style="display: none;"></div>
                 </div>
             </div>
@@ -136,7 +133,8 @@
             </div>
 
 
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <div class="professor-controls">
+                <button type="submit" class="btn btn-primary" onclick="clearFields()">Clear</button>
                 <button type="submit" class="btn btn-primary" onclick="submitProfessorDetails(event)">Submit</button>
             </div>
         </form>

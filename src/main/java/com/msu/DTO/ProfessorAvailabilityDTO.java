@@ -7,7 +7,7 @@ public class ProfessorAvailabilityDTO {
 	private Long id;
 	private Long professorId;
 	private Integer semNameId;
-	private Integer dayOfWeek;
+	private String dayOfWeek;
 	private LocalTime startTime;
 	private LocalTime endTime;
 
@@ -40,11 +40,11 @@ public class ProfessorAvailabilityDTO {
 		this.semNameId = semNameId;
 	}
 
-	public Integer getDayOfWeek() {
+	public String getDayOfWeek() {
 		return dayOfWeek;
 	}
 
-	public void setDayOfWeek(Integer dayOfWeek) {
+	public void setDayOfWeek(String dayOfWeek) {
 		this.dayOfWeek = dayOfWeek;
 	}
 
