@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import com.msu.DTO.CreateNewSemesterRequestDTO;
 import com.msu.DTO.DisplayCourseAndSectionResponseDTO;
 import com.msu.DTO.GetSemesterResponseDTO;
+import com.msu.DTO.PreviousSemesterDTO;
+import com.msu.DTO.PreviousSemesterListDTO;
+import com.msu.DTO.PreviousSemesterListRequestDTO;
 import com.msu.DTO.SectionListDTO;
 import com.msu.DTO.SemesterDTO;
 import com.msu.Enums.SmesterEnum;
@@ -275,6 +278,33 @@ public class SemesterServiceImpl implements SemesterService{
 			System.out.println("excpetion while fetchCourseAndSemesterDetails" + ex);
 		}
 		return list;
+	}
+
+	@Override
+	public Semester findBySemId(Integer semId) {
+		return semesterRepository.findBySemId(semId);
+	}
+
+	@Override
+	public Semester findBySemNameId(Integer semNameId) {
+		return semesterRepository.findBySemNameId(semNameId);
+	}
+
+	@Override
+	public PreviousSemesterListDTO getPrevioussemDetails(
+			PreviousSemesterListRequestDTO previousSemesterListRequestDTO) {
+		PreviousSemesterListDTO previoussemList = new PreviousSemesterListDTO();
+		List<PreviousSemesterDTO> list = new ArrayList<PreviousSemesterDTO>();
+		List<Semester> allSemesters = semesterRepository.findAll();
+		List<Semester> finalSemesterList = allSemesters.stream().filter(sem->sem.getSemId() != previousSemesterListRequestDTO.getCurrentSemId()).collect(Collectors.toList());
+	      for(Semester semester:finalSemesterList) {
+	    	  PreviousSemesterDTO previousSemesterDTO = new PreviousSemesterDTO();
+	    	  previousSemesterDTO.setSemId(semester.getSemId());
+	    	  previousSemesterDTO.setSemName(semester.getYear()+"-"+SmesterEnum.getSemesterName(semester.getSemNameId()));
+	    	  list.add(previousSemesterDTO);
+	      }
+	      previoussemList.setPreviousSemList(list);
+		return previoussemList;
 	}
 
 	

@@ -1,3 +1,60 @@
+body {
+    font-family: 'Arial', sans-serif; 
+    background-color: #f8f9fa; 
+}
+
+.container {
+    background-color: #fff; 
+    padding: 20px;
+    border-radius: 5px; 
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow to lift the container from the background */
+}
+
+
+.btn-primary, .btn-success {
+    background-color: #C8102E; 
+    border-color: #C8102E;
+}
+
+.btn-primary:hover, .btn-success:hover {
+    background-color: #a00f2a;
+    border-color: #a00f2a;
+}
+
+
+.form-control {
+    border-radius: 0; 
+    border-color: #ced4da;
+}
+
+
+label {
+    font-weight: bold;
+    color: #343a40; 
+}
+
+
+#suggestionBox, #suggestionBoxProfType {
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+
+.list-group-item {
+    color: #495057;
+}
+
+.list-group-item:hover {
+    background-color: #C8102E; 
+    color: white;
+}
+
+.list-group-item.active {
+    background-color: #C8102E;
+    border-color: #C8102E;
+    color: white;
+}
 
 /* secondary navigation */
 
@@ -7,7 +64,7 @@
     padding: 10px 15px; /* Padding around the navigation for spacing */
     border: 2px solid white; /* Hollow look with white border */
     border-radius: 15px; /* Curved edges */
-    box-shadow: 0 4px 8px rgba(45, 45, 45, 0.1); /* Subtle shadow for depth */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
     background-color: transparent; /* Transparent background */
 }
 

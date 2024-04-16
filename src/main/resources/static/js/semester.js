@@ -24,15 +24,17 @@ function renderSemesterDetails(data) {
             semesterCell.classList.add('text-center', 'align-middle', 'w-25');
             
             if (semester === null) {
-                semesterCell.innerHTML = '<button class="btn btn-primary">+</button>';
+                // Display "+" sign in the color #C8102E
+                semesterCell.innerHTML = '<p  style="color: #C8102E;">+</p>';
             } else {
-                semesterCell.innerHTML = `<a href="courseAndsectionList.html?semId=${semester.semId}">${semester.semName}</a>`;
+                semesterCell.innerHTML = `<a style="color: #C8102E;" href="courseAndsectionList.html?semId=${semester.semId}">${semester.semName}</a>`;
             }
         });
 
         semesterDetailsContainer.appendChild(table);
     });
 }
+
 
 
 

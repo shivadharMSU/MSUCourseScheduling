@@ -9,4 +9,5 @@ import com.msu.entities.Section;
 public interface SectionRepository extends JpaRepository<Section, Long> {
 
 	public List<Section> findByCourseSemesterMappingId(Long courseSemesterMappingId);
+	public Section findBySectionId(Long sectionId);
 }

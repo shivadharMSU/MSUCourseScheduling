@@ -35,4 +35,16 @@ public class SemesterNameserviceImpl implements SemesterNameService{
 		
 	}
 
+	@Override
+	public SemesterName findBySemNameId(Integer semNameId) {
+		return semesterNameRepository.findBySemNameId(semNameId);
+	}
+
+	@Override
+	public SemesterName findByName(String name) {
+		return semesterNameRepository.findByName(name);
+	}
+	
+	
+
 }

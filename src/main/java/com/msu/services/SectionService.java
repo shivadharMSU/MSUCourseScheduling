@@ -10,5 +10,6 @@ public interface SectionService {
 	public List<Section> findAll();
     public void saveSection(Section section);
     public List<Section> findByCourseSemesterMappingId(Long courseSemesterMappingId);
+    public Section findBySectionId(Long sectionId);
     
 }

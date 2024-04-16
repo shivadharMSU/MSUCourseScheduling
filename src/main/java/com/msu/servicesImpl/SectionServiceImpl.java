@@ -46,4 +46,10 @@ public class SectionServiceImpl implements SectionService {
 		return null;
 	}
 
+	@Override
+	public Section findBySectionId(Long sectionId) {
+		return sectionRepository.findBySectionId(sectionId);
+		
+	}
+
 }
