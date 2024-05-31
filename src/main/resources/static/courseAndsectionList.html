@@ -97,7 +97,7 @@
     <div class="container">
         <!-- Button for copying semester -->
         <button id="copySemesterButton" class="btn btn-primary float-right mt-3 mr-3">Copy Semester</button>
-        
+
     </div>
     <div class="container mt-5">
         <div id="coursesList"></div>
@@ -113,14 +113,14 @@
             const semId = urlParams.get('semId');
 
             fetch('http://localhost:8080/getCourseAndSemesterList', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        semId: semId
-                    })
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    semId: semId
                 })
+            })
                 .then(response => response.json())
                 .then(data => displayCourses(data))
                 .catch(error => console.error('Error:', error));
@@ -140,7 +140,7 @@
                 courseHeader.classList.add('card-header', 'p-0');
                 const courseButton = document.createElement('button');
 
-                courseButton.classList.add('btn', 'btn-link', 'collapsed','course-name');
+                courseButton.classList.add('btn', 'btn-link', 'collapsed', 'course-name');
                 courseButton.setAttribute('type', 'button');
                 courseButton.setAttribute('data-toggle', 'collapse');
                 courseButton.setAttribute('data-target', `#courseCollapse${course.courseId}`);
@@ -171,7 +171,7 @@
                 addSectionLink.textContent = '+ add section';
                 addSectionLink.href = `createSection.html?courseId=${course.courseId}&courseSemesterMappingId=${course.courseSemesterMappingId}&courseName=${course.courseName}&semId=${semId}`;
                 sectionItemPlus.appendChild(addSectionLink);
-                    sectionList.appendChild(sectionItemPlus);
+                sectionList.appendChild(sectionItemPlus);
                 sectionCardBody.appendChild(sectionList);
                 sectionDiv.appendChild(sectionCardBody);
                 courseDiv.appendChild(sectionDiv);
@@ -179,7 +179,7 @@
                 coursesList.appendChild(courseDiv);
             });
         }
-        document.getElementById('copySemesterButton').addEventListener('click', function() {
+        document.getElementById('copySemesterButton').addEventListener('click', function () {
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
             const semId = urlParams.get('semId');

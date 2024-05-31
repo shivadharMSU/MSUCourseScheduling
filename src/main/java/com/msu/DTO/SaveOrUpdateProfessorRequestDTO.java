@@ -22,19 +22,83 @@ public class SaveOrUpdateProfessorRequestDTO {
 	@JsonProperty("availabilities")
 	private List<Availability> availabilities;
 
+	public Long getProfessorId() {
+		return professorId;
+	}
+
+	public void setProfessorId(Long professorId) {
+		this.professorId = professorId;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getCourseLoad() {
+		return courseLoad;
+	}
+
+	public void setCourseLoad(String courseLoad) {
+		this.courseLoad = courseLoad;
+	}
+
+	public String getProfType() {
+		return profType;
+	}
+
+	public void setProfType(String profType) {
+		this.profType = profType;
+	}
+
+	public List<Availability> getAvailabilities() {
+		return availabilities;
+	}
+
+	public void setAvailabilities(List<Availability> availabilities) {
+		this.availabilities = availabilities;
+	}
+
 	// Getters and setters
 
 	public static class Availability {
 
-        @JsonProperty("dayOfWeek")
-        private String dayOfWeek;
+		public String getDayOfWeek() {
+			return dayOfWeek;
+		}
 
-        @JsonProperty("startTime")
-        private LocalTime startTime;
+		public void setDayOfWeek(String dayOfWeek) {
+			this.dayOfWeek = dayOfWeek;
+		}
 
-        @JsonProperty("endTime")
-        private LocalTime endTime;
-        
+		public LocalTime getStartTime() {
+			return startTime;
+		}
+
+		public void setStartTime(LocalTime startTime) {
+			this.startTime = startTime;
+		}
+
+		public LocalTime getEndTime() {
+			return endTime;
+		}
+
+		public void setEndTime(LocalTime endTime) {
+			this.endTime = endTime;
+		}
+
+		@JsonProperty("dayOfWeek")
+		private String dayOfWeek;
+
+		@JsonProperty("startTime")
+		private LocalTime startTime;
+
+		@JsonProperty("endTime")
+		private LocalTime endTime;
+
 	}
 
 }
