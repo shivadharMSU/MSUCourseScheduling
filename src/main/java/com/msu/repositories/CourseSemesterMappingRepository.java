@@ -13,4 +13,5 @@ public interface CourseSemesterMappingRepository extends JpaRepository<CourseSem
 	 public List<CourseSemesterMapping> findBySemesterId(Integer semesterId);
 	 public CourseSemesterMapping findByCourseSemesterMappingId(Long courseSemesterMappingId);
 	 
+	 
 }

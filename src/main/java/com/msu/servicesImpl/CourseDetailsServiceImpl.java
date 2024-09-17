@@ -18,6 +18,7 @@ public class CourseDetailsServiceImpl implements CourseDetailsService {
 	@Override
 	public List<CourseDetails> getcourselist() {
 	    List<CourseDetails> courseDetailsList = coursedetailsRepository.findAll();
+
 	    return courseDetailsList;
 	}
 

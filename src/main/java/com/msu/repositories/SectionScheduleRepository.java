@@ -13,6 +13,7 @@ public interface SectionScheduleRepository extends JpaRepository<SectionSchedule
 	public List<SectionSchedule> findBySectionId(Long sectionId);   
 	public SectionSchedule findBySectionScheduledId(Long semNameId); 
 	
+	
  
 	
 }

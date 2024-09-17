@@ -70,6 +70,7 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 
 	@Override
 	public void saveSectionSchedule(SectionSchedule sectionSchedule) {
+
 		sectionScheduleRepository.save(sectionSchedule);
 		
 	}
@@ -136,8 +137,8 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 			
 			Section section = new Section();
 			section.setSectionNo(sectionScheduleSaveDTO.getSectionNo());
-			section.setProfessor_id(sectionScheduleSaveDTO.getProfessorId());
-			section.setRoom_id(sectionScheduleSaveDTO.getRoomId());
+			section.setProfessorId(sectionScheduleSaveDTO.getProfessorId());
+			section.setRoomId(sectionScheduleSaveDTO.getRoomId());
 			section.setCourseSemesterMappingId(sectionScheduleSaveDTO.getCourseSemesterMappingId());
 			section.setCrossSectionId(sectionScheduleSaveDTO.getCrossSectionId());
 			section.setCourseSemesterMappingId(sectionScheduleSaveDTO.getCourseSemesterMappingId());
@@ -203,7 +204,7 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 		     for( SectionSchedule sectionScheduleForProfessor:fetchProfessorConflctsData) {
 		    	 
 		    	 Section section = sectionService.findBySectionId(sectionScheduleForProfessor.getSectionId());
-		    	 ProfessorDetails professor = professorService.findByProfessorId(section.getProfessor_id());
+		    	 ProfessorDetails professor = professorService.findByProfessorId(section.getProfessorId());
 		    	 String professorName = professor.getName();
 		    	 String weekDay = WeekEnum.getWeekEnum(sectionScheduleForProfessor.getWeekDay());;
 		    	 String startTime = sectionScheduleForProfessor.getStartTime().toString();
@@ -253,7 +254,7 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 		    	 CourseDetails courseDetails = coursedetailsService.findCourseDetailsByCourseId(byCourseSemesterMappingId.getCourseId());
 		    	 String courseName = courseDetails.getCourseName();
 		    	 
-		    	ClassRoom room = classRoomService.findByRoomId(section.getRoom_id());
+		    	ClassRoom room = classRoomService.findByRoomId(section.getRoomId());
 		    	
 		    
 	              String finalAnswer = room.getRoomName()+" is occupied on "+weekDay+" from "+startTime+" to "+endTime+" for course "+courseName;
@@ -292,7 +293,7 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 				 for(CourseSemesterMapping courseSemesterMapping:filteredCourseSemesterMappingList) {
 			
 					 List<Section> filterSections = sectionService.findAll().stream()
-					 .filter(section -> section.getProfessor_id() == suggestionsRequest.getProfessorId())
+					 .filter(section -> section.getProfessorId() == suggestionsRequest.getProfessorId())
 					 .filter(section -> section.getCourseSemesterMappingId() == courseSemesterMapping.getCourseSemesterMappingId())
 					    .collect(Collectors.toList());
 					 if(!filterSections.isEmpty()) {
@@ -420,7 +421,7 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 					 for(CourseSemesterMapping courseSemesterMapping:filteredCourseSemesterMappingList) {
 					 
 					 List<Section> filterSections = sectionService.findAll().stream()
-					 .filter(section -> section.getRoom_id() == roomByRoomId.getRoomId())
+					 .filter(section -> section.getRoomId() == roomByRoomId.getRoomId())
 					 .filter(section -> section.getCourseSemesterMappingId() == courseSemesterMapping.getCourseSemesterMappingId())
 					    .collect(Collectors.toList());
 					 if(!filterSections.isEmpty()) {

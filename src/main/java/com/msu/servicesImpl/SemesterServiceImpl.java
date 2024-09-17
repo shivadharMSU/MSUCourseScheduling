@@ -178,8 +178,8 @@ public class SemesterServiceImpl implements SemesterService{
 					newSection.setSectionNo(oldSection.getSectionNo());
 					newSection.setCapacity(oldSection.getCapacity());
 					newSection.setMaxCapacity(oldSection.getCapacity());
-					newSection.setProfessor_id(oldSection.getProfessor_id());
-					newSection.setRoom_id(oldSection.getRoom_id());
+					newSection.setProfessorId(oldSection.getProfessorId());
+					newSection.setRoomId(oldSection.getRoomId());
 					newSection.setCrossSectionId(oldSection.getCrossSectionId());
 					newSection.setCourseSemesterMappingId(newCourseSemMapping.getCourseSemesterMappingId());
 					sectionService.saveSection(newSection);
@@ -251,7 +251,7 @@ public class SemesterServiceImpl implements SemesterService{
 					sectionListDTO.setSectionId(section.getSectionId());
 					sectionListDTO.setSectionNo(section.getSectionNo());
 					
-					ProfessorDetails professorDetails = professorService.findByProfessorId(section.getProfessor_id());
+					ProfessorDetails professorDetails = professorService.findByProfessorId(section.getProfessorId());
 					sectionListDTO.setProfessorName(professorDetails.getName());
 					List<SectionSchedule> sectionSceduleList = sectionScheduleService
 							.findBySectionId(section.getSectionId());
