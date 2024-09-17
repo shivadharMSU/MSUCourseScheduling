@@ -274,17 +274,24 @@ function submitProfessorDetails(event) {
     // Get all the availability slots
     const timeSlotRows = document.getElementById('timeSlotsContainer').querySelectorAll('.row');
     console.log(timeSlotRows);
+    // Assuming 'timeSlotRows' is already defined and contains all your rows
     timeSlotRows.forEach(row => {
-        const activeButton = row.querySelector('button.active');
-        if (activeButton) {
-            // console.log(activeButton.textContent);
-            const dayOfWeek = activeButton.textContent;
+        const activeButtons = row.querySelectorAll('button.active');
+        activeButtons.forEach(activeButton => {
+            const dayOfWeek = activeButton.textContent; // Get the text of each active button
             const timeInputs = row.querySelectorAll('input[type="time"]');
             const startTime = timeInputs[0].value; // First time input is start time
             const endTime = timeInputs[1].value; // Second time input is end time
-            currentProfessorDetails.availabilities.push({ dayOfWeek, startTime, endTime });
-        }
+
+            // Assuming 'currentProfessorDetails.availabilities' is an array to store the availability
+            currentProfessorDetails.availabilities.push({
+                dayOfWeek: dayOfWeek.trim(),
+                startTime,
+                endTime
+            });
+        });
     });
+
 
     const apiUrl = 'http://localhost:8080/saveProfessor';
 

@@ -30,9 +30,6 @@ public class ProfessorServiceImpl implements ProfessorService {
 
 	@Autowired
 	private ProfessorTypeRepository professorTypeRepository;
-	
-	
-
 
 	@Override
 	public List<getProfessorResponseDTO> findAllProfessorsWithDetails() {
@@ -60,9 +57,12 @@ public class ProfessorServiceImpl implements ProfessorService {
 					availabilityDTO.setId(availability.getId());
 					// Omitting setProfessorId to avoid redundancy, assuming it's always the same as
 					// the parent professor's ID
-					availabilityDTO.setProfessorId(availability.getProfessorId()); // Assuming getProfessorAvailabilityDTO has this field
+					availabilityDTO.setProfessorId(availability.getProfessorId()); // Assuming
+																					// getProfessorAvailabilityDTO has
+																					// this field
 					availabilityDTO.setSemNameId(availability.getSemNameId());
-					availabilityDTO.setDayOfWeek(WeekDaysEnum.fromNumber(availability.getDayOfWeek()).getDayAbbreviation());
+					availabilityDTO
+							.setDayOfWeek(WeekDaysEnum.fromNumber(availability.getDayOfWeek()).getDayAbbreviation());
 					availabilityDTO.setStartTime(availability.getStartTime());
 					availabilityDTO.setEndTime(availability.getEndTime());
 					return availabilityDTO;
@@ -88,28 +88,69 @@ public class ProfessorServiceImpl implements ProfessorService {
 
 	@Override
 	public List<getProfessorTypeResponseDTO> findAllProfessorType() {
-	    List<ProfessorType> professorTypes = professorTypeRepository.findAll();
-	    List<getProfessorTypeResponseDTO> dtos = new ArrayList<>();
+		List<ProfessorType> professorTypes = professorTypeRepository.findAll();
+		List<getProfessorTypeResponseDTO> dtos = new ArrayList<>();
 
-	    for (ProfessorType professorType : professorTypes) {
-	        getProfessorTypeResponseDTO dto = new getProfessorTypeResponseDTO();
-	        dto.setId(professorType.getId()); // Assuming getProfessorTypesResponseDTO has this field
-	        dto.setName(professorType.getType()); // Assuming getProfessorTypesResponseDTO has this field
-	        dtos.add(dto);
-	    }
+		for (ProfessorType professorType : professorTypes) {
+			getProfessorTypeResponseDTO dto = new getProfessorTypeResponseDTO();
+			dto.setId(professorType.getId()); // Assuming getProfessorTypesResponseDTO has this field
+			dto.setName(professorType.getType()); // Assuming getProfessorTypesResponseDTO has this field
+			dtos.add(dto);
+		}
 
-	    return dtos;
+		return dtos;
 	}
 
 	@Override
 	public ProfessorDetails findByProfessorId(Long professorId) {
-	
+
 		return professorDetailsRepository.findByProfessorId(professorId);
 	}
 
 	@Override
 	public void saveOrUpdateProfessor(SaveOrUpdateProfessorRequestDTO saveOrUpdateProfessorRequestDTO) {
-		//System.out.println("saveOrUpdateProfessorRequestDTO: " + saveOrUpdateProfessorRequestDTO.toString());
+		// TODO Auto-generated method stub
 		
 	}
+
+//	@Override
+//	public void saveOrUpdateProfessor(SaveOrUpdateProfessorRequestDTO saveOrUpdateProfessorRequestDTO) {
+//		// Retrieve or create a ProfessorDetails entity
+//		ProfessorDetails professor = professorDetailsRepository
+//				.findById(saveOrUpdateProfessorRequestDTO.getProfessorId()).orElse(new ProfessorDetails());
+//
+//		// Update professor details
+//		professor.setProfessorId(saveOrUpdateProfessorRequestDTO.getProfessorId());
+//		professor.setName(saveOrUpdateProfessorRequestDTO.getName());
+//		professor.setCourseLoad(saveOrUpdateProfessorRequestDTO.getCourseLoad());
+//		professor.setProfessorType(saveOrUpdateProfessorRequestDTO.getProfType());
+//
+//		// Check and update professor type
+//		ProfessorType profType = professorTypeRepository.findByType(saveOrUpdateProfessorRequestDTO.getProfType())
+//				.orElse(new ProfessorType()); // This assumes you have a method to find by type name
+//		profType.setType(saveOrUpdateProfessorRequestDTO.getProfType()); // Ensure the type is set (for new types)
+//		professorTypeRepository.save(profType); // Save new or updated types
+//
+//		// Handle availabilities
+//		// First, clear existing availabilities if they are to be replaced
+//		professorAvailabilityRepository.deleteByProfessorId(professor.getProfessorId());
+//
+//		// Then, create and add new availabilities
+//		List<ProfessorAvailability> updatedAvailabilities = saveOrUpdateProfessorRequestDTO.getAvailabilities().stream()
+//				.map(availabilityDTO -> {
+//					ProfessorAvailability availability = new ProfessorAvailability();
+//					availability.setProfessorDetails(professor);
+//					availability.setDayOfWeek(availabilityDTO.getDayOfWeek());
+//					availability.setStartTime(availabilityDTO.getStartTime());
+//					availability.setEndTime(availabilityDTO.getEndTime());
+//					return availability;
+//				}).collect(Collectors.toList());
+//
+//		// Save the updated list of availabilities
+//		professorAvailabilityRepository.saveAll(updatedAvailabilities);
+//
+//		// Finally, save the updated professor details
+//		professorDetailsRepository.save(professor);
+//	}
+
 }
