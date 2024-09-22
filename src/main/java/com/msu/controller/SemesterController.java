@@ -1,6 +1,7 @@
 package com.msu.controller;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,10 @@ import com.msu.DTO.GetSemesterResponseDTO;
 import com.msu.DTO.PreviousSemesterListDTO;
 import com.msu.DTO.PreviousSemesterListRequestDTO;
 import com.msu.DTO.getProfessorResponseDTO;
+import com.msu.Enums.SmesterEnum;
 import com.msu.entities.CopySemesterRequestDTO;
 import com.msu.entities.CourseDetails;
+import com.msu.entities.Semester;
 import com.msu.services.SemesterService;
 
 @Controller
@@ -113,6 +116,19 @@ public class SemesterController {
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); // HTTP 500 Internal Server Error for failure
 	    }
 		
+	}
+	
+	@GetMapping("/getSemesterDropDown")
+	public ResponseEntity<HashMap<Integer, String>> getSemesterDropDown(){
+		
+		
+		HashMap<Integer,String> map = new HashMap<Integer,String>();
+		List<Semester> semesterList = semesterService.findAll();
+		for(Semester sem:semesterList) {
+			map.put(sem.getSemId(), SmesterEnum.getSemesterName(sem.getSemNameId())+"-"+sem.getYear());
+		}
+		
+		return ResponseEntity.ok(map);
 	}
 	
 	

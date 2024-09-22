@@ -164,7 +164,7 @@
             sectionItem.classList.add('list-group-item');
             sectionItem.innerHTML = `Section ${section.sectionNo} - Professor: ${section.professorName} - Time: ${section.dayAndTime}
                 <span class="float-right">
-                    <a href="#" class="edit" data-section-id="${section.sectionId}">Edit</a> |
+                    <a href="createSection.html?courseId=${course.courseId}&courseSemesterMappingId=${course.courseSemesterMappingId}&courseName=${course.courseName}&semId=${semId}&isEdit=1&sectionId=${section.sectionId}" class="edit" data-section-id="${section.sectionId}">Edit</a> |
                     <a href="#" class="delete" data-section-id="${section.sectionId}">Delete</a>
                 </span>`;
             sectionList.appendChild(sectionItem);
@@ -173,7 +173,7 @@
                 sectionItemPlus.classList.add('list-group-item');
                 const addSectionLink = document.createElement('a');
                 addSectionLink.textContent = '+ add section';
-                addSectionLink.href = `createSection.html?courseId=${course.courseId}&courseSemesterMappingId=${course.courseSemesterMappingId}&courseName=${course.courseName}&semId=${semId}`;
+                addSectionLink.href = `createSection.html?courseId=${course.courseId}&courseSemesterMappingId=${course.courseSemesterMappingId}&courseName=${course.courseName}&semId=${semId}&isEdit=0`;
                 sectionItemPlus.appendChild(addSectionLink);
                 sectionList.appendChild(sectionItemPlus);
                 sectionCardBody.appendChild(sectionList);
