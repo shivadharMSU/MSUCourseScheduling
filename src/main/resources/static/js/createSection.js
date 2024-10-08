@@ -1,22 +1,123 @@
 document.addEventListener("DOMContentLoaded", function() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
+    const sectionId = urlParams.get('sectionId'); 
+
     // Fetch room data and populate dropdown
     fetchData();
     fetchRooms();
     fetchProfessors();
-     
-        
+
+
+    // new code start here 
     document.getElementById("professor").innerHTML = '<option value="" selected>Select</option>';
 
     // Set default option for room dropdown
     document.getElementById("roomId").innerHTML = '<option value="" selected>Select</option>';
 
-        
     const addTimeSlotButton = document.getElementById("onAvailable");
     addTimeSlotButton.addEventListener("click", function() {
-        addTimeSlot();
+        addTimeSlot();  // Empty call adds a blank time slot
     });
+
+    
+  // if section id is present get existing details
+    //    if (sectionId) {
+    //     fetch(`http://localhost:8080/getSectionSchedule/${sectionId}`)
+    //         .then(response => response.json())
+    //         .then(data => populateForm(data))
+    //         .catch(error => console.error("Error fetching section data:", error));
+    // }
+
+    Promise.all([fetchRooms(), fetchProfessors()]).then(() => {
+        if (sectionId) {
+            fetch(`http://localhost:8080/getSectionSchedule/${sectionId}`)
+                .then(response => response.json())
+                .then(data => populateForm(data))
+                .catch(error => console.error("Error fetching section data:", error));
+        }
+    });
+
+    function populateForm(data) {
+        console.log(data);
+        document.getElementById("sectionNo").value = data.sectionNo;
+        document.getElementById("capacity").value = data.capacity;
+        document.getElementById("maxCapacity").value = data.maxCapacity;
+        document.getElementById("crossSectionId").value = data.crossSectionId;
+        document.getElementById("professor").value = data.professorId;
+        document.getElementById("roomId").value = data.roomId;
+
+        // Clear existing time slots, then populate new ones from data
+        const timeSlotsContainer = document.getElementById("timeSlotsContainer");
+        timeSlotsContainer.innerHTML = ''; // Clear existing slots
+        console.log("inside populateForm");
+        console.log("inside populateForm");
+        // Populate time slots
+        data.timeSlots.forEach((slot) => {
+            console.log("inside forlop",slot);
+            addTimeSlotTwo(slot);  
+            console.log("after forlop",slot);// Add each time slot using the data from the API
+        });
+        console.log(data.timeSlots);
+    }
+
+    function addTimeSlotTwo(slot = {}) {
+        console.log("inside addTimeSlotTwo",);
+        const timeSlotsContainer = document.getElementById("timeSlotsContainer");
+        const index = timeSlotsContainer.children.length; // Get the number of existing time slots
+        const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const selectedDays = slot.days || []; // Fetch selected days or leave empty
+
+        const newTimeSlotDiv = document.createElement('div');
+        newTimeSlotDiv.classList.add('row', 'align-items-center', 'mb-3');
+        console.log("add time row");
+        // Dynamically create the time slot HTML
+        newTimeSlotDiv.innerHTML = `
+            <div class="btn-group col-auto" role="group" aria-label="Day Selection">
+                ${days.map(day => 
+                    `<button class="btn btn-outline-primary ${selectedDays.includes(day.toUpperCase()) ? 'active btn-primary' : ''}" data-day="${day.toLowerCase()}">${day}</button>`
+                ).join('')}
+            </div>
+            <div class="col">
+                <input type="time" class="form-control" id="startTime${index}" value="${slot.startTime || ''}" />
+            </div>
+            <div class="col">
+                <input type="time" class="form-control" id="endTime${index}" value="${slot.endTime || ''}" />
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-outline-danger remove-time-slot" type="button">Remove</button>
+            </div>
+        `;
+
+        // Append the new time slot div to the container
+        timeSlotsContainer.appendChild(newTimeSlotDiv);
+
+        // Add event listeners for the new buttons (Day toggles and Remove button)
+        newTimeSlotDiv.querySelectorAll('.btn-outline-primary').forEach(button => {
+            button.addEventListener('click', function () {
+                toggleDaySelection(this);
+            });
+        });
+
+        newTimeSlotDiv.querySelector('.remove-time-slot').addEventListener('click', function() {
+            newTimeSlotDiv.remove();
+        });
+    }
+
+    function toggleDaySelection(button) {
+        button.classList.toggle('active');
+        button.classList.toggle('btn-primary');
+    }
+
+        // new code end
+    
+
+        
+    // commented for testng
+    // const addTimeSlotButton = document.getElementById("onAvailable");
+    // addTimeSlotButton.addEventListener("click", function() {
+    //     addTimeSlot();
+    // });
 
     // Function to add a new time slot
     function addTimeSlot() {
@@ -129,8 +230,11 @@ document.addEventListener("DOMContentLoaded", function() {
         const endTimeInput = timeSlot.querySelector('[id^="endTime"]');
         if (dayButtons.length > 0 && startTimeInput && endTimeInput) {
             const days = Array.from(dayButtons).map(button => button.dataset.day);
+            console.log(days);
             const startTime = startTimeInput.value;
+            console.log(startTime);
             const endTime = endTimeInput.value;
+            console.log(endTime);
             timeSlots.push({ days, startTime, endTime });
         }
     });
@@ -166,29 +270,18 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Function to fetch room data and populate dropdown
     function fetchRooms() {
-        const timeSlots = getTimeSlots();
-        console.log(timeSlots);
-        fetch("http://localhost:8080/getClassListForDropDown", {
+        return fetch("http://localhost:8080/getClassListForDropDown", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 "professorId": 9876,
                 "semId": 3,
                 "courseId": 67890,
-                "timeSlots": timeSlots // Pass time slots array to the API
+                "timeSlots": getTimeSlots()
             })
         })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error("Failed to fetch rooms");
-            }
-        })
+        .then(response => response.ok ? response.json() : Promise.reject("Failed to fetch rooms"))
         .then(data => {
-            // Populate dropdown options with fetched data
             const roomDropdown = document.getElementById("roomId");
             roomDropdown.innerHTML = ""; // Clear existing options
             data.forEach(room => {
@@ -197,19 +290,13 @@ document.addEventListener("DOMContentLoaded", function() {
                 option.textContent = room.roomName;
                 roomDropdown.appendChild(option);
             });
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            alert("Failed to fetch rooms");
         });
     }
     
     function fetchProfessors() {
-        fetch("http://localhost:8080/getProfessorListForDropDown", {    
+        return fetch("http://localhost:8080/getProfessorListForDropDown", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 "courseId": 1,
                 "semId": 2,
@@ -218,26 +305,16 @@ document.addEventListener("DOMContentLoaded", function() {
                 "endTime": "11:00 AM"
             })
         })
-        .then(response => {
-            if (response.ok) {
-                return response.json();
-            } else {
-                throw new Error("Failed to fetch professors");
-            }
-        })
+        .then(response => response.ok ? response.json() : Promise.reject("Failed to fetch professors"))
         .then(data => {
-            // Populate dropdown options with fetched data
             const professorDropdown = document.getElementById("professor");
+            professorDropdown.innerHTML = ""; // Clear existing options
             data.forEach(professor => {
                 const option = document.createElement("option");
                 option.value = professor.proffessorId;
                 option.textContent = professor.professorName;
                 professorDropdown.appendChild(option);
             });
-        })
-        .catch(error => {
-            console.error("Error:", error);
-            alert("Failed to fetch professors");
         });
     }
     

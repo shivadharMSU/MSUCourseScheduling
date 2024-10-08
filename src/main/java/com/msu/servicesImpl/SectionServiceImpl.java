@@ -58,4 +58,9 @@ public class SectionServiceImpl implements SectionService {
 		return sectionRepository.findByProfessorIdAndCourseSemesterMappingId(professorId, courseSemesterMappingId);
 	}
 
+	@Override
+	public void deleteSectionBySection(Long sectionId) {
+		sectionRepository.deleteBySectionId(sectionId);
+	}
+
 }

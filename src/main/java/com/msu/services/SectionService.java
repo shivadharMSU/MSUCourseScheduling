@@ -12,5 +12,6 @@ public interface SectionService {
     public List<Section> findByCourseSemesterMappingId(Long courseSemesterMappingId);
     public Section findBySectionId(Long sectionId);
 	public List<Section> findByProfessorIdAndCourseSemesterMappingId(Long professorId,Long courseSemesterMappingId);
-    
+
+    public void deleteSectionBySection(Long sectionId);
 }
