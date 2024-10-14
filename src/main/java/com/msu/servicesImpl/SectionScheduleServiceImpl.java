@@ -3,22 +3,16 @@ package com.msu.servicesImpl;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.msu.DTO.*;
+import com.msu.Enums.WeekDaysEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.msu.DTO.ClassDropDownListRequestDTO;
-import com.msu.DTO.ClassDropDownListResponseDTO;
-import com.msu.DTO.ConflictDTO;
-import com.msu.DTO.ProfessorDropDownListRequestDTO;
-import com.msu.DTO.ProfessorDropDownListResponseDTO;
-import com.msu.DTO.SectionScheduleSaveDTO;
-import com.msu.DTO.SuggestionDTO;
-import com.msu.DTO.SuggestionRequestDTO;
-import com.msu.DTO.SuggestionsResponseDTO;
-import com.msu.DTO.TimeSlotsDTO;
 import com.msu.Enums.WeekEnum;
 import com.msu.entities.ClassRoom;
 import com.msu.entities.CourseDetails;
@@ -70,6 +64,7 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 
 	@Override
 	public void saveSectionSchedule(SectionSchedule sectionSchedule) {
+
 		sectionScheduleRepository.save(sectionSchedule);
 		
 	}
@@ -133,33 +128,25 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 	public void saveSectionSchedule(SectionScheduleSaveDTO sectionScheduleSaveDTO) {
 		
 		try {
-			
-			Section section = new Section();
+			Long sectionId = sectionScheduleSaveDTO.getSectionId();
+			Section section = sectionService.findBySectionId(sectionId);
+			if (section == null) {
+				section = new Section();
+			} else {
+				section.setSectionId(sectionId);
+			}
+
 			section.setSectionNo(sectionScheduleSaveDTO.getSectionNo());
-			section.setProfessor_id(sectionScheduleSaveDTO.getProfessorId());
-			section.setRoom_id(sectionScheduleSaveDTO.getRoomId());
+			section.setProfessorId(sectionScheduleSaveDTO.getProfessorId());
+			section.setRoomId(sectionScheduleSaveDTO.getRoomId());
 			section.setCourseSemesterMappingId(sectionScheduleSaveDTO.getCourseSemesterMappingId());
 			section.setCrossSectionId(sectionScheduleSaveDTO.getCrossSectionId());
 			section.setCourseSemesterMappingId(sectionScheduleSaveDTO.getCourseSemesterMappingId());
 			section.setCapacity(sectionScheduleSaveDTO.getCapacity());
 			section.setMaxCapacity(sectionScheduleSaveDTO.getMaxCapacity());
 			sectionService.saveSection(section);
-			
-			TimeSlotsDTO[] timeSlots = sectionScheduleSaveDTO.getTimeSlots();
-			for(TimeSlotsDTO timeSlot:timeSlots) {
-				for(String day:timeSlot.getDays()) {
-					SectionSchedule sectionSchedule = new SectionSchedule();
-					sectionSchedule.setSectionId(section.getSectionId());
-					
-					sectionSchedule.setWeekDay(WeekEnum.getWeekIdByWeekName(day));
-					sectionSchedule.setStartTime(timeSlot.getStartTime());
-					sectionSchedule.setEndTime(timeSlot.getEndTime());
-					
-					saveSectionSchedule(sectionSchedule);
-				}
-				
-			}
-			
+			List<SectionSchedule> sectionScheduleList = sectionScheduleRepository.findBySectionId(section.getSectionId());
+			 saveTimeLots(sectionScheduleList, sectionScheduleSaveDTO.getTimeSlots());
 			
 			
 		}catch(Exception ex) {
@@ -167,9 +154,50 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 		}
 		
 	}
-	
-	
-	
+
+	private void saveTimeLots(List<SectionSchedule> sectionScheduleList, TimeSlotsDTO[] timeSlots) {
+
+		ArrayList<TimeSlotDTO> list = new ArrayList<TimeSlotDTO>();
+		for (TimeSlotsDTO timeSlot : timeSlots) {
+			for (String day : timeSlot.getDays()) {
+				TimeSlotDTO timeSlotDTO = new TimeSlotDTO();
+				timeSlotDTO.setDays(WeekEnum.getWeekIdByWeekName(day));
+				timeSlotDTO.setStartTime(timeSlot.getStartTime());
+				timeSlotDTO.setEndTime(timeSlot.getEndTime());
+				list.add(timeSlotDTO);
+			}
+
+		}
+
+		for(SectionSchedule sectionSchedule:sectionScheduleList){
+         boolean change = false;
+			for (TimeSlotDTO timeSlotDTO : list) {
+
+				if(timeSlotDTO.getDays() == sectionSchedule.getWeekDay()
+						&& timeSlotDTO.getStartTime() == sectionSchedule.getStartTime()
+						&& timeSlotDTO.getEndTime() == sectionSchedule.getEndTime()){
+					change = true;
+					list.remove(timeSlotDTO);
+				}
+
+			}
+			if(change){
+				sectionScheduleRepository.deleteBySectionId(sectionSchedule.getSectionScheduledId());
+			}
+		}
+
+		for (TimeSlotDTO timeSlotDTO : list) {
+
+			 SectionSchedule sectionScedule = new SectionSchedule();
+			sectionScedule.setWeekDay(timeSlotDTO.getDays());
+			sectionScedule.setStartTime(timeSlotDTO.getStartTime());
+			sectionScedule.setEndTime(timeSlotDTO.getEndTime());
+			 sectionScheduleRepository.save(sectionScedule);
+		}
+
+	}
+
+
 	public static void main(String[] args) {
 
 		
@@ -203,7 +231,7 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 		     for( SectionSchedule sectionScheduleForProfessor:fetchProfessorConflctsData) {
 		    	 
 		    	 Section section = sectionService.findBySectionId(sectionScheduleForProfessor.getSectionId());
-		    	 ProfessorDetails professor = professorService.findByProfessorId(section.getProfessor_id());
+		    	 ProfessorDetails professor = professorService.findByProfessorId(section.getProfessorId());
 		    	 String professorName = professor.getName();
 		    	 String weekDay = WeekEnum.getWeekEnum(sectionScheduleForProfessor.getWeekDay());;
 		    	 String startTime = sectionScheduleForProfessor.getStartTime().toString();
@@ -253,7 +281,7 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 		    	 CourseDetails courseDetails = coursedetailsService.findCourseDetailsByCourseId(byCourseSemesterMappingId.getCourseId());
 		    	 String courseName = courseDetails.getCourseName();
 		    	 
-		    	ClassRoom room = classRoomService.findByRoomId(section.getRoom_id());
+		    	ClassRoom room = classRoomService.findByRoomId(section.getRoomId());
 		    	
 		    
 	              String finalAnswer = room.getRoomName()+" is occupied on "+weekDay+" from "+startTime+" to "+endTime+" for course "+courseName;
@@ -292,7 +320,7 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 				 for(CourseSemesterMapping courseSemesterMapping:filteredCourseSemesterMappingList) {
 			
 					 List<Section> filterSections = sectionService.findAll().stream()
-					 .filter(section -> section.getProfessor_id() == suggestionsRequest.getProfessorId())
+					 .filter(section -> section.getProfessorId() == suggestionsRequest.getProfessorId())
 					 .filter(section -> section.getCourseSemesterMappingId() == courseSemesterMapping.getCourseSemesterMappingId())
 					    .collect(Collectors.toList());
 					 if(!filterSections.isEmpty()) {
@@ -420,7 +448,7 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 					 for(CourseSemesterMapping courseSemesterMapping:filteredCourseSemesterMappingList) {
 					 
 					 List<Section> filterSections = sectionService.findAll().stream()
-					 .filter(section -> section.getRoom_id() == roomByRoomId.getRoomId())
+					 .filter(section -> section.getRoomId() == roomByRoomId.getRoomId())
 					 .filter(section -> section.getCourseSemesterMappingId() == courseSemesterMapping.getCourseSemesterMappingId())
 					    .collect(Collectors.toList());
 					 if(!filterSections.isEmpty()) {
@@ -464,10 +492,79 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 		
 		return null;
 	}
-	
-	
-	
-	
-	
+
+	@Override
+	public SectionScheduleSaveDTO getSectionSceduleBySectionSceduleId(Long sectionId) {
+
+		SectionScheduleSaveDTO sectionssheduleDTO = new SectionScheduleSaveDTO();
+		try{
+			Section section = sectionService.findBySectionId(sectionId);
+			sectionssheduleDTO.setCourseSemesterMappingId(section.getCourseSemesterMappingId());
+			sectionssheduleDTO.setProfessorId(section.getProfessorId());
+			sectionssheduleDTO.setRoomId(section.getRoomId());
+			sectionssheduleDTO.setCapacity(section.getRoomId());
+			sectionssheduleDTO.setMaxCapacity(section.getMaxCapacity());
+			sectionssheduleDTO.setSectionNo(section.getSectionNo());
+
+			List<SectionSchedule> sectionScheduleList = sectionScheduleRepository.findBySectionId(sectionId);
+			Map<String,List<String>> map = new HashMap<String,List<String>>();
+              for(SectionSchedule sectionSchedule: sectionScheduleList){
+
+				  Integer weekDay = sectionSchedule.getWeekDay();
+				  String weekByValue = WeekEnum.getWeekByValue(weekDay);
+
+				  LocalTime startTime = sectionSchedule.getStartTime().now(); // or any LocalTime object
+				  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+				  String formattedStartTime = startTime.format(formatter);
+
+
+				  LocalTime endTime = sectionSchedule.getEndTime().now(); // or any LocalTime object
+				  DateTimeFormatter endTimeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+				  String formattedEndTime = endTime.format(endTimeFormatter);
+
+
+				  map.computeIfAbsent(formattedStartTime+","+formattedEndTime, k -> new ArrayList<>()).add(weekByValue);
+
+			  }
+			TimeSlotsDTO[] timesSlot = new TimeSlotsDTO[map.size()];
+			  int index = 0;
+			for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+				TimeSlotsDTO dto =  new TimeSlotsDTO();
+				String[] split = entry.getKey().split(",");
+                  int i =0;
+				  String[] weekstr = new String[entry.getValue().size()];
+
+				for(String str:entry.getValue()){
+					weekstr[i++] = str;
+				}
+				dto.setDays(weekstr);
+				LocalTime startTime = LocalTime.parse(split[0], DateTimeFormatter.ofPattern("HH:mm"));
+				LocalTime endTime = LocalTime.parse(split[1], DateTimeFormatter.ofPattern("HH:mm"));
+
+
+				dto.setStartTime(startTime);
+				dto.setEndTime(endTime);
+
+				timesSlot[index++] = dto;
+
+			}
+
+			sectionssheduleDTO.setTimeSlots(timesSlot);
+			return sectionssheduleDTO;
+
+		}catch(Exception ex){
+          
+		}
+		return null;
+	}
+
+	@Override
+	public void deleteSectionSchedule(Long sectionId) {
+
+		sectionScheduleRepository.deleteBySectionId(sectionId);
+		sectionService.deleteSectionBySection(sectionId);
+
+	}
+
 
 }

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate PDF</title>
+    <!-- Include jsPDF library -->
+
+     <link rel="stylesheet" href="./css/jspdf.umd.min.js">
+</head>
+<body>
+    <button id="downloadBtn">Download PDF</button>
+
+    <script>
+        // Check if jsPDF is defined
+        if (typeof jsPDF !== "undefined") {
+            // Function to generate and download PDF
+            function generatePDF() {
+                // Create new jsPDF instance
+                const doc = new jsPDF();
+
+                // Get name from user
+                const name = prompt("Enter your name:");
+
+                // Add name to PDF
+                doc.text(`Hello, ${name}!`, 10, 10);
+
+                // Save the PDF
+                doc.save("output.pdf");
+            }
+
+            // Event listener for button click
+            document.getElementById("downloadBtn").addEventListener("click", generatePDF);
+        } else {
+            // Alert the user if jsPDF is not defined
+            alert("Error: jsPDF library is not loaded!");
+        }
+    </script>
+</body>
+</html>

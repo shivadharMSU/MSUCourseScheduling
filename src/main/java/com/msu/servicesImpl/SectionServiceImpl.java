@@ -52,4 +52,15 @@ public class SectionServiceImpl implements SectionService {
 		
 	}
 
+	@Override
+	public List<Section> findByProfessorIdAndCourseSemesterMappingId(Long professorId, Long courseSemesterMappingId) {
+		// TODO Auto-generated method stub
+		return sectionRepository.findByProfessorIdAndCourseSemesterMappingId(professorId, courseSemesterMappingId);
+	}
+
+	@Override
+	public void deleteSectionBySection(Long sectionId) {
+		sectionRepository.deleteBySectionId(sectionId);
+	}
+
 }

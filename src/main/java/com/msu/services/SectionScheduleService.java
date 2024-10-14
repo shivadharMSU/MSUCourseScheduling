@@ -27,6 +27,8 @@ public interface SectionScheduleService {
 	 public List<SectionSchedule> fetchProfessorConflctsData(SuggestionRequestDTO suggestionsRequest);
 	 public List<SectionSchedule> fetchCourseConflctsData(SuggestionRequestDTO suggestionsRequest);
 	 public List<SectionSchedule> fetchRoomConflctsData(SuggestionRequestDTO suggestionsRequest);
+	 public SectionScheduleSaveDTO getSectionSceduleBySectionSceduleId(Long sectionId);
+	 public void  deleteSectionSchedule(Long sectionId);
 
 	 
 

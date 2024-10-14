@@ -27,13 +27,13 @@ public class CourseDetailsController {
 	
 	@GetMapping(value = "/getallcourses", produces = MediaType.APPLICATION_PDF_VALUE)
 	public ResponseEntity<InputStreamResource> getallcoursedetails() {
-		
+
+
 			List<CourseDetails> coursedetails = coursedetailservicce.getcourselist();
 			
 			ByteArrayInputStream coursepdfreport = DatabasePDFService.coursepdfreport(coursedetails);
 			System.out.println(coursedetails);
-			
-			
+
 			
 			HttpHeaders headers = new  HttpHeaders();
 			headers.add("Content-Disposition", "attachment; filename=courses.pdf");
@@ -47,6 +47,8 @@ public class CourseDetailsController {
 		coursedetailservicce.saveCourseDetails(coursedetails);
 		
 	}
+
+
 	
 	
 	

@@ -30,10 +30,10 @@ public class Section {
     
    
     @Column(name = "professor_id")
-    private Long professor_id;
+    private Long professorId;
     
     @Column(name = "room_id")
-    private Integer room_id;
+    private Integer roomId;
     
     @Column(name = "cross_section_id")
     private Long crossSectionId;
@@ -69,20 +69,22 @@ public class Section {
 
 	
 
-	public Long getProfessor_id() {
-		return professor_id;
+	
+
+	public Long getProfessorId() {
+		return professorId;
 	}
 
-	public void setProfessor_id(Long professor_id) {
-		this.professor_id = professor_id;
+	public void setProfessorId(Long professorId) {
+		this.professorId = professorId;
 	}
 
-	public Integer getRoom_id() {
-		return room_id;
+	public Integer getRoomId() {
+		return roomId;
 	}
 
-	public void setRoom_id(Integer room_id) {
-		this.room_id = room_id;
+	public void setRoomId(Integer roomId) {
+		this.roomId = roomId;
 	}
 
 	public Long getCrossSectionId() {
