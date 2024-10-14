@@ -25,6 +25,9 @@ public class ProfessorDetails {
     @Column(name = "professor_type")
     private Integer professorType;
     
+    @Column(name = "prof_status")
+    private boolean profStatus;
+    
     // Getters and setters
     public Long getProfessorId() {
         return professorId;
@@ -42,7 +45,15 @@ public class ProfessorDetails {
         this.name = name;
     }
 
-    public String getCourseLoad() {
+    public boolean getProfStatus() {
+		return profStatus;
+	}
+
+	public void setProfStatus(boolean profStatus) {
+		this.profStatus = profStatus;
+	}
+
+	public String getCourseLoad() {
         return courseLoad;
     }
 
