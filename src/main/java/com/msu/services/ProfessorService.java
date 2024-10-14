@@ -5,6 +5,7 @@ import java.util.List;
 import com.msu.DTO.SaveOrUpdateProfessorRequestDTO;
 import com.msu.DTO.getProfessorResponseDTO;
 import com.msu.DTO.getProfessorTypeResponseDTO;
+import com.msu.entities.ProfessorAvailability;
 import com.msu.entities.ProfessorDetails;
 
 public interface ProfessorService {
@@ -13,12 +14,19 @@ public interface ProfessorService {
 
 	public List<getProfessorResponseDTO> findAllProfessorsWithDetails();
 
-	public void saveProfessorDetails(ProfessorDetails professorDetails);
-
 	public List<getProfessorTypeResponseDTO> findAllProfessorType();
-	
+
 	public ProfessorDetails findByProfessorId(Long professorId);
 
-	public void saveOrUpdateProfessor(SaveOrUpdateProfessorRequestDTO saveOrUpdateProfessorRequestDTO);
+	public boolean deleteProfessor(Long professorId);
 
+	ProfessorDetails updateProfessor(Long professorId, SaveOrUpdateProfessorRequestDTO updateProfessorRequestDTO);
+
+	ProfessorDetails saveProfessor(SaveOrUpdateProfessorRequestDTO saveProfessorRequestDTO);
+
+	public ProfessorDetails saveOrUpdateProfessor(SaveOrUpdateProfessorRequestDTO saveOrUpdateProfessorRequestDTO);
+
+	void saveProfessorAvailability(ProfessorAvailability professorAvailability);
+
+	ProfessorDetails saveProfessorDetails(ProfessorDetails professorDetails);
 }
