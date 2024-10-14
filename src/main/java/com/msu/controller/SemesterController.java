@@ -121,21 +121,7 @@ public class SemesterController {
 		return ResponseEntity.ok(map);
 	}
 
-	@GetMapping("/deleteSection/{sectionId}/{courseId}")
-	public ResponseEntity<String> deleteCourseBySemId(@PathVariable Integer semId, @PathVariable Long courseId) {
-
-		try {
-			
-				//sectionScheduleService.getSectionSceduleBySectionSceduleId(sectionId);
-			return ResponseEntity.ok("success");
-
-		} catch (Exception ex) {
-			System.out.println("getClassListForDropDown: " + ex.getMessage());
-			return ResponseEntity.ok("failure");
-
-		}
-
-
-
-	}
+//deleteSectionSchedule
+	
+	
 }
