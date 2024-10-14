@@ -2,18 +2,18 @@ document.addEventListener("DOMContentLoaded", function() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const sectionId = urlParams.get('sectionId'); 
+    const semId = urlParams.get('semId'); 
+    const courseId = urlParams.get('courseId'); 
+
 
     // Fetch room data and populate dropdown
     fetchData();
     fetchRooms();
     fetchProfessors();
+    fetchCrossSectionList(semId,courseId);
 
 
-    // new code start here 
-    document.getElementById("professor").innerHTML = '<option value="" selected>Select</option>';
-
-    // Set default option for room dropdown
-    document.getElementById("roomId").innerHTML = '<option value="" selected>Select</option>';
+   
 
     const addTimeSlotButton = document.getElementById("onAvailable");
     addTimeSlotButton.addEventListener("click", function() {
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function() {
     //         .catch(error => console.error("Error fetching section data:", error));
     // }
 
-    Promise.all([fetchRooms(), fetchProfessors()]).then(() => {
+    Promise.all([fetchRooms(), fetchProfessors(),fetchCrossSectionList(semId,courseId)]).then(() => {
         if (sectionId) {
             fetch(`http://localhost:8080/getSectionSchedule/${sectionId}`)
                 .then(response => response.json())
@@ -356,6 +356,25 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // Function to fetch suggestion for the selected professor
+
+    function fetchCrossSectionList(semId,courseId){
+        return fetch(`http://localhost:8080/getCrossSectionDropDownList/${semId}/${courseId}`, {
+            method: 'GET',
+        })
+        .then(response => response.ok ? response.json() : Promise.reject("Failed to fetch professors"))
+        .then(data => {
+          
+            const crossSectionDropDown = document.getElementById("crossSectionId");
+            crossSectionDropDown.innerHTML = ""; // Clear existing options
+            data.corsssSectionDropDownList.forEach(crossSection => {
+                const option = document.createElement("option");
+                option.value = crossSection.id;
+                option.textContent = crossSection.sectionName;
+                crossSectionDropDown.appendChild(option);
+            });
+        });
+    }
+
     function fetchSuggestion() {
         const timeSlots = getTimeSlots();
         fetch("http://localhost:8080/getSuggestion", {

@@ -22,5 +22,10 @@ public interface SectionRepository extends JpaRepository<Section, Long> {
 	@Transactional
 	@Query("DELETE FROM Section s WHERE s.sectionId = :sectionId")
 	void deleteBySectionId(@Param("sectionId") Long sectionId);
+	
+	@Modifying
+	@Transactional
+	@Query("DELETE FROM Section s WHERE s.courseSemesterMappingId = :courseSemesterMappingId")
+	void deleteByCourseSemesterMappingId(@Param("courseSemesterMappingId") Long courseSemesterMappingId);
 
 }

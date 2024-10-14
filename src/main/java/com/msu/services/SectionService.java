@@ -2,6 +2,7 @@ package com.msu.services;
 
 import java.util.List;
 
+import com.msu.DTO.CrossSectionDropDownList;
 import com.msu.entities.Section;
 
 public interface SectionService {
@@ -14,4 +15,6 @@ public interface SectionService {
 	public List<Section> findByProfessorIdAndCourseSemesterMappingId(Long professorId,Long courseSemesterMappingId);
 
     public void deleteSectionBySection(Long sectionId);
+    public CrossSectionDropDownList getCrossSectionList(Integer semId,Long courseId);
+
 }

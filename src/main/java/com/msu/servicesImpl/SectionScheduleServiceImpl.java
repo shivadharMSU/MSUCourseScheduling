@@ -144,9 +144,11 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 			section.setCourseSemesterMappingId(sectionScheduleSaveDTO.getCourseSemesterMappingId());
 			section.setCapacity(sectionScheduleSaveDTO.getCapacity());
 			section.setMaxCapacity(sectionScheduleSaveDTO.getMaxCapacity());
+			section.setCrossSectionId(sectionScheduleSaveDTO.getCrossSectionId());
 			sectionService.saveSection(section);
 			List<SectionSchedule> sectionScheduleList = sectionScheduleRepository.findBySectionId(section.getSectionId());
-			 saveTimeLots(sectionScheduleList, sectionScheduleSaveDTO.getTimeSlots());
+			saveTimeLots(sectionScheduleList, sectionScheduleSaveDTO.getTimeSlots(),section);
+			
 			
 			
 		}catch(Exception ex) {
@@ -155,7 +157,7 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 		
 	}
 
-	private void saveTimeLots(List<SectionSchedule> sectionScheduleList, TimeSlotsDTO[] timeSlots) {
+	private void saveTimeLots(List<SectionSchedule> sectionScheduleList, TimeSlotsDTO[] timeSlots,Section section) {
 
 		ArrayList<TimeSlotDTO> list = new ArrayList<TimeSlotDTO>();
 		for (TimeSlotsDTO timeSlot : timeSlots) {
@@ -164,6 +166,7 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 				timeSlotDTO.setDays(WeekEnum.getWeekIdByWeekName(day));
 				timeSlotDTO.setStartTime(timeSlot.getStartTime());
 				timeSlotDTO.setEndTime(timeSlot.getEndTime());
+				LocalTime endTime = timeSlot.getEndTime();
 				list.add(timeSlotDTO);
 			}
 
@@ -189,6 +192,7 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 		for (TimeSlotDTO timeSlotDTO : list) {
 
 			 SectionSchedule sectionScedule = new SectionSchedule();
+			 sectionScedule.setSectionId(section.getSectionId());
 			sectionScedule.setWeekDay(timeSlotDTO.getDays());
 			sectionScedule.setStartTime(timeSlotDTO.getStartTime());
 			sectionScedule.setEndTime(timeSlotDTO.getEndTime());
@@ -505,43 +509,52 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 			sectionssheduleDTO.setCapacity(section.getRoomId());
 			sectionssheduleDTO.setMaxCapacity(section.getMaxCapacity());
 			sectionssheduleDTO.setSectionNo(section.getSectionNo());
+			sectionssheduleDTO.setCrossSectionId(section.getCrossSectionId());
+			
 
 			List<SectionSchedule> sectionScheduleList = sectionScheduleRepository.findBySectionId(sectionId);
-			Map<String,List<String>> map = new HashMap<String,List<String>>();
+			Map<String,List<GetTimeSlotIterativeDTO>> map = new HashMap<String,List<GetTimeSlotIterativeDTO>>();
               for(SectionSchedule sectionSchedule: sectionScheduleList){
 
 				  Integer weekDay = sectionSchedule.getWeekDay();
 				  String weekByValue = WeekEnum.getWeekByValue(weekDay);
 
-				  LocalTime startTime = sectionSchedule.getStartTime().now(); // or any LocalTime object
+				  LocalTime startTime = sectionSchedule.getStartTime(); // or any LocalTime object
 				  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 				  String formattedStartTime = startTime.format(formatter);
 
 
-				  LocalTime endTime = sectionSchedule.getEndTime().now(); // or any LocalTime object
+				  LocalTime endTime = sectionSchedule.getEndTime() ;// or any LocalTime object
 				  DateTimeFormatter endTimeFormatter = DateTimeFormatter.ofPattern("HH:mm");
 				  String formattedEndTime = endTime.format(endTimeFormatter);
-
-
-				  map.computeIfAbsent(formattedStartTime+","+formattedEndTime, k -> new ArrayList<>()).add(weekByValue);
+                   
+				  GetTimeSlotIterativeDTO timeSlots = new GetTimeSlotIterativeDTO();
+				  timeSlots.setWeekDay(weekByValue);
+				  timeSlots.setStartTime(startTime);
+				  timeSlots.setEndTime(endTime);
+				  
+				  map.computeIfAbsent(formattedStartTime+","+formattedEndTime, k -> new ArrayList<>()).add(timeSlots);
 
 			  }
 			TimeSlotsDTO[] timesSlot = new TimeSlotsDTO[map.size()];
 			  int index = 0;
-			for (Map.Entry<String, List<String>> entry : map.entrySet()) {
+			for (Map.Entry<String, List<GetTimeSlotIterativeDTO>> entry : map.entrySet()) {
 				TimeSlotsDTO dto =  new TimeSlotsDTO();
 				String[] split = entry.getKey().split(",");
                   int i =0;
 				  String[] weekstr = new String[entry.getValue().size()];
 
-				for(String str:entry.getValue()){
-					weekstr[i++] = str;
+				for(GetTimeSlotIterativeDTO str:entry.getValue()){
+					weekstr[i++] = str.getWeekDay();
 				}
+				GetTimeSlotIterativeDTO getTimeSlotIterativeDTO = entry.getValue().get(0);
 				dto.setDays(weekstr);
-				LocalTime startTime = LocalTime.parse(split[0], DateTimeFormatter.ofPattern("HH:mm"));
-				LocalTime endTime = LocalTime.parse(split[1], DateTimeFormatter.ofPattern("HH:mm"));
+				//LocalTime startTime = LocalTime.parse(getTimeSlotIterativeDTO.getStartTime(), DateTimeFormatter.ofPattern("HH:mm"));
+				//LocalTime endTime = LocalTime.parse(getTimeSlotIterativeDTO.getEndTime(), DateTimeFormatter.ofPattern("HH:mm"));
 
-
+				LocalTime startTime = getTimeSlotIterativeDTO.getStartTime();
+				LocalTime endTime = getTimeSlotIterativeDTO.getEndTime();
+				
 				dto.setStartTime(startTime);
 				dto.setEndTime(endTime);
 
@@ -565,6 +578,7 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 		sectionService.deleteSectionBySection(sectionId);
 
 	}
+	
 
 
 }

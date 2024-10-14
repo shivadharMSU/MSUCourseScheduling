@@ -23,7 +23,6 @@
             color: #FFFFFF;
         }
 
-
         .navbar-nav .nav-item.dropdown .dropdown-menu {
             background-color: #C8102E;
         }
@@ -42,16 +41,18 @@
             border-color: rgba(255, 255, 255, 0.1);
         }
 
-        /* .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255, 255, 255, 0.5)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-        } */
-    </style>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    <style>
         .course-name {
             color: red;
         }
+
+        .delete-button {
+            color: white;
+            background-color: #dc3545;
+            border: none;
+            cursor: pointer;
+        }
     </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 </head>
 
 <body>
@@ -96,9 +97,10 @@
     </div>
     <div class="container">
         <!-- Button for copying semester -->
+        <button id="newCourseButton" class="btn btn-primary float-right mt-3 mr-3">Add new Course Semester</button>
         <button id="copySemesterButton" class="btn btn-primary float-right mt-3 mr-3">Copy Semester</button>
-
     </div>
+    <br>
     <div class="container mt-5">
         <div id="coursesList"></div>
     </div>
@@ -131,15 +133,16 @@
             const urlParams = new URLSearchParams(queryString);
             const semId = urlParams.get('semId');
             const coursesList = document.getElementById('coursesList');
+            coursesList.innerHTML = ''; // Clear the list before adding new data
 
             courses.forEach(course => {
                 const courseDiv = document.createElement('div');
                 courseDiv.classList.add('card');
 
                 const courseHeader = document.createElement('div');
-                courseHeader.classList.add('card-header', 'p-0');
-                const courseButton = document.createElement('button');
+                courseHeader.classList.add('card-header', 'p-0', 'd-flex', 'justify-content-between', 'align-items-center');
 
+                const courseButton = document.createElement('button');
                 courseButton.classList.add('btn', 'btn-link', 'collapsed', 'course-name');
                 courseButton.setAttribute('type', 'button');
                 courseButton.setAttribute('data-toggle', 'collapse');
@@ -147,7 +150,14 @@
                 courseButton.setAttribute('aria-expanded', 'false');
                 courseButton.setAttribute('aria-controls', `courseCollapse${course.courseId}`);
                 courseButton.textContent = course.courseName;
+
+                const deleteButton = document.createElement('button');
+                deleteButton.classList.add('delete-button', 'btn-sm');
+                deleteButton.textContent = 'Delete';
+                deleteButton.onclick = () => deleteCourse(course.courseId);
+
                 courseHeader.appendChild(courseButton);
+                courseHeader.appendChild(deleteButton);
                 courseDiv.appendChild(courseHeader);
 
                 const sectionDiv = document.createElement('div');
@@ -155,20 +165,23 @@
                 sectionDiv.setAttribute('id', `courseCollapse${course.courseId}`);
                 sectionDiv.setAttribute('aria-labelledby', `courseCollapse${course.courseId}`);
                 sectionDiv.setAttribute('data-parent', '#coursesList');
+
                 const sectionCardBody = document.createElement('div');
                 sectionCardBody.classList.add('card-body');
                 const sectionList = document.createElement('ul');
                 sectionList.classList.add('list-group', 'list-group-flush');
+
                 course.sectionList.forEach(section => {
-            const sectionItem = document.createElement('li');
-            sectionItem.classList.add('list-group-item');
-            sectionItem.innerHTML = `Section ${section.sectionNo} - Professor: ${section.professorName} - Time: ${section.dayAndTime}
-                <span class="float-right">
-                    <a href="createSection.html?courseId=${course.courseId}&courseSemesterMappingId=${course.courseSemesterMappingId}&courseName=${course.courseName}&semId=${semId}&isEdit=1&sectionId=${section.sectionId}" class="edit" data-section-id="${section.sectionId}">Edit</a> |
-                    <a href="#" class="delete" data-section-id="${section.sectionId}">Delete</a>
-                </span>`;
-            sectionList.appendChild(sectionItem);
-        });
+                    const sectionItem = document.createElement('li');
+                    sectionItem.classList.add('list-group-item');
+                    sectionItem.innerHTML = `Section ${section.sectionNo} - Professor: ${section.professorName} - Time: ${section.dayAndTime}
+                        <span class="float-right">
+                            <a href="createSection.html?courseId=${course.courseId}&courseSemesterMappingId=${course.courseSemesterMappingId}&courseName=${course.courseName}&semId=${semId}&isEdit=1&sectionId=${section.sectionId}" class="edit" data-section-id="${section.sectionId}">Edit</a> |
+                            <a href="#" class="delete" data-section-id="${section.sectionId}">Delete</a>
+                        </span>`;
+                    sectionList.appendChild(sectionItem);
+                });
+
                 const sectionItemPlus = document.createElement('li');
                 sectionItemPlus.classList.add('list-group-item');
                 const addSectionLink = document.createElement('a');
@@ -182,29 +195,67 @@
 
                 coursesList.appendChild(courseDiv);
             });
-            coursesList.addEventListener('click', function(event) {
-        const target = event.target;
-        if (target.classList.contains('edit')) {
-            const sectionId = target.getAttribute('data-section-id');
-            // Handle edit functionality here
-            alert(`Edit section ${sectionId}`);
-        } else if (target.classList.contains('delete')) {
-            const sectionId = target.getAttribute('data-section-id');
-            // Handle delete functionality here
-            if (confirm(`Are you sure you want to delete section ${sectionId}?`)) {
-                // Delete section
-                alert(`Section ${sectionId} deleted`);
+
+            coursesList.addEventListener('click', function (event) {
+                const target = event.target;
+                if (target.classList.contains('edit')) {
+                    const sectionId = target.getAttribute('data-section-id');
+                    alert(`Edit section ${sectionId}`);
+                } else if (target.classList.contains('delete')) {
+                    const sectionId = target.getAttribute('data-section-id');
+                    if (confirm(`Are you sure you want to delete section ${sectionId}?`)) {
+                        deleteSection(sectionId);
+                    }
+                }
+            });
+        }
+
+        function deleteCourse(courseId) {
+            if (confirm('Are you sure you want to delete this course?')) {
+                fetch(`http://localhost:8080/deleteCourse/${courseId}`, {
+                    method: 'DELETE',
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            fetchData(); // Refresh the course list after deletion
+                        } else {
+                            alert('Failed to delete the course');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
             }
         }
-    });
+
+        function deleteSection(sectionId) {
+            if (confirm('Are you sure you want to delete this section?')) {
+                fetch(`http://localhost:8080/deleteSection/${sectionId}`, {
+                    method: 'GET',
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            fetchData(); // Refresh the course and section list after deletion
+                        } else {
+                            alert('Failed to delete the section');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
         }
+
         document.getElementById('copySemesterButton').addEventListener('click', function () {
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);
             const semId = urlParams.get('semId');
             window.location.href = `copySemester.html?semId=${semId}`;
         });
-        // Call fetchData function when the page is loaded
+        
+        document.getElementById('newCourseButton').addEventListener('click', function () {
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const semId = urlParams.get('semId');
+            window.location.href = `addNewCourse.html?semId=${semId}`;
+        });
+
         document.addEventListener('DOMContentLoaded', fetchData);
     </script>
 </body>

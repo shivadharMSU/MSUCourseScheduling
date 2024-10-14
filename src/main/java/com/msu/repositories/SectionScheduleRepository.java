@@ -24,7 +24,7 @@ public interface SectionScheduleRepository extends JpaRepository<SectionSchedule
 	@Modifying
 	@Transactional
 	@Query("DELETE FROM SectionSchedule s WHERE s.sectionScheduledId = :sectionScheduledId")
-	void deleteBySectionScheduledId(@Param("sectionId") Long sectionScheduledId);
+	void deleteBySectionScheduledId(@Param("sectionScheduledId") Long sectionScheduledId);
 	
  
 	

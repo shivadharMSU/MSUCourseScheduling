@@ -1,7 +1,10 @@
 package com.msu.controller;
 
 import com.msu.DTO.*;
+import com.msu.services.CourseSemesterMappingService;
 import com.msu.services.SectionScheduleService;
+import com.msu.services.SectionService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +25,10 @@ public class SectionSchduleController {
 
 	@Autowired
 	private SectionScheduleService sectionScheduleService;
+    @Autowired
+	private CourseSemesterMappingService courseSemesterMappingService;
+    @Autowired
+    private SectionService sectionService;
 	
 	@PostMapping("/getProfessorListForDropDown")
 	public ResponseEntity<List<ProfessorDropDownListResponseDTO>> getProfessorListForDropDown(@RequestBody ProfessorDropDownListRequestDTO professorDropDownListRequestDTO) {
@@ -88,31 +95,38 @@ public class SectionSchduleController {
 
 	@GetMapping("/deleteSection/{sectionId}")
 	public ResponseEntity<String> deleteSection(@PathVariable Long sectionId){
-
 		try {
-			 sectionScheduleService.getSectionSceduleBySectionSceduleId(sectionId);
+			 sectionScheduleService.deleteSectionSchedule(sectionId);
 			return ResponseEntity.ok("success");
-
-
 		}catch(Exception ex) {
 			System.out.println("getClassListForDropDown: " + ex.getMessage());
 			return ResponseEntity.ok("failure");
-
 		}
-
-
 	}
 
 	//saveSectionSchedule
 
 	@PostMapping("/saveSctionSchedule")
 	public ResponseEntity<String> saveSctionSchedule(@RequestBody SectionScheduleSaveDTO sectionScheduleSaveDTO){
+		try {
+			 sectionScheduleService.saveSectionSchedule(sectionScheduleSaveDTO);
+			return ResponseEntity.ok("success");
+		}catch(Exception ex) {
+			System.out.println("getClassListForDropDown: " + ex.getMessage());
+		}
+		return null;
+
+	}
+
+
+	@GetMapping("/getCourseDropDownNotIncludedForSemesterList/{semId}")
+	public ResponseEntity<CourseDropDownForSemesterDTOList> getCourseDropDownNotIncludedForSemester(@PathVariable Integer semId){
 
 		try {
-
-			 sectionScheduleService.saveSectionSchedule(sectionScheduleSaveDTO);
-
-			return ResponseEntity.ok("success");
+			List<CourseDropDownForSemesterDTO> courseDropDownNotIncludedForSemester = courseSemesterMappingService.getCourseDropDownNotIncludedForSemester(semId);
+			CourseDropDownForSemesterDTOList courseDropDownForSemesterDTOList = new CourseDropDownForSemesterDTOList();
+			courseDropDownForSemesterDTOList.setCourseDropDownForSemester(courseDropDownNotIncludedForSemester);
+			return ResponseEntity.ok(courseDropDownForSemesterDTOList);
 		}catch(Exception ex) {
 			System.out.println("getClassListForDropDown: " + ex.getMessage());
 
@@ -121,8 +135,44 @@ public class SectionSchduleController {
 
 	}
 
+	@GetMapping("/deleteCourseFromSem/{semId}/{courseId}")
+	public ResponseEntity<String> deleteCourseBySemId(@PathVariable Integer semId, @PathVariable Long courseId) {
+		try {
+			courseSemesterMappingService.deleteCourseSemesterMappingByCourseIfAndSemId(semId,courseId);
+			return ResponseEntity.ok("success");
+		} catch (Exception ex) {
+			System.out.println("getClassListForDropDown: " + ex.getMessage());
+			return ResponseEntity.ok("failure");
+		}
+	}
 
+	
+	@GetMapping("/getCrossSectionDropDownList/{semId}/{courseId}")
+	public ResponseEntity<CrossSectionDropDownList> getCourseSectionId(@PathVariable Integer semId, @PathVariable Long courseId) {
+		try {
+			
+			CrossSectionDropDownList list = sectionService.getCrossSectionList(semId, courseId);
+			return ResponseEntity.ok(list);
+		} catch (Exception ex) {
+			System.out.println("getClassListForDropDown: " + ex.getMessage());
+			
+		}
+		return null;
+	}
+	
+	@PostMapping("/saveCourseForSemester")
+	public ResponseEntity<APIResponseDTO> saveCourseForSemester(@RequestBody SaveCourseForSemesterDTO saveCourseForSemesterDTO){
+		try {
+			courseSemesterMappingService.getSaveCourseForSemesterDTO(saveCourseForSemesterDTO);
+			APIResponseDTO response = new APIResponseDTO();
+			response.setResponseMessage("success");
+			return ResponseEntity.ok(response);
+		}catch(Exception ex) {
+			System.out.println("getClassListForDropDown: " + ex.getMessage());
+		}
+		return null;
 
+	}
 
 
 }
