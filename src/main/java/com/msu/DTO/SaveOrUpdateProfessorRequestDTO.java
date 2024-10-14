@@ -14,10 +14,13 @@ public class SaveOrUpdateProfessorRequestDTO {
 	private String name;
 
 	@JsonProperty("courseLoad")
-	private String courseLoad; // Consider converting this to List<Integer> or int[]
+	private String courseLoad; 
 
-	@JsonProperty("profType")
-	private String profType;
+	@JsonProperty("profTypeId")
+	private int profType;
+
+	@JsonProperty("profStatus")
+	private boolean profStatus;
 
 	@JsonProperty("availabilities")
 	private List<Availability> availabilities;
@@ -46,12 +49,20 @@ public class SaveOrUpdateProfessorRequestDTO {
 		this.courseLoad = courseLoad;
 	}
 
-	public String getProfType() {
+	public int getProfType() {
 		return profType;
 	}
 
-	public void setProfType(String profType) {
+	public void setProfType(int profType) {
 		this.profType = profType;
+	}
+
+	public boolean isProfStatus() {
+		return profStatus;
+	}
+
+	public void setProfStatus(boolean profStatus){
+		this.profStatus = profStatus;
 	}
 
 	public List<Availability> getAvailabilities() {
@@ -65,6 +76,14 @@ public class SaveOrUpdateProfessorRequestDTO {
 	// Getters and setters
 
 	public static class Availability {
+		
+		public int getSemNameId() {
+			return semNameid;
+		}
+		
+		public void setSemNameId(int semNameid) {
+			this.semNameid = semNameid;
+		}
 
 		public String getDayOfWeek() {
 			return dayOfWeek;
@@ -89,6 +108,9 @@ public class SaveOrUpdateProfessorRequestDTO {
 		public void setEndTime(LocalTime endTime) {
 			this.endTime = endTime;
 		}
+		
+		@JsonProperty("dayOfWeek")
+		private int semNameid;
 
 		@JsonProperty("dayOfWeek")
 		private String dayOfWeek;

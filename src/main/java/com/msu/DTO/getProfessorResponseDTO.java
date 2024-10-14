@@ -8,6 +8,7 @@ public class getProfessorResponseDTO {
 	private String name;
 	private String courseLoad;
 	private String professorTypeName; // Descriptive professor type
+	private boolean profStatus;
 	private List<ProfessorAvailabilityDTO> availabilities; // Assuming you also have a DTO for availabilities
 
 	// Constructors, Getters, and Setter
@@ -42,6 +43,14 @@ public class getProfessorResponseDTO {
 
 	public void setProfessorTypeName(String professorTypeName) {
 		this.professorTypeName = professorTypeName;
+	}
+
+	public boolean isProfStatus() {
+		return profStatus;
+	}
+
+	public void setProfStatus(boolean profStatus) {
+		this.profStatus = profStatus;
 	}
 
 	public List<ProfessorAvailabilityDTO> getAvailabilities() {
