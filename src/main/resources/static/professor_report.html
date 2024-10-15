@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Professor's Report</title>
+    <link rel="stylesheet" href="./css/professor_report.css"> <!-- Make sure this path is correct -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            gap: 15px; /* Added for spacing between elements */
+            align-items: center; /* Ensure elements are vertically centered */
+        }
+
+        .controls select,
+        .controls input[type="text"] {
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            flex: 1; /* Allow controls to grow and fit */
+        }
+
+        .controls button {
+            padding: 8px 12px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #C8102E;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            flex-shrink: 0; /* Prevents button from shrinking */
+        }
+
+        .controls button:hover {
+            background-color: #A00F2A;
+        }
+
+        .label-container {
+            display: flex;
+            align-items: center;
+            gap: 8px; /* Space between label and select */
+        }
+
+        .label-container span {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ccc;
+        }
+
+        th {
+            background-color: #C8102E;
+            color: white;
+        }
+
+        td {
+            vertical-align: top;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2 id="professor-title">Professor's Report</h2>
+
+        <div class="controls">
+            <div class="label-container">
+                <span>Semester:</span>
+                <select id="semester-select"></select>
+            </div>
+
+            <div class="label-container">
+                <span>Professor:</span>
+                <select id="professor-select">
+                    <option value="">Select</option>
+                </select>
+            </div>
+
+            <input type="text" id="search" placeholder="Search">
+            <button id="export-pdf">Export PDF</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Professor Name</th>
+                    <th>Day</th>
+                    <th>Occupied</th>
+                </tr>
+            </thead>
+            <tbody id="report-content">
+                <!-- Content will be dynamically generated -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="./js/professor_report.js"></script> 
+
+</html>
