@@ -132,7 +132,15 @@
                 </div>
             </div>
 
-
+            <div class="row mb-3 align-items-center">
+                <label for="profStatus" class="col-sm-3 col-form-label">Professor Status:</label>
+                <div class="col-sm-9">
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="profStatus" class="toggle-input" checked>
+                        <label for="profStatus" class="toggle-label"></label>
+                    </div>
+                </div>
+            </div>
             <div class="professor-controls">
                 <button type="submit" class="btn btn-primary" onclick="clearFields()">Clear</button>
                 <button type="submit" class="btn btn-primary" onclick="submitProfessorDetails(event)">Submit</button>
