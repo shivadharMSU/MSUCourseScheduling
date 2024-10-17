@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>D</title>
+    <title>Course Management</title>
     <style>
         .navbar-custom {
             background-color: #C8102E;
@@ -22,36 +22,12 @@
             color: #FFFFFF;
         }
 
-
-        .navbar-nav .nav-item.dropdown .dropdown-menu {
-            background-color: #C8102E;
-        }
-
-        .dropdown-item {
-            color: white;
-        }
-
-        .dropdown-item:hover,
-        .dropdown-item:focus {
-            background-color: #A00F2A;
-            color: white;
-        }
-
         .navbar-toggler {
             border-color: rgba(255, 255, 255, 0.1);
         }
-
-        .course-list-container {
-            background-color: #ffffff; /* White background */
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 00 4px 7px rgba(24, 13, 13, 0.1); /* Shadow effect */
-        }
-
-        
     </style>
-    <link rel="stylesheet" href="./css/classes.css">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="./css/courses.css">
 </head>
 
 <body>
@@ -66,21 +42,13 @@
                     <a class="nav-link" href="./semester.html">Home </a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="./professor.html">Details <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="./course.html">Courses <span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item ">
-                    <a class="nav-link" href="./reports.html">Reports </a>
+                <li class="nav-item">
+                    <a class="nav-link" href="./professor.html">Professors</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Dropdown link
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
+                <li class="nav-item">
+                    <a class="nav-link" href="./reports.html">Reports</a>
                 </li>
             </ul>
         </div>
@@ -88,78 +56,58 @@
     <div class="secondary-nav-container">
         <nav class="navbar navbar-expand secondary-navbar-custom">
             <div class="navbar-nav mx-auto">
-                <a class="nav-link" href="./professor.html">Professor</a>
-                <a class="nav-link active" href="./courses.html">Courses</a>
+                <a class="nav-link" href="./professor.html">Professors</a>
+                <a class="nav-link active" href="./course.html">Courses</a>
                 <a class="nav-link" href="./class_rooms.html">Class Rooms</a>
             </div>
         </nav>
     </div>
+
     <div class="container my-4">
         <h2 class="mb-4">Course Details</h2>
         <form id="courseForm">
-             <!-- Course name -->
-             <div class="row mb-3 align-items-center">
-                <label for="crn" class="col-sm-3 col-form-label">Course Name:</label>
-                <div class="col-sm-9">
-                    <input type="text" class="form-control" id="crn">
-                </div>
-            </div>
-            <!-- CRN -->
+            <!-- Course Name -->
             <div class="row mb-3 align-items-center">
-                <label for="crn" class="col-sm-3 col-form-label">CRN:</label>
+                <label for="courseName" class="col-sm-3 col-form-label">Course Name:</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="crn">
+                    <input type="text" class="form-control" id="courseName" oninput="searchCourse()">
+                    <input type="hidden" id="courseId">
                 </div>
             </div>
 
-            <!-- Course Number -->
+            <!-- Course Code -->
             <div class="row mb-3 align-items-center">
-                <label for="courseNumber" class="col-sm-3 col-form-label">Course Number:</label>
+                <label for="courseCode" class="col-sm-3 col-form-label">Course Number:</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="courseNumber">
+                    <input type="text" class="form-control" id="courseCode">
                 </div>
             </div>
 
-            <!-- Radio button for Computer number -->
+            <!-- Assign Professor -->
             <div class="row mb-3 align-items-center">
-                <label class="col-sm-3 col-form-label">Computer number:</label>
+                <label for="professor" class="col-sm-3 col-form-label">Assign Professor:</label>
                 <div class="col-sm-9">
-                    <input type="radio" id="computerNumberYes" name="computerNumber" value="yes">
-                    <label for="computerNumberYes">Yes</label>
-                    &nbsp;&nbsp;&nbsp;
-                    <input type="radio" id="computerNumberNo" name="computerNumber" value="no">
-                    <label for="computerNumberNo">No</label>
+                    <input type="text" class="form-control" id="professor" oninput="searchProfessor()">
+                    <input type="hidden" id="professorId">
+                    <div id="suggestionBox" class="list-group" style="display: none;"></div>
                 </div>
             </div>
 
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <div class="course-controls">
+                <button type="submit" class="btn btn-primary" onclick="clearFields()">Clear</button>
                 <button type="submit" class="btn btn-primary" onclick="submitCourseDetails(event)">Submit</button>
             </div>
         </form>
     </div>
 
-
-    <div class="container my-4">
+    <div class="container">
         <h2 class="mb-4">Courses List</h2>
-        <div id="coursesListContainer" class="course-list-container">
-            <!-- Dummy Course List -->
-            <div class="course-item">
-                <h3>Course 1</h3>
-                <p>Description of Course 1</p>
-            </div>
-            <div class="course-item">
-                <h3>Course 2</h3>
-                <p>Description of Course 2</p>
-            </div>
-            <div class="course-item">
-                <h3>Course 3</h3>
-                <p>Description of Course 3</p>
-            </div>
-        </div>
+        <div id="coursesContainer"></div>
     </div>
 
     <script src="./js/jquery-3.7.1.min.js"></script>
     <script src="./js/bootstrap.bundle.min.js"></script>
+    <script src="./js/courses.js"></script>
 </body>
 
 </html>
