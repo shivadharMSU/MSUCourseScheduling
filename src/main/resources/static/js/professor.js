@@ -10,28 +10,6 @@ document.addEventListener("DOMContentLoaded", function () {
   fetchFullCoursesDetails();
 });
 
-// Function to log messages to the file
-
-const fs = require("fs");
-const path = require("path");
-
-// Define the path to the log file
-const logFilePath = path.join(__dirname, "logs.txt");
-
-// Function to log messages to the file
-function logToFile(message) {
-  const timestamp = new Date().toISOString(); // Add timestamp
-  const logMessage = `[${timestamp}] ${message}\n`;
-
-  // Append the log message to the file
-  fs.appendFile(logFilePath, logMessage, (err) => {
-    if (err) {
-      console.error("Failed to log to file:", err);
-    }
-  });
-}
-// function to logfile close
-
 //suggestion box hiding
 
 // Helper function to handle mouse enter/leave events for suggestion boxes
@@ -109,6 +87,54 @@ function fetchFullCoursesDetails() {
     });
 }
 
+function displayProfessors() {
+  const container = document.getElementById("professorsContainer");
+
+  // Sort professors by profStatus: active (true) first, inactive (false) last
+  const sortedProfessors = allProfessors.sort(
+    (a, b) => b.profStatus - a.profStatus
+  );
+
+  container.innerHTML = sortedProfessors
+    .map(
+      (professor, index) => `
+        <div class="professor-item ${
+          !professor.profStatus ? "inactive-professor" : ""
+        }" data-index="${index}">
+            <div class="professor-name" onclick="toggleDetails(${index})">
+                <span class="arrow-icon">&#9660;</span>
+                ${professor.name}
+            </div>
+            <div class="professor-details" id="details-${index}" style="display: none;">
+                <div>Name: ${professor.name}</div>
+                <div>Course Load: ${professor.courseLoad}</div>
+                <div>Professor Type: ${professor.professorTypeName}</div>
+                <div>Courses: <ol>${professor.professorMappings
+                  .map((mapping) => `<li>${mapping.courseName}</li>`)
+                  .join("")}</ol></div>
+                <div>Status: ${
+                  professor.profStatus ? "Active" : "Inactive"
+                }</div>
+                <div>Availabilities: ${professor.availabilities
+                  .map(
+                    (availability) => `
+                        <div>Day: ${availability.dayOfWeek}, Start Time: ${availability.startTime}, End Time: ${availability.endTime}</div>
+                    `
+                  )
+                  .join("")}</div>
+                <div class="professor-controls">
+                    <button type="button" class="btn btn-danger" onclick="editDetails(${index})">Edit</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteProfessor(${
+                      professor.professorId
+                    })">Toggle</button>
+                </div>
+            </div>
+        </div>
+    `
+    )
+    .join("");
+}
+
 // Function to search and filter courses based on input
 function searchFullCoursesDetails() {
   const input = document.getElementById("courseInput").value.toLowerCase();
@@ -180,22 +206,9 @@ function showCourseSuggestions(suggestions) {
 
 function selectCourse(course) {
   // Ensure the course is not already selected
-  if (
-    !selectedCourses.some(
-      (selected) =>
-        selected.courseDetails.courseId === course.courseDetails.courseId
-    )
-  ) {
+  if (!selectedCourses.some((c) => c.courseDetails.courseId === course.courseDetails.courseId)) {
     selectedCourses.push(course); // Add course to the selected list
-    console.log("selected courses 1 ", selectedCourses);
-    updateSelectedCoursesDisplay(); // Update the UI immediately
-
-    // Update the hidden input with selected course IDs
-    const selectedCourseIds = selectedCourses
-      .map((c) => c.courseDetails.courseId)
-      .join(",");
-    document.getElementById("selectedCoursesIds").value = selectedCourseIds;
-    console.log("selected courses 2 ", selectedCourses);
+    updateSelectedCourses(); // Update the UI with the new selection
   }
 
   // Clear the input and hide the suggestion box
@@ -203,43 +216,40 @@ function selectCourse(course) {
   document.getElementById("courseSuggestionBox").style.display = "none";
 }
 
-// to update UI
-function updateSelectedCoursesDisplay() {
+// Update selected courses
+function updateSelectedCourses() {
   const container = document.getElementById("selectedCoursesContainer");
-  container.innerHTML = ""; // Clear previous selections
 
+  // Check if the container exists in the DOM
+  if (!container) {
+    console.error("Error: 'selectedCoursesContainer' element not found.");
+    return;
+  }
+
+  // Clear previous selections
+  container.innerHTML = "";
+
+  // Generate HTML for the selected courses
   selectedCourses.forEach((course, index) => {
     const courseDiv = document.createElement("div");
-    courseDiv.classList.add(
-      "badge",
-      "badge-primary",
-      "p-2",
-      "mr-2",
-      "d-inline-flex",
-      "align-items-center"
-    );
-
+    courseDiv.classList.add("badge", "badge-primary", "mr-2", "p-2", "d-inline-flex", "align-items-center");
     courseDiv.innerHTML = `
       ${course.courseDetails.courseName}
       <button type="button" class="ml-2 btn btn-sm btn-danger" onclick="removeCourse(${index})">X</button>
     `;
-
     container.appendChild(courseDiv);
   });
-}
 
-// Function to remove a selected course by index
-function removeCourse(index) {
-  // Remove the course from the selectedCourses array
-  selectedCourses.splice(index, 1);
-  console.log("selectedCourses in remove course", selectedCourses);
-  // Update the UI with the new list of courses
-  updateSelectedCoursesDisplay();
-
-  // Update the hidden input with the remaining course IDs
+  // Update the hidden input with selected course IDs
   document.getElementById("selectedCoursesIds").value = selectedCourses
     .map((c) => c.courseDetails.courseId)
     .join(",");
+}
+
+// Remove a course
+function removeCourse(index) {
+  selectedCourses.splice(index, 1); // Remove course from the list
+  updateSelectedCourses(); // Update the UI
 }
 
 function selectProfessorType(professor) {
@@ -277,10 +287,6 @@ function selectProfessor(professor) {
       );
     })
     .filter((course) => course !== undefined);
-  console.log(
-    "selected courses in select professor/edit details ",
-    selectedCourses
-  );
   updateSelectedCoursesDisplay();
 }
 
@@ -402,6 +408,7 @@ function submitProfessorDetails(event) {
     profStatus: document.getElementById("profStatus").checked,
     availabilities: [], // This will be populated below
   };
+
   // Get all the availability slots
   const timeSlotRows = document
     .getElementById("timeSlotsContainer")
@@ -481,54 +488,6 @@ function clearFields() {
   while (timeSlotsContainer.firstChild) {
     timeSlotsContainer.removeChild(timeSlotsContainer.firstChild);
   }
-}
-
-function displayProfessors() {
-  const container = document.getElementById("professorsContainer");
-
-  // Sort professors by profStatus: active (true) first, inactive (false) last
-  const sortedProfessors = allProfessors.sort(
-    (a, b) => b.profStatus - a.profStatus
-  );
-
-  container.innerHTML = sortedProfessors
-    .map(
-      (professor, index) => `
-        <div class="professor-item ${
-          !professor.profStatus ? "inactive-professor" : ""
-        }" data-index="${index}">
-            <div class="professor-name" onclick="toggleDetails(${index})">
-                <span class="arrow-icon">&#9660;</span>
-                ${professor.name}
-            </div>
-            <div class="professor-details" id="details-${index}" style="display: none;">
-                <div>Name: ${professor.name}</div>
-                <div>Course Load: ${professor.courseLoad}</div>
-                <div>Professor Type: ${professor.professorTypeName}</div>
-                <div>Courses: <ol>${professor.professorMappings
-                  .map((mapping) => `<li>${mapping.courseName}</li>`)
-                  .join("")}</ol></div>
-                <div>Status: ${
-                  professor.profStatus ? "Active" : "Inactive"
-                }</div>
-                <div>Availabilities: ${professor.availabilities
-                  .map(
-                    (availability) => `
-                        <div>Day: ${availability.dayOfWeek}, Start Time: ${availability.startTime}, End Time: ${availability.endTime}</div>
-                    `
-                  )
-                  .join("")}</div>
-                <div class="professor-controls">
-                    <button type="button" class="btn btn-danger" onclick="editDetails(${index})">Edit</button>
-                    <button type="button" class="btn btn-danger" onclick="deleteProfessor(${
-                      professor.professorId
-                    })">Toggle</button>
-                </div>
-            </div>
-        </div>
-    `
-    )
-    .join("");
 }
 
 // Function to toggle the display of details
