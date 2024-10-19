@@ -2,14 +2,18 @@ package com.msu.services;
 
 import java.util.List;
 
+import com.msu.DTO.CourseFullDetailsDTO;
+import com.msu.DTO.CourseResponseDto;
 import com.msu.entities.CourseDetails;
 
 public interface CourseDetailsService {
 	
 	
 	public List<CourseDetails> getcourselist();
-	public void saveCourseDetails(CourseDetails coursedetails);
+	List<CourseFullDetailsDTO> getFullCoursesDetails();
 	public CourseDetails findCourseDetailsByCourseId(Long courseId);
+    public void updateCourseDetails(CourseResponseDto courseResponseDto);
+    public void saveCourseDetails(CourseResponseDto courseResponseDto);
 	
 
 }

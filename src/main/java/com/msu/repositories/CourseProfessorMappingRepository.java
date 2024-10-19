@@ -9,6 +9,8 @@ import com.msu.entities.CourseProfessorMapping;
 
 public interface CourseProfessorMappingRepository extends JpaRepository<CourseProfessorMapping, Long> {
 
-	public List<CourseProfessorMapping> findCourseProfessorMappingByCourse(Long course);
+	List<CourseProfessorMapping> findCourseProfessorMappingByCourse(Long course);
+	List<CourseProfessorMapping> findByProfessor(Long professorId);
+	void deleteByProfessor(Long professorId);
 
 }

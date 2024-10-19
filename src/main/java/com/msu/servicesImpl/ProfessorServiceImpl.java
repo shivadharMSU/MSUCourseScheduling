@@ -7,12 +7,15 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.msu.DTO.ProfessorAvailabilityDTO;
+import com.msu.DTO.ProfessorMappingDTO;
 import com.msu.DTO.SaveOrUpdateProfessorRequestDTO;
 import com.msu.DTO.SaveOrUpdateProfessorRequestDTO.Availability;
 import com.msu.DTO.getProfessorResponseDTO;
 import com.msu.DTO.getProfessorTypeResponseDTO;
 import com.msu.Enums.WeekDaysEnum;
 import com.msu.Enums.WeekEnum;
+import com.msu.entities.CourseDetails;
+import com.msu.entities.CourseProfessorMapping;
 import com.msu.entities.ProfessorAvailability;
 import com.msu.entities.ProfessorDetails;
 import com.msu.entities.ProfessorType;
@@ -32,6 +35,12 @@ public class ProfessorServiceImpl implements ProfessorService {
 
 	@Autowired
 	private ProfessorTypeRepository professorTypeRepository;
+
+	@Autowired
+	private CourseProfessorMappingServiceImpl courseProfessorMappingServiceImpl;
+
+	@Autowired
+	private CourseDetailsServiceImpl courseDetailsServiceImpl;
 
 	private Map<Integer, ProfessorType> professorTypeMap;
 
@@ -60,6 +69,23 @@ public class ProfessorServiceImpl implements ProfessorService {
 			throw new RuntimeException("ProfessorType not found for ID: " + professor.getProfessorType());
 		}
 		dto.setProfessorTypeName(professorType.getType());
+
+		    // Fetch course mappings
+    List<CourseProfessorMapping> mappings = courseProfessorMappingServiceImpl.findByProfessor(professor.getProfessorId());
+
+    List<ProfessorMappingDTO> professorMappings = mappings.stream().map(mapping -> {
+        ProfessorMappingDTO mappingDTO = new ProfessorMappingDTO();
+        mappingDTO.setMappingId(mapping.getId());
+        mappingDTO.setCourseId(mapping.getCourse());
+        
+        // Fetch course details to get the course name
+        CourseDetails courseDetails = courseDetailsServiceImpl.findCourseDetailsByCourseId(mapping.getCourse());
+        mappingDTO.setCourseName(courseDetails.getCourseName());
+
+        return mappingDTO;
+    }).collect(Collectors.toList());
+
+    dto.setProfessorMappings(professorMappings);
 
 		// Assuming availabilities need to be fetched and converted to DTOs
 		List<ProfessorAvailabilityDTO> availabilityDTOs = professorAvailabilityRepository
@@ -118,6 +144,11 @@ public class ProfessorServiceImpl implements ProfessorService {
 		try {
 			// Save the new professor and return the saved entity
 			ProfessorDetails savedProfessor = saveProfessorDetails(newProfessor);
+			Long professorId = saveProfessorRequestDTO.getProfessorId();
+			List<Long> courses = saveProfessorRequestDTO.getProfCourses();
+
+			// Process and save the professor-course mapping
+			courseProfessorMappingServiceImpl.processMethodForSave(professorId, courses);
 
 			// Save the availability for the professor
 			List<Availability> availabilities = saveProfessorRequestDTO.getAvailabilities();
@@ -175,6 +206,10 @@ public class ProfessorServiceImpl implements ProfessorService {
 		try {
 			// Save the updated professor directly
 			ProfessorDetails updatedProfessor = saveProfessorDetails(existingProfessor);
+			List<Long> courses = updateProfessorRequestDTO.getProfCourses();
+
+			// Process and save the professor-course mapping
+			courseProfessorMappingServiceImpl.processMethodForSave(professorId, courses);
 			deleteProfessorAvailabilityByProfessorId(professorId);
 			// Update the availability details
 			List<Availability> availabilities = updateProfessorRequestDTO.getAvailabilities();
@@ -219,15 +254,6 @@ public class ProfessorServiceImpl implements ProfessorService {
 
 				// Save the updated status
 				saveProfessorDetails(professor);
-
-				// Optionally delete professor availabilities if needed (this part is commented
-				// out)
-				// List<ProfessorAvailability> availabilities =
-				// professorAvailabilityRepository.findByProfessorId(professorId);
-				// if (!availabilities.isEmpty()) {
-				// professorAvailabilityRepository.deleteAll(availabilities); // Remove all
-				// availabilities for this professor
-				// }
 
 				return true;
 			}

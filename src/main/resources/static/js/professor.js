@@ -1,61 +1,54 @@
 let allProfessors = [];
 let allProfessorTypes = [];
+let allCoursesDetails = []; // Store all courses fetched from the server
+let selectedCourses = []; // Store selected course objects
 let currentProfessorDetails = {};
-fetchAllProfessors();
-fetchAllProfessorsTypes();
+
+document.addEventListener("DOMContentLoaded", function () {
+  fetchAllProfessors();
+  fetchAllProfessorsTypes();
+  fetchFullCoursesDetails();
+});
 
 //suggestion box hiding
 
-let isMouseOverProfSuggestionBox = false;
-let isMouseOverProfTypeSuggestionBox = false;
+// Helper function to handle mouse enter/leave events for suggestion boxes
+function setupSuggestionBoxHiding(inputFieldId, suggestionBoxId) {
+  let isMouseOverSuggestionBox = false;
+  const inputField = document.getElementById(inputFieldId);
+  const suggestionBox = document.getElementById(suggestionBoxId);
 
-// Professor Name Suggestion Box
-let profInputField = document.getElementById("professorName");
-let profSuggestionBox = document.getElementById("suggestionBox");
+  // Event listeners for mouse enter/leave
+  suggestionBox.addEventListener(
+    "mouseenter",
+    () => (isMouseOverSuggestionBox = true)
+  );
+  suggestionBox.addEventListener(
+    "mouseleave",
+    () => (isMouseOverSuggestionBox = false)
+  );
 
-// Professor Type Suggestion Box
-let profTypeInputField = document.getElementById("profType");
-let profTypeSuggestionBox = document.getElementById("suggestionBoxProfType");
+  // Blur event listener on input field to hide suggestion box
+  inputField.addEventListener("blur", function () {
+    if (!isMouseOverSuggestionBox) {
+      setTimeout(() => (suggestionBox.style.display = "none"), 100); // Delay to allow click events
+    }
+  });
+}
 
-// Event listeners for mouse enter/leave for professor name suggestion box
-profSuggestionBox.addEventListener(
-  "mouseenter",
-  () => (isMouseOverProfSuggestionBox = true)
-);
-profSuggestionBox.addEventListener(
-  "mouseleave",
-  () => (isMouseOverProfSuggestionBox = false)
-);
-
-// Event listeners for mouse enter/leave for professor type suggestion box
-profTypeSuggestionBox.addEventListener(
-  "mouseenter",
-  () => (isMouseOverProfTypeSuggestionBox = true)
-);
-profTypeSuggestionBox.addEventListener(
-  "mouseleave",
-  () => (isMouseOverProfTypeSuggestionBox = false)
-);
-
-// Adjusting the blur event listener on the input field for professor name
-profInputField.addEventListener("blur", function () {
-  if (!isMouseOverProfSuggestionBox) {
-    setTimeout(() => (profSuggestionBox.style.display = "none"), 100); // Delay hiding to allow click event
-  }
-});
-
-// Adjusting the blur event listener on the input field for professor type
-profTypeInputField.addEventListener("blur", function () {
-  if (!isMouseOverProfTypeSuggestionBox) {
-    setTimeout(() => (profTypeSuggestionBox.style.display = "none"), 100); // Delay hiding to allow click event
-  }
-});
+// Call the function for Professor Name, Professor Type, and Course Input suggestion boxes
+setupSuggestionBoxHiding("professorName", "suggestionBox");
+setupSuggestionBoxHiding("profType", "suggestionBoxProfType");
+setupSuggestionBoxHiding("courseInput", "courseSuggestionBox"); // Added for courses
 
 // end of suggestion box hiding
 
 document
   .getElementById("professorName")
   .addEventListener("input", searchProfessor);
+document
+  .getElementById("courseInput")
+  .addEventListener("input", searchFullCoursesDetails);
 const profTypeSelect = document.getElementById("profType");
 
 // Fetch all professors from the server
@@ -64,7 +57,6 @@ function fetchAllProfessors() {
     .then((response) => response.json())
     .then((data) => {
       allProfessors = data; // Store the data in the allProfessors variable
-      console.log(allProfessors);
       displayProfessors();
     })
     .catch((error) => {
@@ -77,22 +69,80 @@ function fetchAllProfessorsTypes() {
     .then((response) => response.json())
     .then((data) => {
       allProfessorTypes = data; // Store the data in the allProfessorTypes variable
-      console.log(allProfessorTypes);
     })
     .catch((error) => {
       console.error("Error fetching professors:", error);
     });
 }
 
-// Dynamically add day buttons with Bootstrap classes
-document.querySelectorAll(".day-button").forEach((button) => {
-  button.addEventListener("click", function () {
-    // Toggle 'active' class to highlight the button with Bootstrap style
-    this.classList.toggle("active");
-    this.classList.toggle("btn-primary"); // Bootstrap active class
-    // Add logic to handle the selection of day
-  });
-});
+// Fetch all courses from the server
+function fetchFullCoursesDetails() {
+  return fetch("http://localhost:8080/coursedetails/fullCoursesDetails")
+    .then((response) => response.json())
+    .then((data) => {
+      allCoursesDetails = data; // Store all course data
+    })
+    .catch((error) => {
+      console.error("Error fetching courses:", error);
+    });
+}
+
+function displayProfessors() {
+  const container = document.getElementById("professorsContainer");
+
+  // Sort professors by profStatus: active (true) first, inactive (false) last
+  const sortedProfessors = allProfessors.sort(
+    (a, b) => b.profStatus - a.profStatus
+  );
+
+  container.innerHTML = sortedProfessors
+    .map(
+      (professor, index) => `
+        <div class="professor-item ${
+          !professor.profStatus ? "inactive-professor" : ""
+        }" data-index="${index}">
+            <div class="professor-name" onclick="toggleDetails(${index})">
+                <span class="arrow-icon">&#9660;</span>
+                ${professor.name}
+            </div>
+            <div class="professor-details" id="details-${index}" style="display: none;">
+                <div>Name: ${professor.name}</div>
+                <div>Course Load: ${professor.courseLoad}</div>
+                <div>Professor Type: ${professor.professorTypeName}</div>
+                <div>Courses: <ol>${professor.professorMappings
+                  .map((mapping) => `<li>${mapping.courseName}</li>`)
+                  .join("")}</ol></div>
+                <div>Status: ${
+                  professor.profStatus ? "Active" : "Inactive"
+                }</div>
+                <div>Availabilities: ${professor.availabilities
+                  .map(
+                    (availability) => `
+                        <div>Day: ${availability.dayOfWeek}, Start Time: ${availability.startTime}, End Time: ${availability.endTime}</div>
+                    `
+                  )
+                  .join("")}</div>
+                <div class="professor-controls">
+                    <button type="button" class="btn btn-danger" onclick="editDetails(${index})">Edit</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteProfessor(${
+                      professor.professorId
+                    })">Toggle</button>
+                </div>
+            </div>
+        </div>
+    `
+    )
+    .join("");
+}
+
+// Function to search and filter courses based on input
+function searchFullCoursesDetails() {
+  const input = document.getElementById("courseInput").value.toLowerCase();
+  const filteredCourses = allCoursesDetails.filter((course) =>
+    course.courseDetails.courseName.toLowerCase().includes(input)
+  );
+  showCourseSuggestions(filteredCourses);
+}
 
 // Function to display suggestions
 function searchProfessor() {
@@ -137,6 +187,71 @@ function showSuggestionsforProfType() {
     allProfessorTypes.length > 0 ? "block" : "none";
 }
 
+// Show course suggestions in the suggestion box
+function showCourseSuggestions(suggestions) {
+  const suggestionBox = document.getElementById("courseSuggestionBox");
+  suggestionBox.innerHTML = ""; // Clear previous suggestions
+
+  suggestions.forEach((course) => {
+    const div = document.createElement("div");
+    div.classList.add("list-group-item", "list-group-item-action"); // Bootstrap styling
+    div.textContent = course.courseDetails.courseName;
+    div.onclick = function () {
+      selectCourse(course); // Select the course on click
+    };
+    suggestionBox.appendChild(div);
+  });
+  suggestionBox.style.display = suggestions.length > 0 ? "block" : "none";
+}
+
+function selectCourse(course) {
+  // Ensure the course is not already selected
+  if (!selectedCourses.some((c) => c.courseDetails.courseId === course.courseDetails.courseId)) {
+    selectedCourses.push(course); // Add course to the selected list
+    updateSelectedCourses(); // Update the UI with the new selection
+  }
+
+  // Clear the input and hide the suggestion box
+  document.getElementById("courseInput").value = "";
+  document.getElementById("courseSuggestionBox").style.display = "none";
+}
+
+// Update selected courses
+function updateSelectedCourses() {
+  const container = document.getElementById("selectedCoursesContainer");
+
+  // Check if the container exists in the DOM
+  if (!container) {
+    console.error("Error: 'selectedCoursesContainer' element not found.");
+    return;
+  }
+
+  // Clear previous selections
+  container.innerHTML = "";
+
+  // Generate HTML for the selected courses
+  selectedCourses.forEach((course, index) => {
+    const courseDiv = document.createElement("div");
+    courseDiv.classList.add("badge", "badge-primary", "mr-2", "p-2", "d-inline-flex", "align-items-center");
+    courseDiv.innerHTML = `
+      ${course.courseDetails.courseName}
+      <button type="button" class="ml-2 btn btn-sm btn-danger" onclick="removeCourse(${index})">X</button>
+    `;
+    container.appendChild(courseDiv);
+  });
+
+  // Update the hidden input with selected course IDs
+  document.getElementById("selectedCoursesIds").value = selectedCourses
+    .map((c) => c.courseDetails.courseId)
+    .join(",");
+}
+
+// Remove a course
+function removeCourse(index) {
+  selectedCourses.splice(index, 1); // Remove course from the list
+  updateSelectedCourses(); // Update the UI
+}
+
 function selectProfessorType(professor) {
   document.getElementById("profType").value = professor.type;
   document.getElementById("profTypeId").value = professor.id;
@@ -163,6 +278,16 @@ function selectProfessor(professor) {
   }
   populateAvailabilities(professor.availabilities);
   document.getElementById("suggestionBox").style.display = "none";
+
+  // Populate selected courses
+  selectedCourses = professor.professorMappings
+    .map((mapping) => {
+      return allCoursesDetails.find(
+        (course) => course.courseDetails.courseId === mapping.courseId
+      );
+    })
+    .filter((course) => course !== undefined);
+  updateSelectedCoursesDisplay();
 }
 
 function populateAvailabilities(availabilities) {
@@ -279,6 +404,7 @@ function submitProfessorDetails(event) {
     name: document.getElementById("professorName").value,
     courseLoad: document.getElementById("courseLoad").value,
     profTypeId: document.getElementById("profTypeId").value,
+    profCourses: selectedCourses.map((course) => course.courseDetails.courseId),
     profStatus: document.getElementById("profStatus").checked,
     availabilities: [], // This will be populated below
   };
@@ -287,7 +413,8 @@ function submitProfessorDetails(event) {
   const timeSlotRows = document
     .getElementById("timeSlotsContainer")
     .querySelectorAll(".row");
-  console.log(timeSlotRows);
+
+  const profcourses = document.getElementById("");
 
   // Iterate over each row to extract availability data
   timeSlotRows.forEach((row) => {
@@ -312,7 +439,7 @@ function submitProfessorDetails(event) {
       console.warn("Row missing time inputs:", row);
     }
   });
-
+  console.log("currentProfessorDetails   ", currentProfessorDetails);
   const apiUrl = "http://localhost:8080/saveProfessor";
 
   // Perform the API call to submit professor details
@@ -345,8 +472,6 @@ function submitProfessorDetails(event) {
       console.error("Error:", error);
       alert("An error occurred while submitting professor details.");
     });
-
-  console.log(currentProfessorDetails);
   clearFields();
 }
 
@@ -356,56 +481,13 @@ function clearFields() {
   document.getElementById("courseLoad").value = "";
   document.getElementById("profType").value = "";
   document.getElementById("profTypeId").value = "";
+  document.getElementById("selectedCoursesContainer").innerHTML = "";
+  document.getElementById("selectedCoursesIds").value = "";
+  selectedCourses = [];
   const timeSlotsContainer = document.getElementById("timeSlotsContainer");
   while (timeSlotsContainer.firstChild) {
     timeSlotsContainer.removeChild(timeSlotsContainer.firstChild);
   }
-}
-
-function displayProfessors() {
-  const container = document.getElementById("professorsContainer");
-
-  // Sort professors by profStatus: active (true) first, inactive (false) last
-  const sortedProfessors = allProfessors.sort(
-    (a, b) => b.profStatus - a.profStatus
-  );
-
-  container.innerHTML = sortedProfessors
-    .map(
-      (professor, index) => `
-        <div class="professor-item ${
-          !professor.profStatus ? "inactive-professor" : ""
-        }" data-index="${index}">
-            <div class="professor-name" onclick="toggleDetails(${index})">
-                <span class="arrow-icon">&#9660;</span>
-                ${professor.name}
-            </div>
-            <div class="professor-details" id="details-${index}" style="display: none;">
-                <!-- Display professor details here -->
-                <div>Name: ${professor.name}</div>
-                <div>Course Load: ${professor.courseLoad}</div>
-                <div>Professor Type: ${professor.professorTypeName}</div>
-                <div>Status: ${
-                  professor.profStatus ? "Active" : "Inactive"
-                }</div>
-                <div>Availabilities: ${professor.availabilities
-                  .map(
-                    (availability) => `
-                        <div>Day: ${availability.dayOfWeek}, Start Time: ${availability.startTime}, End Time: ${availability.endTime}</div>
-                    `
-                  )
-                  .join("")}</div>
-                <div class="professor-controls">
-                    <button type="button" class="btn btn-danger" onclick="editDetails(${index})">Edit</button>
-                    <button type="button" class="btn btn-danger" onclick="deleteProfessor(${
-                      professor.professorId
-                    })">Toggle</button>
-                </div>
-            </div>
-        </div>
-    `
-    )
-    .join("");
 }
 
 // Function to toggle the display of details
@@ -447,7 +529,6 @@ function editDetails(index) {
 // Function to delete a professor
 function deleteProfessor(professorId) {
   if (confirm("Are you sure you want to change this professor status?")) {
-    console.log(professorId);
     const apiUrl = `http://localhost:8080/delete/${professorId}`; // DELETE API URL with professorId
 
     // Perform the DELETE request

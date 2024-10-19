@@ -25,10 +25,8 @@ public class CourseDetails {
 	@Column(name = "course_name")
     private String courseName; 
 	
-
-	
 	@Column(name = "credits")
-    private int credits; 
+    private int credits;
 	
 	@Column(name = "cmputer_required")
     private boolean computerRequired;  

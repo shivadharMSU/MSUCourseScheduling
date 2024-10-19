@@ -43,8 +43,8 @@ public class CourseProfessorMapping {
 		return professor;
 	}
 
-	public void setProfessor(Long professor) {
-		this.professor = professor;
+	public void setProfessor(Long professorId) {
+		this.professor = professorId;
 	}
 
     // Constructors, getters, and setters

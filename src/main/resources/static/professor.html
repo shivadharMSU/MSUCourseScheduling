@@ -93,7 +93,7 @@
             <div class="row mb-3 align-items-center">
                 <label for="professorName" class="col-sm-3 col-form-label">Professor Name:</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="professorName" oninput="searchProfessor()">
+                    <input type="text" class="form-control" id="professorName" onclick="searchProfessor()">
                     <input type="hidden" id="profId">
                     <div id="suggestionBox" class="list-group" style="display: none;"></div>
                 </div>
@@ -101,9 +101,9 @@
 
             <!-- Course Load -->
             <div class="row mb-3 align-items-center">
-                <label for="courseLoad" class="col-sm-3 col-form-label">Professor Course Load (SPRING|FALL):</label>
+                <label for="courseLoad" class="col-sm-3 col-form-label">Professor Course Load (SPRING|SUMMER|FALL|WINTER):</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="courseLoad">
+                    <input type="text" class="form-control" placeholder="ex:4567" id="courseLoad">
                 </div>
             </div>
 
@@ -117,6 +117,18 @@
                 </div>
             </div>
 
+            <div class="row mb-3 align-items-center">
+                <label for="courseInput" class="col-sm-3 col-form-label">Courses:</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" id="courseInput" onclick="searchFullCoursesDetails()">
+                    <input type="hidden" id="selectedCoursesIds"> <!-- Stores selected course IDs -->
+                    <div id="courseSuggestionBox" class="list-group" style="display: none;"></div>
+                </div>
+            </div>
+            
+            <!-- Display selected courses here -->
+            <div id="selectedCoursesContainer" class="my-3"></div>
+            
             <!-- Professor Availability -->
             <div class="mb-3">
                 <div class="row mb-3 align-items-center">
@@ -131,9 +143,8 @@
                     </div>
                 </div>
             </div>
-
             <div class="row mb-3 align-items-center">
-                <label for="profStatus" class="col-sm-3 col-form-label">Professor Status:</label>
+                <label for="profStatus" class="col-sm-3 col-form-label">Professor Status:        (make professor active/inactive)</label>
                 <div class="col-sm-9">
                     <div class="toggle-switch">
                         <input type="checkbox" id="profStatus" class="toggle-input" checked>
