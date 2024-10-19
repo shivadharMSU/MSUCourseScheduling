@@ -17,11 +17,11 @@ public interface CourseSemesterMappingRepository extends JpaRepository<CourseSem
 	 public List<CourseSemesterMapping> findBySemesterId(Integer semesterId);
 	 public CourseSemesterMapping findByCourseSemesterMappingId(Long courseSemesterMappingId);
 	 public CourseSemesterMapping findBySemesterIdAndCourseId(Integer semesterId,Long courseId);
-
 	@Modifying
 	@Transactional
 	@Query("DELETE FROM CourseSemesterMapping c WHERE c.courseId = :courseId AND c.semesterId = :semesterId")
 	void deleteByCourseIdAndSemesterId(@Param("courseId") Long courseId, @Param("semesterId") Integer semesterId);
+	public List<CourseSemesterMapping> findByCourseId(long courseId);
 
 	 
 }
