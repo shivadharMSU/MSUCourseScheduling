@@ -1,49 +1,7 @@
-/* secondary navigation */
-
-.secondary-nav-container {
-  margin-top: 20px; /* Gap between the main and secondary nav */
-  text-align: center;
-  padding: 10px 15px; /* Padding around the navigation for spacing */
-  border: 2px solid white; /* Hollow look with white border */
-  border-radius: 15px; /* Curved edges */
-  box-shadow: 0 4px 8px rgba(45, 45, 45, 0.1); /* Subtle shadow for depth */
-  background-color: transparent; /* Transparent background */
-}
-
-.secondary-navbar-custom {
-  background-color: transparent; /* Ensure navbar itself has a transparent background */
-  justify-content: center; /* Center navbar items */
-}
-
-.secondary-navbar-custom .navbar-nav .nav-link {
-  color: #c8102e; /* White text for contrast */
-  margin: 0 15px; /* Spacing between links */
-  transition: background-color 0.3s, color 0.3s; /* Smooth transition for background and color */
-  padding: 5px 10px; /* Padding for the links */
-  border-radius: 10px; /* Curved edges for individual links */
-}
-
-.secondary-navbar-custom .navbar-nav .nav-link:hover,
-.secondary-navbar-custom .navbar-nav .nav-link:focus {
-  background-color: #c8102e; /* Montclair red background on hover/focus for highlight */
-  color: white; /* Maintain white text for readability */
-}
-
-/* Additional style for active or clicked state */
-.secondary-navbar-custom .navbar-nav .nav-link.active {
-  background-color: #c8102e; /* Even darker shade for the active state */
-  color: white;
-}
-
-/* end of secondary navigation */
-
+/* Body and container styling */
 body {
-  font-family: "Arial", sans-serif;
+  font-family: 'Arial', sans-serif;
   background-color: #f8f9fa;
-}
-
-.course-controls{
-    text-align: right;
 }
 
 .container {
@@ -53,16 +11,18 @@ body {
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
-.btn-primary {
-  background-color: #c8102e;
-  border-color: #c8102e;
+/* Button styles */
+.btn-primary, .btn-success {
+  background-color: #C8102E;
+  border-color: #C8102E;
 }
 
-.btn-primary:hover {
+.btn-primary:hover, .btn-success:hover {
   background-color: #a00f2a;
   border-color: #a00f2a;
 }
 
+/* Form field and label styling */
 .form-control {
   border-radius: 0;
   border-color: #ced4da;
@@ -73,27 +33,39 @@ label {
   color: #343a40;
 }
 
-#suggestionBox {
-  background-color: #fff;
+/* Course suggestion box styling */
+#courseSuggestionBox {
+  position: absolute;
+  z-index: 1000;
+  width: 100%; 
+  max-height: 200px;
+  overflow-y: auto; 
+  background-color: white;
   border: 1px solid #ced4da;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 .list-group-item {
+  cursor: pointer;
   color: #495057;
 }
 
 .list-group-item:hover {
-  background-color: #c8102e;
+  background-color: #C8102E;
   color: white;
+}
+
+.course-controls {
+  text-align: right;
 }
 
 .list-group-item.active {
-  background-color: #c8102e;
-  border-color: #c8102e;
+  background-color: #C8102E;
+  border-color: #C8102E;
   color: white;
 }
 
+/* Course item styling */
 .course-item {
   border: 1px solid #ddd;
   margin-bottom: 10px;
@@ -102,3 +74,146 @@ label {
   background-color: #fff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
+
+.course-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.course-name {
+  flex-grow: 1;
+  user-select: none;
+  cursor: pointer;
+}
+
+.course-controls {
+  text-align: right;
+}
+
+/* Toggle arrow icon rotation */
+.arrow-icon {
+  display: inline-block;
+  transition: transform 0.3s ease; /* Smooth rotation transition */
+}
+
+.course-item .arrow-icon {
+  transform: rotate(0deg); /* Default state */
+}
+
+/* Rotate the arrow when the course is expanded */
+.course-item.expanded .arrow-icon {
+  transform: rotate(180deg);
+}
+
+/* Course details section styling */
+.course-details {
+  padding: 10px 0;
+  border-top: 1px solid #ddd;
+  margin-top: 10px;
+}
+
+/* Toggle switch for computer required */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 32px;
+}
+
+.toggle-input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-label {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ddd;
+  border-radius: 34px;
+  transition: 0.4s;
+}
+
+.toggle-label::before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  border-radius: 50%;
+  transition: 0.4s;
+}
+
+.toggle-input:checked + .toggle-label {
+  background-color: #C8102E;
+}
+
+.toggle-input:checked + .toggle-label::before {
+  transform: translateX(26px);
+}
+
+/* Styling for inactive courses */
+.inactive-course {
+  background-color: #C8102E;
+  color: white;
+}
+
+/* Secondary navigation styles */
+.secondary-nav-container {
+  margin-top: 20px;
+  text-align: center;
+  padding: 10px 15px;
+  border: 2px solid white;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: transparent;
+}
+
+.secondary-navbar-custom {
+  background-color: transparent;
+  justify-content: center;
+}
+
+.secondary-navbar-custom .navbar-nav .nav-link {
+  color: #C8102E;
+  margin: 0 15px;
+  transition: background-color 0.3s, color 0.3s;
+  padding: 5px 10px;
+  border-radius: 10px;
+}
+
+.secondary-navbar-custom .navbar-nav .nav-link:hover,
+.secondary-navbar-custom .navbar-nav .nav-link:focus {
+  background-color: #C8102E;
+  color: white;
+}
+
+.secondary-navbar-custom .navbar-nav .nav-link.active {
+  background-color: #C8102E;
+  color: white;
+}
+
+/* Badge styling for selected professors */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 5px;
+  padding: 5px 10px;
+  border-radius: 10px;
+  background-color: #C8102E;
+  color: white;
+}
+
+.badge .btn-danger {
+  margin-left: 5px;
+  padding: 0 5px;
+  font-size: 12px;
+}
+
