@@ -1,0 +1,86 @@
+/* Navbar styles (already provided) */
+.navbar-custom {
+    background-color: #C8102E;
+    border-radius: 0;
+}
+
+.navbar-nav .nav-link {
+    color: white;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.navbar-nav .nav-item.active .nav-link,
+.navbar-nav .nav-item:focus .nav-link,
+.navbar-nav .nav-item:hover .nav-link {
+    background-color: #A00F2A;
+    color: #FFFFFF;
+}
+
+.navbar-nav .nav-item.dropdown .dropdown-menu {
+    background-color: #C8102E;
+}
+
+.dropdown-item {
+    color: white;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: #A00F2A;
+    color: white;
+}
+
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Custom styles for Reports page */
+.container {
+    margin-top: 20px;
+    max-width: 600px;
+}
+
+h2 {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #C8102E;
+    padding-bottom: 10px;
+}
+
+.report-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.report-list li {
+    margin: 15px 0;
+    font-size: 20px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.report-list li a {
+    text-decoration: none;
+    color: #C8102E;
+    font-weight: bold;
+    position: relative;
+    display: block;
+}
+
+.report-list li a::before {
+    content: '\2022';
+    color: #A00F2A;
+    font-size: 30px;
+    position: absolute;
+    left: -30px;
+    top: -5px;
+}
+
+.report-list li:hover {
+    transform: scale(1.05);
+}
+
+.report-list li a:hover {
+    text-decoration: underline;
+    color: #A00F2A;
+}

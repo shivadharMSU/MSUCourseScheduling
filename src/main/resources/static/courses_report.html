@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Courses Report</title>
+    <link rel="stylesheet" href="./css/courses_report.css"> 
+</head>
+
+<body>
+    <div class="container">
+        <h2>Courses</h2>
+
+        <div class="controls">
+            <div class="label-container">
+                <span>Semester:</span>
+                <select id="semester-select"></select>
+            </div>
+
+            <input type="text" id="search" placeholder="Search">
+            <button id="export-pdf">Export PDF</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Course Number</th>
+                    <th>CRN</th>
+                    <th>Course Name</th>
+                    <th>Credits</th>
+                    <th>Computer Required</th>
+                </tr>
+            </thead>
+            <tbody id="report-content">
+     
+            </tbody>
+        </table>
+    </div>
+
+    <script src="./js/courses_report.js"></script> <!-- Link to your JS file -->
+</body>
+
+</html>

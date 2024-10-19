@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Classroom Report</title>
+    <link rel="stylesheet" href="./css/classroom_report.css"> <!-- Link to your stylesheet if necessary -->
+    <style>
+        /* Add any inline styles necessary for the layout, or include a link to your external CSS */
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Classroom Report</h2>
+
+        <div class="controls">
+            <div class="label-container">
+                <span>Semester:</span>
+                <select id="semester-select"></select>
+            </div>
+
+            <div class="label-container">
+                <span>Classroom:</span>
+                <select id="classroom-select">
+                    <option value="">Select</option>
+                </select>
+            </div>
+
+            <input type="text" id="search" placeholder="Search">
+            <button id="export-pdf">Export PDF</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Classroom Name</th>
+                    <th>Day</th>
+                    <th>Occupied</th>
+                </tr>
+            </thead>
+            <tbody id="report-content">
+                <!-- Content will be dynamically generated -->
+            </tbody>
+        </table>
+    </div>
+
+    <script src="./js/classroom_report.js"></script> <!-- Link to your external JavaScript file -->
+</body>
+
+</html>
