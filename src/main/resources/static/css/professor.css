@@ -169,7 +169,8 @@ label {
     height: 32px;
 }
 
-/* Add this to your CSS */
+/* toggle css */
+
 .inactive-professor {
     background-color: #C8102E;
     /* Brick color */

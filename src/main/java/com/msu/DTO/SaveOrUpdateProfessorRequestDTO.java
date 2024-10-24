@@ -19,11 +19,16 @@ public class SaveOrUpdateProfessorRequestDTO {
 	@JsonProperty("profTypeId")
 	private int profType;
 
+	@JsonProperty("profCourses")
+	private List<Long> profCourses;
+
 	@JsonProperty("profStatus")
 	private boolean profStatus;
 
 	@JsonProperty("availabilities")
 	private List<Availability> availabilities;
+
+	// Getters and setters
 
 	public Long getProfessorId() {
 		return professorId;
@@ -73,7 +78,13 @@ public class SaveOrUpdateProfessorRequestDTO {
 		this.availabilities = availabilities;
 	}
 
-	// Getters and setters
+	public List<Long> getProfCourses() {
+		return profCourses;
+	}
+
+	public void setProfCourses(List<Long> profCourses) {
+		this.profCourses = profCourses;
+	}
 
 	public static class Availability {
 		
