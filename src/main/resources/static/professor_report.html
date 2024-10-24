@@ -30,8 +30,8 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 20px;
-            gap: 15px; /* Added for spacing between elements */
-            align-items: center; /* Ensure elements are vertically centered */
+            gap: 15px;
+            align-items: center;
         }
 
         .controls select,
@@ -40,7 +40,7 @@
             font-size: 16px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            flex: 1; /* Allow controls to grow and fit */
+            flex: 1;
         }
 
         .controls button {
@@ -51,7 +51,7 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            flex-shrink: 0; /* Prevents button from shrinking */
+            flex-shrink: 0;
         }
 
         .controls button:hover {
@@ -61,7 +61,7 @@
         .label-container {
             display: flex;
             align-items: center;
-            gap: 8px; /* Space between label and select */
+            gap: 8px;
         }
 
         .label-container span {
@@ -128,6 +128,59 @@
         </table>
     </div>
 
-    <script src="./js/professor_report.js"></script> 
+    <!-- Add jsPDF and AutoTable Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+    <!-- JS File -->
+    <script src="./js/professor_report.js"></script>
+
+    <script>
+        document.getElementById('export-pdf').addEventListener('click', function () {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+    
+            doc.setFontSize(18);
+            doc.text('Professor\'s Report', 10, 10);
+    
+            // Capture table content
+            const tableData = [];
+            const table = document.querySelector('#report-content');
+            const rows = table.querySelectorAll('tr');
+    
+            rows.forEach(row => {
+                const columns = row.querySelectorAll('td');
+                const rowData = [];
+                columns.forEach(column => {
+                    rowData.push(column.textContent);
+                });
+                tableData.push(rowData);
+            });
+
+            // Define the table header
+            const headers = [['Professor Name', 'Day', 'Occupied']];
+    
+            // Add autoTable to the PDF
+            doc.autoTable({
+                head: headers,
+                body: tableData,
+                startY: 20,
+                theme: 'grid',
+                styles: {
+                    fontSize: 12,
+                    overflow: 'linebreak',
+                },
+                columnStyles: {
+                    0: { cellWidth: 50 }, // Professor Name
+                    1: { cellWidth: 40 }, // Day
+                    2: { cellWidth: 90 }, // Occupied
+                },
+            });
+    
+            // Save the PDF
+            doc.save('professor-report.pdf');
+        });
+    </script>    
+</body>
 
 </html>
