@@ -82,7 +82,6 @@ async function populateProfessors(semesterId) {
 }
 
 // Function to display all professors' schedules for the selected semester
-// Function to display all professors' schedules for the selected semester
 function displayAllProfessors(professors) {
     const reportContent = document.getElementById('report-content');
     reportContent.innerHTML = ''; // Clear previous content
@@ -107,29 +106,6 @@ function displayAllProfessors(professors) {
         }
     });
 }
-
-// Function to display a single professor's schedule
-function displayProfessorSchedule(professorId, professors) {
-    const reportContent = document.getElementById('report-content');
-    reportContent.innerHTML = ''; // Clear previous content
-
-    const professor = professors.find(prof => prof.id === professorId);
-    
-    if (professor && professor.schedule) {
-        console.log('Displaying schedule for professor', professor); // Log professor being displayed
-
-        Object.entries(professor.schedule).forEach(([day, { occupied }]) => {
-            const row = reportContent.insertRow();
-            row.insertCell().textContent = professor.name;
-            row.insertCell().textContent = day;
-            row.insertCell().textContent = occupied || 'N/A';
-        });
-    } else {
-        console.log('No matching professor found for ID or no schedule available:', professorId);
-        reportContent.innerHTML = '<tr><td colspan="3">No data available for this professor.</td></tr>';
-    }
-}
-
 
 // Function to display a single professor's schedule
 function displayProfessorSchedule(professorId, professors) {
