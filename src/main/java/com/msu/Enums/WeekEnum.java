@@ -39,7 +39,7 @@ public enum WeekEnum {
     	}else if(value == 3) {
     		return "WED";
     	}else if(value == 4) {
-    		return "THUS";
+    		return "THU";
     	}else if(value == 5) {
     		return "FRI";
     	}else if(value == 6) {

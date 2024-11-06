@@ -158,8 +158,9 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 	}
 
 	private void saveTimeLots(List<SectionSchedule> sectionScheduleList, TimeSlotsDTO[] timeSlots,Section section) {
+			ArrayList<TimeSlotDTO> list = new ArrayList<TimeSlotDTO>();
 
-		ArrayList<TimeSlotDTO> list = new ArrayList<TimeSlotDTO>();
+   if(sectionScheduleList != null  && sectionScheduleList.size() !=1) {
 		for (TimeSlotsDTO timeSlot : timeSlots) {
 			for (String day : timeSlot.getDays()) {
 				TimeSlotDTO timeSlotDTO = new TimeSlotDTO();
@@ -198,6 +199,36 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 			sectionScedule.setEndTime(timeSlotDTO.getEndTime());
 			 sectionScheduleRepository.save(sectionScedule);
 		}
+}else {
+	
+	SectionSchedule sectionSchedule = sectionScheduleList.get(0);
+	sectionScheduleRepository.deleteBySectionScheduledId(sectionSchedule.getSectionScheduledId());
+	for (TimeSlotsDTO timeSlot : timeSlots) {
+		for (String day : timeSlot.getDays()) {
+			TimeSlotDTO timeSlotDTO = new TimeSlotDTO();
+			timeSlotDTO.setDays(WeekEnum.getWeekIdByWeekName(day));
+			timeSlotDTO.setStartTime(timeSlot.getStartTime());
+			timeSlotDTO.setEndTime(timeSlot.getEndTime());
+			LocalTime endTime = timeSlot.getEndTime();
+			list.add(timeSlotDTO);
+		}
+
+	}
+	
+	for (TimeSlotDTO timeSlotDTO : list) {
+
+		 SectionSchedule sectionScedule = new SectionSchedule();
+		 sectionScedule.setSectionId(section.getSectionId());
+		sectionScedule.setWeekDay(timeSlotDTO.getDays());
+		sectionScedule.setStartTime(timeSlotDTO.getStartTime());
+		sectionScedule.setEndTime(timeSlotDTO.getEndTime());
+		 sectionScheduleRepository.save(sectionScedule);
+	}
+	
+	
+	
+}
+		
 
 	}
 
@@ -295,29 +326,12 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 		     }
 	}
 		     
-		 StringBuilder profConflict = new StringBuilder();
-		 for(String s:professorConflictList) {
-		    	 profConflict.append(s).append("\n");
-		    	 
-		     }
-		 conflictDTO.setProfessorCnflict(profConflict.toString());
-		 StringBuilder courseConflict = new StringBuilder();
-	     for(String s:courseConflictList) {
-	    	 courseConflict.append(s).append("\n");
-	    	 
-	     }
-	     
-		conflictDTO.setCourseConflict(courseConflict.toString());
-		
-		
-		 StringBuilder roomConflict = new StringBuilder();
-	     for(String s:roomConflictList) {
-	    	 roomConflict.append(s).append("\n");
-	    	 
-	     }
-		conflictDTO.setClassRoomConflcit(roomConflict.toString());
+		     
+		     
+		conflictDTO.setProfessorCnflict(professorConflictList.toString());
+		conflictDTO.setCourseConflict(courseConflictList.toString());
+		conflictDTO.setClassRoomConflcit(roomConflictList.toString());
 		suggestionsRequest.setConflictDTO(conflictDTO);
-		
 		SuggestionDTO suggestion = new SuggestionDTO();
 		suggestion.setSuggestions("suggestions here");
 		
@@ -329,7 +343,7 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 	public List<SectionSchedule> fetchProfessorConflctsData(SuggestionRequestDTO suggestionsRequest) {
 		 TimeSlotsDTO[] timeSlots = suggestionsRequest.getTimeSlots();
 		 
-		 List<SectionSchedule> finalList =  new ArrayList<SectionSchedule>();
+		 
 		 
 		 for(TimeSlotsDTO timeSlotsDTO: timeSlots) {
 			   
@@ -339,14 +353,13 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 				 .collect(Collectors.toList());
 				 
 				 for(CourseSemesterMapping courseSemesterMapping:filteredCourseSemesterMappingList) {
-					System.out.println(courseSemesterMapping.getCourseSemesterMappingId());
-					 courseSemesterMapping.getCourseSemesterMappingId();
+			
 					 List<Section> filterSections = sectionService.findAll().stream()
 					 .filter(section -> section.getProfessorId() == suggestionsRequest.getProfessorId())
 					 .filter(section -> section.getCourseSemesterMappingId() == courseSemesterMapping.getCourseSemesterMappingId())
 					    .collect(Collectors.toList());
 					 if(!filterSections.isEmpty()) {
-						  //// removed list
+						 List<SectionSchedule> finalList = new ArrayList<SectionSchedule>();
 						 for(Section section : filterSections){
 						List<SectionSchedule> sectionSecheduleList =  sectionScheduleRepository.findAll().stream().filter(sr->{
 							 if(sr.getSectionId().equals(section.getSectionId())) {
@@ -376,7 +389,7 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 						 }).collect(Collectors.toList());
 						finalList.addAll(sectionSecheduleList);
 					 }
-						
+						return finalList;
 						
 						
 						 
@@ -384,11 +397,10 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 					 
 					 
 				 }
-				 
 		 
 		 }
-		 
-		return finalList;
+		
+		return null;
 	}
 
 
@@ -413,7 +425,7 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 					 .filter(section -> section.getCourseSemesterMappingId() == courseSemesterMapping.getCourseSemesterMappingId())
 					    .collect(Collectors.toList());
 					 if(!filterSections.isEmpty()) {
-						 for(Section section:filterSections) {
+						 Section section = filterSections.get(0);
 						List<SectionSchedule> sectionSecheduleList =  sectionScheduleRepository.findAll().stream().filter(sr->{
 							 if(sr.getSectionId().equals(section.getSectionId())) {
 								  
@@ -443,7 +455,6 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 						if(!sectionSecheduleList.isEmpty()) {
 							return sectionSecheduleList;
 						}
-					 }
 						 
 					 }
 					 

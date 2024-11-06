@@ -13,21 +13,12 @@ document.addEventListener("DOMContentLoaded", function() {
     fetchCrossSectionList(semId,courseId);
 
 
-   
-
     const addTimeSlotButton = document.getElementById("onAvailable");
     addTimeSlotButton.addEventListener("click", function() {
         addTimeSlot();  // Empty call adds a blank time slot
     });
 
     
-  // if section id is present get existing details
-    //    if (sectionId) {
-    //     fetch(`http://localhost:8080/getSectionSchedule/${sectionId}`)
-    //         .then(response => response.json())
-    //         .then(data => populateForm(data))
-    //         .catch(error => console.error("Error fetching section data:", error));
-    // }
 
     Promise.all([fetchRooms(), fetchProfessors(),fetchCrossSectionList(semId,courseId)]).then(() => {
         if (sectionId) {
@@ -93,33 +84,34 @@ document.addEventListener("DOMContentLoaded", function() {
         timeSlotsContainer.appendChild(newTimeSlotDiv);
 
         // Add event listeners for the new buttons (Day toggles and Remove button)
-        newTimeSlotDiv.querySelectorAll('.btn-outline-primary').forEach(button => {
-            button.addEventListener('click', function () {
-                toggleDaySelection(this);
+        //jaffa
+        // newTimeSlotDiv.querySelectorAll('.btn-outline-primary').forEach(button => {
+        //     button.addEventListener('click', function () {
+        //         toggleDaySelection(this);
+        //     });
+        // });
+
+        document.querySelectorAll('.btn-outline-primary').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent default form submission behavior
+                event.stopPropagation(); // Stop the event from bubbling up
+                toggleDaySelection(this); // Toggle the selection for the day
             });
         });
+         newTimeSlotDiv.querySelector('.remove-time-slot').addEventListener('click', function() {
+             newTimeSlotDiv.remove();
+         });
 
-        newTimeSlotDiv.querySelector('.remove-time-slot').addEventListener('click', function() {
-            newTimeSlotDiv.remove();
-        });
+        
     }
 
     function toggleDaySelection(button) {
+        console.log("inside toggleDaySelection");
         button.classList.toggle('active');
         button.classList.toggle('btn-primary');
     }
 
-        // new code end
-    
 
-        
-    // commented for testng
-    // const addTimeSlotButton = document.getElementById("onAvailable");
-    // addTimeSlotButton.addEventListener("click", function() {
-    //     addTimeSlot();
-    // });
-
-    // Function to add a new time slot
     function addTimeSlot() {
         const timeSlotsContainer = document.getElementById("timeSlotsContainer");
         const index = timeSlotsContainer.children.length; // Get the number of existing time slots
@@ -145,11 +137,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Append the new time slot to the container
         timeSlotsContainer.appendChild(newTimeSlotDiv);
-
+        //jaffa
         // Add event listeners to toggle day selection for the new time slot
-        newTimeSlotDiv.querySelectorAll('.btn-outline-primary').forEach(button => {
-            button.addEventListener('click', function () {
-                toggleDaySelection(this);
+        // newTimeSlotDiv.querySelectorAll('.btn-outline-primary').forEach(button => {
+        //     console.log();
+        //     button.addEventListener('click', function () {
+        //         toggleDaySelection(this);
+        //     });
+        // });
+
+        document.querySelectorAll('.btn-outline-primary').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent default form submission behavior
+                event.stopPropagation(); // Stop the event from bubbling up
+                toggleDaySelection(this); // Toggle the selection for the day
             });
         });
 
@@ -166,7 +167,6 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         });
 
-    
         
     }
 
@@ -243,6 +243,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Add time slots to formData
     formData.timeSlots = timeSlots;
+    formData.sectionId = sectionId;
 
     console.log(formData);
 
