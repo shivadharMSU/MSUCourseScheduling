@@ -201,6 +201,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Event listener for form submission
     document.getElementById("sectionForm").addEventListener("submit", function(event) {
+
+        console.log("after sumbit");
         event.preventDefault(); // Prevent default form submission
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
@@ -409,22 +411,34 @@ document.addEventListener("DOMContentLoaded", function() {
             // Check if there are any conflicts
             if (conflictDTO) {
                 for (const conflictType in conflictDTO) {
+                    
                     const conflictMessages = conflictDTO[conflictType];
                     if (conflictMessages && conflictMessages.length > 0) {
+                        // Map conflictType to display name
+                        let headingText;
+                        if (conflictType === 'professorConflict') {
+                            headingText = "Professor Conflict";
+                        } else if (conflictType === 'classRoomConflict') {
+                            headingText = "Class Room Conflict";
+                        } else if (conflictType === 'courseConflict') {
+                            headingText = "Course Conflict";
+                        } else {
+                            headingText = `${conflictType} Conflict`; // default heading for other types
+                        }
+            
                         // Create heading for each conflict type
                         const heading = document.createElement("h3");
-                        heading.textContent = `${conflictType} Conflict`;
+                        heading.textContent = headingText;
                         suggestionBox.appendChild(heading);
-        
+            
                         // Create list to display conflict messages
                         const list = document.createElement("ul");
-                        // Check if conflictMessages is a string
                         if (typeof conflictMessages === 'string') {
                             const listItem = document.createElement("li");
                             listItem.textContent = conflictMessages;
                             list.appendChild(listItem);
                         } else {
-                            // If it's not a string, assume it's an array and iterate over it
+                            // Assume it's an array and iterate over it
                             conflictMessages.forEach(message => {
                                 const listItem = document.createElement("li");
                                 listItem.textContent = message;
@@ -434,7 +448,8 @@ document.addEventListener("DOMContentLoaded", function() {
                         suggestionBox.appendChild(list);
                     }
                 }
-            } else {
+            }
+            else {
                 // If no conflicts, display a message indicating so
                 suggestionBox.textContent = "No conflicts found.";
             }

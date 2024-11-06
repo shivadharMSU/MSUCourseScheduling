@@ -2,6 +2,7 @@ package com.msu.controller;
 
 import com.msu.DTO.GetSemesterResponseDTO;
 import com.msu.DTO.ProfessorReportScheduleList;
+import com.msu.DTO.SectionReportSceduleList;
 import com.msu.entities.CourseDetails;
 import com.msu.services.CourseDetailsService;
 import com.msu.services.ReportService;
@@ -39,6 +40,14 @@ public class ReportsController {
     	         
     	ProfessorReportScheduleList professorReportScheduleListService = reposrtService.getProfessorReportScheduleListService(semId);
     	return  ResponseEntity.ok(professorReportScheduleListService);
+    }
+    
+    
+    @GetMapping("/getSectionReport/{semId}")
+    public ResponseEntity<SectionReportSceduleList> getsectionreport(@PathVariable Integer semId) {
+    	         
+    	 SectionReportSceduleList sectionReportScheduleListService = reposrtService.getSectionReportScheduleListService(semId);
+    	return  ResponseEntity.ok(sectionReportScheduleListService);
     }
         
     

@@ -295,12 +295,29 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 		     }
 	}
 		     
-		     
-		     
-		conflictDTO.setProfessorCnflict(professorConflictList.toString());
-		conflictDTO.setCourseConflict(courseConflictList.toString());
-		conflictDTO.setClassRoomConflcit(roomConflictList.toString());
+		 StringBuilder profConflict = new StringBuilder();
+		 for(String s:professorConflictList) {
+		    	 profConflict.append(s).append("\n");
+		    	 
+		     }
+		 conflictDTO.setProfessorCnflict(profConflict.toString());
+		 StringBuilder courseConflict = new StringBuilder();
+	     for(String s:courseConflictList) {
+	    	 courseConflict.append(s).append("\n");
+	    	 
+	     }
+	     
+		conflictDTO.setCourseConflict(courseConflict.toString());
+		
+		
+		 StringBuilder roomConflict = new StringBuilder();
+	     for(String s:roomConflictList) {
+	    	 roomConflict.append(s).append("\n");
+	    	 
+	     }
+		conflictDTO.setClassRoomConflcit(roomConflict.toString());
 		suggestionsRequest.setConflictDTO(conflictDTO);
+		
 		SuggestionDTO suggestion = new SuggestionDTO();
 		suggestion.setSuggestions("suggestions here");
 		
@@ -312,7 +329,7 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 	public List<SectionSchedule> fetchProfessorConflctsData(SuggestionRequestDTO suggestionsRequest) {
 		 TimeSlotsDTO[] timeSlots = suggestionsRequest.getTimeSlots();
 		 
-		 
+		 List<SectionSchedule> finalList =  new ArrayList<SectionSchedule>();
 		 
 		 for(TimeSlotsDTO timeSlotsDTO: timeSlots) {
 			   
@@ -322,13 +339,14 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 				 .collect(Collectors.toList());
 				 
 				 for(CourseSemesterMapping courseSemesterMapping:filteredCourseSemesterMappingList) {
-			
+					System.out.println(courseSemesterMapping.getCourseSemesterMappingId());
+					 courseSemesterMapping.getCourseSemesterMappingId();
 					 List<Section> filterSections = sectionService.findAll().stream()
 					 .filter(section -> section.getProfessorId() == suggestionsRequest.getProfessorId())
 					 .filter(section -> section.getCourseSemesterMappingId() == courseSemesterMapping.getCourseSemesterMappingId())
 					    .collect(Collectors.toList());
 					 if(!filterSections.isEmpty()) {
-						 List<SectionSchedule> finalList = new ArrayList<SectionSchedule>();
+						  //// removed list
 						 for(Section section : filterSections){
 						List<SectionSchedule> sectionSecheduleList =  sectionScheduleRepository.findAll().stream().filter(sr->{
 							 if(sr.getSectionId().equals(section.getSectionId())) {
@@ -358,7 +376,7 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 						 }).collect(Collectors.toList());
 						finalList.addAll(sectionSecheduleList);
 					 }
-						return finalList;
+						
 						
 						
 						 
@@ -366,10 +384,11 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 					 
 					 
 				 }
+				 
 		 
 		 }
-		
-		return null;
+		 
+		return finalList;
 	}
 
 
@@ -394,7 +413,7 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 					 .filter(section -> section.getCourseSemesterMappingId() == courseSemesterMapping.getCourseSemesterMappingId())
 					    .collect(Collectors.toList());
 					 if(!filterSections.isEmpty()) {
-						 Section section = filterSections.get(0);
+						 for(Section section:filterSections) {
 						List<SectionSchedule> sectionSecheduleList =  sectionScheduleRepository.findAll().stream().filter(sr->{
 							 if(sr.getSectionId().equals(section.getSectionId())) {
 								  
@@ -424,6 +443,7 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 						if(!sectionSecheduleList.isEmpty()) {
 							return sectionSecheduleList;
 						}
+					 }
 						 
 					 }
 					 

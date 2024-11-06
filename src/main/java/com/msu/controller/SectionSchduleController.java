@@ -38,7 +38,7 @@ public class SectionSchduleController {
 	    
 	        
 	    } catch (Exception ex) {
-	        System.out.println("Exception in GetSemesterResponseDTO controller: " + ex.getMessage());
+	        ex.printStackTrace();
 	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 	                             .body(Collections.emptyList()); 
 	    }
@@ -68,7 +68,7 @@ public class SectionSchduleController {
 			
 			SuggestionsResponseDTO suggestions = sectionScheduleService.getSuggestions(suggestionRequestDTO);
 		
-			return ResponseEntity.ok(suggestions);
+		return ResponseEntity.ok(suggestions);
 		}catch(Exception ex) {
 	        System.out.println("getClassListForDropDown: " + ex.getMessage());
 
