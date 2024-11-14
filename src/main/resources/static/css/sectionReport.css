@@ -1,0 +1,21 @@
+/* CSS for the table header */
+#reportTable thead th {
+    background-color: #C8102E;
+    color: white;
+}
+
+/* CSS for dropdown fields */
+.form-control {
+    border: 2px solid #C8102E;
+}
+
+/* CSS for the button */
+.btn-primary {
+    background-color: #C8102E;
+    border-color: #C8102E;
+}
+
+.btn-primary:hover {
+    background-color: darkred;
+    border-color: darkred;
+}

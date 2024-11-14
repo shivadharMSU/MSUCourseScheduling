@@ -6,9 +6,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import com.msu.DTO.Occupency;
 import com.msu.DTO.Schedule;
+import com.msu.DTO.SectionReportScedule;
+import com.msu.DTO.SectionReportSceduleList;
 import com.msu.entities.*;
 import com.msu.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +42,9 @@ public class ReportServiceImpl implements ReportService{
 
 	@Autowired
 	private CourseDetailsService courseDetailsService;
+	
+	@Autowired
+	private ClassRomService classRomService;
 
 	@Override
 	public ProfessorReportScheduleList getProfessorReportScheduleListService(Integer semId) {
@@ -118,6 +125,55 @@ public class ReportServiceImpl implements ReportService{
 		professorScheduleList.setProfessorReportSchedule(professorReportScheduleList);
 		
 		return professorScheduleList;
+	}
+
+	@Override
+	public SectionReportSceduleList getSectionReportScheduleListService(Integer semId) {
+		// TODO Auto-generated method stub
+		
+		SectionReportSceduleList sectionReportSceduleList = new SectionReportSceduleList();
+		ArrayList<SectionReportScedule> list = new ArrayList<SectionReportScedule>();
+		
+		List<ProfessorDetails> professorList = professorService.findAll();
+		List<Section> sectionList = sectionService.findAll();
+		List<CourseSemesterMapping> courseSemesterMappingList = courseSemesterMappingService.findBySemesterId(semId);
+		
+		List<ProfessorReportSchedule> professorReportScheduleList  = new ArrayList<ProfessorReportSchedule>();
+		
+		
+		for(CourseSemesterMapping courseSemMapping:courseSemesterMappingList) {
+			
+			List<Section> sectionListByCourseMappingId = sectionList.stream().filter(c->c.getCourseSemesterMappingId() == courseSemMapping.getCourseSemesterMappingId()).collect(Collectors.toList());
+			
+			for(Section section:sectionListByCourseMappingId) {
+				List<SectionSchedule> sectionSceduleList = sectionScheduleService.findBySectionId(section.getSectionId());
+				String time = "";
+				
+				SectionReportScedule sectionReportScedule	 = new SectionReportScedule();
+					CourseDetails courseDetails = courseDetailsService.findCourseDetailsByCourseId(courseSemMapping.getCourseId());
+					sectionReportScedule.setCourseName(courseDetails.getCourseName());
+					ProfessorDetails professor = professorService.findByProfessorId(section.getProfessorId());
+					sectionReportScedule.setProdessorName(professor.getName());
+					sectionReportScedule.setSectionNo(section.getSectionNo());
+					ClassRoom classRoom = classRomService.findByRoomId(section.getRoomId());
+					sectionReportScedule.setClassRoom(classRoom.getRoomName());
+					
+				for(SectionSchedule sectionSchdule:sectionSceduleList) {
+					//sectionReportScedule.setDay(WeekEnum.getWeekByValue(sectionSchdule.getWeekDay()))
+					sectionSchdule.getWeekDay();
+					sectionSchdule.getStartTime();
+					sectionSchdule.getEndTime();
+					String weekEnum = WeekEnum.getWeekEnum(sectionSchdule.getWeekDay());
+					time = time + " " + weekEnum + " " + sectionSchdule.getStartTime() + "-"
+							+ sectionSchdule.getEndTime();
+					sectionReportScedule.setTime(time);
+					
+				}
+				list.add(sectionReportScedule);
+			}
+		}
+		sectionReportSceduleList.setSectionReportDchedule(list);
+		return sectionReportSceduleList;
 	}
 	
 	

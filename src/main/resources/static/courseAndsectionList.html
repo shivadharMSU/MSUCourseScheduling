@@ -154,7 +154,7 @@
                 const deleteButton = document.createElement('button');
                 deleteButton.classList.add('delete-button', 'btn-sm');
                 deleteButton.textContent = 'Delete';
-                deleteButton.onclick = () => deleteCourse(course.courseId);
+                deleteButton.onclick = () => deleteCourse(semId,course.courseId);
 
                 courseHeader.appendChild(courseButton);
                 courseHeader.appendChild(deleteButton);
@@ -210,10 +210,10 @@
             });
         }
 
-        function deleteCourse(courseId) {
+        function deleteCourse(semId,courseId,se) {
             if (confirm('Are you sure you want to delete this course?')) {
-                fetch(`http://localhost:8080/deleteCourse/${courseId}`, {
-                    method: 'DELETE',
+                fetch(`http://localhost:8080/deleteCourseFromSem/${semId}/${courseId}`, {
+                    method: 'GET',
                 })
                     .then(response => {
                         if (response.ok) {

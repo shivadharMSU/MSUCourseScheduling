@@ -158,8 +158,9 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 	}
 
 	private void saveTimeLots(List<SectionSchedule> sectionScheduleList, TimeSlotsDTO[] timeSlots,Section section) {
+			ArrayList<TimeSlotDTO> list = new ArrayList<TimeSlotDTO>();
 
-		ArrayList<TimeSlotDTO> list = new ArrayList<TimeSlotDTO>();
+   if(sectionScheduleList != null  && sectionScheduleList.size() !=1) {
 		for (TimeSlotsDTO timeSlot : timeSlots) {
 			for (String day : timeSlot.getDays()) {
 				TimeSlotDTO timeSlotDTO = new TimeSlotDTO();
@@ -198,6 +199,36 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 			sectionScedule.setEndTime(timeSlotDTO.getEndTime());
 			 sectionScheduleRepository.save(sectionScedule);
 		}
+}else {
+	
+	SectionSchedule sectionSchedule = sectionScheduleList.get(0);
+	sectionScheduleRepository.deleteBySectionScheduledId(sectionSchedule.getSectionScheduledId());
+	for (TimeSlotsDTO timeSlot : timeSlots) {
+		for (String day : timeSlot.getDays()) {
+			TimeSlotDTO timeSlotDTO = new TimeSlotDTO();
+			timeSlotDTO.setDays(WeekEnum.getWeekIdByWeekName(day));
+			timeSlotDTO.setStartTime(timeSlot.getStartTime());
+			timeSlotDTO.setEndTime(timeSlot.getEndTime());
+			LocalTime endTime = timeSlot.getEndTime();
+			list.add(timeSlotDTO);
+		}
+
+	}
+	
+	for (TimeSlotDTO timeSlotDTO : list) {
+
+		 SectionSchedule sectionScedule = new SectionSchedule();
+		 sectionScedule.setSectionId(section.getSectionId());
+		sectionScedule.setWeekDay(timeSlotDTO.getDays());
+		sectionScedule.setStartTime(timeSlotDTO.getStartTime());
+		sectionScedule.setEndTime(timeSlotDTO.getEndTime());
+		 sectionScheduleRepository.save(sectionScedule);
+	}
+	
+	
+	
+}
+		
 
 	}
 

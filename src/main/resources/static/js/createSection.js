@@ -13,21 +13,12 @@ document.addEventListener("DOMContentLoaded", function() {
     fetchCrossSectionList(semId,courseId);
 
 
-   
-
     const addTimeSlotButton = document.getElementById("onAvailable");
     addTimeSlotButton.addEventListener("click", function() {
         addTimeSlot();  // Empty call adds a blank time slot
     });
 
     
-  // if section id is present get existing details
-    //    if (sectionId) {
-    //     fetch(`http://localhost:8080/getSectionSchedule/${sectionId}`)
-    //         .then(response => response.json())
-    //         .then(data => populateForm(data))
-    //         .catch(error => console.error("Error fetching section data:", error));
-    // }
 
     Promise.all([fetchRooms(), fetchProfessors(),fetchCrossSectionList(semId,courseId)]).then(() => {
         if (sectionId) {
@@ -93,33 +84,34 @@ document.addEventListener("DOMContentLoaded", function() {
         timeSlotsContainer.appendChild(newTimeSlotDiv);
 
         // Add event listeners for the new buttons (Day toggles and Remove button)
-        newTimeSlotDiv.querySelectorAll('.btn-outline-primary').forEach(button => {
-            button.addEventListener('click', function () {
-                toggleDaySelection(this);
+        //jaffa
+        // newTimeSlotDiv.querySelectorAll('.btn-outline-primary').forEach(button => {
+        //     button.addEventListener('click', function () {
+        //         toggleDaySelection(this);
+        //     });
+        // });
+
+        document.querySelectorAll('.btn-outline-primary').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent default form submission behavior
+                event.stopPropagation(); // Stop the event from bubbling up
+                toggleDaySelection(this); // Toggle the selection for the day
             });
         });
+         newTimeSlotDiv.querySelector('.remove-time-slot').addEventListener('click', function() {
+             newTimeSlotDiv.remove();
+         });
 
-        newTimeSlotDiv.querySelector('.remove-time-slot').addEventListener('click', function() {
-            newTimeSlotDiv.remove();
-        });
+        
     }
 
     function toggleDaySelection(button) {
+        console.log("inside toggleDaySelection");
         button.classList.toggle('active');
         button.classList.toggle('btn-primary');
     }
 
-        // new code end
-    
 
-        
-    // commented for testng
-    // const addTimeSlotButton = document.getElementById("onAvailable");
-    // addTimeSlotButton.addEventListener("click", function() {
-    //     addTimeSlot();
-    // });
-
-    // Function to add a new time slot
     function addTimeSlot() {
         const timeSlotsContainer = document.getElementById("timeSlotsContainer");
         const index = timeSlotsContainer.children.length; // Get the number of existing time slots
@@ -145,11 +137,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Append the new time slot to the container
         timeSlotsContainer.appendChild(newTimeSlotDiv);
-
+        //jaffa
         // Add event listeners to toggle day selection for the new time slot
-        newTimeSlotDiv.querySelectorAll('.btn-outline-primary').forEach(button => {
-            button.addEventListener('click', function () {
-                toggleDaySelection(this);
+        // newTimeSlotDiv.querySelectorAll('.btn-outline-primary').forEach(button => {
+        //     console.log();
+        //     button.addEventListener('click', function () {
+        //         toggleDaySelection(this);
+        //     });
+        // });
+
+        document.querySelectorAll('.btn-outline-primary').forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent default form submission behavior
+                event.stopPropagation(); // Stop the event from bubbling up
+                toggleDaySelection(this); // Toggle the selection for the day
             });
         });
 
@@ -166,7 +167,6 @@ document.addEventListener("DOMContentLoaded", function() {
             });
         });
 
-    
         
     }
 
@@ -201,6 +201,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Event listener for form submission
     document.getElementById("sectionForm").addEventListener("submit", function(event) {
+
+        console.log("after sumbit");
         event.preventDefault(); // Prevent default form submission
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
@@ -241,6 +243,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Add time slots to formData
     formData.timeSlots = timeSlots;
+    formData.sectionId = sectionId;
 
     console.log(formData);
 
@@ -409,22 +412,34 @@ document.addEventListener("DOMContentLoaded", function() {
             // Check if there are any conflicts
             if (conflictDTO) {
                 for (const conflictType in conflictDTO) {
+                    
                     const conflictMessages = conflictDTO[conflictType];
                     if (conflictMessages && conflictMessages.length > 0) {
+                        // Map conflictType to display name
+                        let headingText;
+                        if (conflictType === 'professorConflict') {
+                            headingText = "Professor Conflict";
+                        } else if (conflictType === 'classRoomConflict') {
+                            headingText = "Class Room Conflict";
+                        } else if (conflictType === 'courseConflict') {
+                            headingText = "Course Conflict";
+                        } else {
+                            headingText = `${conflictType} Conflict`; // default heading for other types
+                        }
+            
                         // Create heading for each conflict type
                         const heading = document.createElement("h3");
-                        heading.textContent = `${conflictType} Conflict`;
+                        heading.textContent = headingText;
                         suggestionBox.appendChild(heading);
-        
+            
                         // Create list to display conflict messages
                         const list = document.createElement("ul");
-                        // Check if conflictMessages is a string
                         if (typeof conflictMessages === 'string') {
                             const listItem = document.createElement("li");
                             listItem.textContent = conflictMessages;
                             list.appendChild(listItem);
                         } else {
-                            // If it's not a string, assume it's an array and iterate over it
+                            // Assume it's an array and iterate over it
                             conflictMessages.forEach(message => {
                                 const listItem = document.createElement("li");
                                 listItem.textContent = message;
@@ -434,7 +449,8 @@ document.addEventListener("DOMContentLoaded", function() {
                         suggestionBox.appendChild(list);
                     }
                 }
-            } else {
+            }
+            else {
                 // If no conflicts, display a message indicating so
                 suggestionBox.textContent = "No conflicts found.";
             }

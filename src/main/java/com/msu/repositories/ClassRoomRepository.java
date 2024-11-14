@@ -10,4 +10,6 @@ public interface ClassRoomRepository extends JpaRepository<ClassRoom, Integer>{
          public ClassRoom findByRoomId(Integer roomId);
          
          public ClassRoom findByRoomName(String roomName);
+         
+         
 }

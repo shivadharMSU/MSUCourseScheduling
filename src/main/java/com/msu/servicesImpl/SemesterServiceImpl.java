@@ -1,6 +1,8 @@
 package com.msu.servicesImpl;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,6 +35,7 @@ import com.msu.services.ProfessorService;
 import com.msu.services.SectionScheduleService;
 import com.msu.services.SectionService;
 import com.msu.services.SemesterService;
+import com.mysql.cj.x.protobuf.MysqlxCrud.Collection;
 @Service("semesterService")
 public class SemesterServiceImpl implements SemesterService{
 
@@ -132,6 +135,9 @@ public class SemesterServiceImpl implements SemesterService{
 	        	 
 	        	semesterResponse.setSemesterList(semDTOArray);
 	        list.add(semesterResponse);
+	        list.sort(Comparator.comparingInt(dto -> Integer.parseInt(dto.getYear())));
+	        Collections.reverse(list);
+
 	        	
 	        	
 	        }

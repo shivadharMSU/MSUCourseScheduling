@@ -56,10 +56,16 @@ async function populateProfessors(semesterId) {
 
         // Populate professor dropdown
         professorReportSchedule.forEach(professor => {
-            const option = document.createElement('option');
-            option.value = professor.id;
-            option.textContent = professor.name;
-            professorSelect.appendChild(option);
+            // Check if the professor has at least one 'occupied' entry in their schedule
+            const hasOccupiedSchedule = Object.values(professor.schedule || {}).some(day => day && day.occupied);
+        
+            if (hasOccupiedSchedule) {
+                // Create an option only for professors with occupied schedules
+                const option = document.createElement('option');
+                option.value = professor.id;
+                option.textContent = professor.name;
+                professorSelect.appendChild(option);
+            }
         });
 
         // Display all professors' schedules for the selected semester
@@ -90,41 +96,45 @@ function displayAllProfessors(professors) {
 
     professors.forEach(professor => {
         if (professor.schedule && Object.keys(professor.schedule).length > 0) {
-            // Iterate over the days and display the schedule
-            Object.entries(professor.schedule).forEach(([day, { occupied }]) => {
-                const row = reportContent.insertRow();
-                row.insertCell().textContent = professor.name;
-                row.insertCell().textContent = day;
-                row.insertCell().textContent = occupied || 'N/A'; // Only display "Occupied"
+            // Iterate over the days in the professor's schedule
+            Object.entries(professor.schedule).forEach(([day, schedule]) => {
+                if (schedule && schedule.occupied) { // Only proceed if 'occupied' is present
+                    const row = reportContent.insertRow();
+                    row.insertCell().textContent = professor.name;
+                    row.insertCell().textContent = day;
+                    row.insertCell().textContent = schedule.occupied; // Display occupied schedule
+                }
             });
-        } else {
-            // Display a fallback if no schedule is available
-            const row = reportContent.insertRow();
-            row.insertCell().textContent = professor.name;
-            row.insertCell().textContent = "N/A"; // No day
-            row.insertCell().textContent = "No schedule available";
         }
     });
 }
 
-// Function to display a single professor's schedule
+// Function to display a single professor's schedul5e
 function displayProfessorSchedule(professorId, professors) {
     const reportContent = document.getElementById('report-content');
     reportContent.innerHTML = ''; // Clear previous content
 
-    const professor = professors.find(prof => prof.id === professorId);
+    const professor = professors.find(prof => prof.id == professorId);
     
     if (professor && professor.schedule) {
         console.log('Displaying schedule for professor', professor); // Log professor being displayed
 
-        Object.entries(professor.schedule).forEach(([day, { occupied }]) => {
-            const row = reportContent.insertRow();
-            row.insertCell().textContent = professor.name;
-            row.insertCell().textContent = day;
-            row.insertCell().textContent = occupied || 'N/A';
+        Object.entries(professor.schedule).forEach(([day, schedule]) => {
+            // Only proceed if the day's schedule exists and is occupied
+            if (schedule && schedule.occupied) {
+                const row = reportContent.insertRow();
+                row.insertCell().textContent = professor.name;
+                row.insertCell().textContent = day;
+                row.insertCell().textContent = schedule.occupied;
+            }
         });
+
+        // If no occupied entries were found, show a "no data" message
+        if (reportContent.rows.length === 0) {
+            reportContent.innerHTML = '<tr><td colspan="3">No occupied schedule available for this professor.</td></tr>';
+        }
     } else {
         console.log('No matching professor found for ID or no schedule available:', professorId);
         reportContent.innerHTML = '<tr><td colspan="3">No data available for this professor.</td></tr>';
-    }
+    }
 }
