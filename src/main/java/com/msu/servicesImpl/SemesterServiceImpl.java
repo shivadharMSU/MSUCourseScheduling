@@ -35,151 +35,144 @@ import com.msu.services.ProfessorService;
 import com.msu.services.SectionScheduleService;
 import com.msu.services.SectionService;
 import com.msu.services.SemesterService;
-import com.mysql.cj.x.protobuf.MysqlxCrud.Collection;
-@Service("semesterService")
-public class SemesterServiceImpl implements SemesterService{
 
-	 @Autowired
-	 private SemesterRepository semesterRepository;
-	 
-	 @Autowired 
-	 private CourseSemesterMappingService courseSemesterMappingService;
-	 
-	 @Autowired
-	 private SectionService sectionService;
-	 
-	 @Autowired
-	 private SectionScheduleService sectionScheduleService;
-	 
-	 @Autowired
-	 private CourseDetailsService courseDetailsService;
-	 
-	 @Autowired
-	 private ProfessorService professorService;
-	 
-	 
+@Service("semesterService")
+public class SemesterServiceImpl implements SemesterService {
+
+	@Autowired
+	private SemesterRepository semesterRepository;
+
+	@Autowired
+	private CourseSemesterMappingService courseSemesterMappingService;
+
+	@Autowired
+	private SectionService sectionService;
+
+	@Autowired
+	private SectionScheduleService sectionScheduleService;
+
+	@Autowired
+	private CourseDetailsService courseDetailsService;
+
+	@Autowired
+	private ProfessorService professorService;
+
 	@Override
 	public List<Semester> findAll() {
 		try {
 			return semesterRepository.findAll();
-		}catch(Exception ex) {
-			System.out.println("Exception while fetching semester "+ex);
+		} catch (Exception ex) {
+			System.out.println("Exception while fetching semester " + ex);
 		}
- 		return null;
+		return null;
 	}
 
 	@Override
 	public void saveSemester(Semester semesterName) {
-     try {
-    	 semesterRepository.save(semesterName);
-		}catch(Exception ex) {
-			System.out.println("Exception saving fetching semester "+ex);
-		}		
+		try {
+			semesterRepository.save(semesterName);
+		} catch (Exception ex) {
+			System.out.println("Exception saving fetching semester " + ex);
+		}
 	}
 
 	@Override
 	public List<GetSemesterResponseDTO> getSemesterDetails() {
 		try {
-			
+
 			List<GetSemesterResponseDTO> list = new ArrayList<GetSemesterResponseDTO>();
-			
+
 			List<Semester> allSemesterDetails = semesterRepository.findAll();
 			Set<String> uniqueYears = new HashSet<>();
-	        for (Semester semester : allSemesterDetails) {
-	        	uniqueYears.add(semester.getYear());
-	        }
+			for (Semester semester : allSemesterDetails) {
+				uniqueYears.add(semester.getYear());
+			}
 
-	        String[] uniqueYearsArray = uniqueYears.toArray(new String[uniqueYears.size()]);
+			String[] uniqueYearsArray = uniqueYears.toArray(new String[uniqueYears.size()]);
 
-	        System.out.println("Unique Years:");
-	        for (String year : uniqueYearsArray) {
-	           
-	        	
-	        	List<Semester> semesterDetailsWithYear = allSemesterDetails.stream()
-                        .filter(semester -> semester.getYear().equals(year)) 
-                        .collect(Collectors.toList());
-	        	GetSemesterResponseDTO semesterResponse = new GetSemesterResponseDTO();
-	        	semesterResponse.setYear(year);
-	        	List<SemesterDTO> semesterdtoList = new ArrayList<SemesterDTO>();
-	        	SemesterDTO[] semDTOArray = new SemesterDTO[4];
-	        	for(Semester sem:semesterDetailsWithYear) {
-	        		SemesterDTO semster = new SemesterDTO();
-	        		if(sem.getSemNameId() == 1) {
-	        			semster.setSemId(sem.getSemId());
-	        			semster.setSemName(SmesterEnum.getSemesterName(1));
-	        			semesterdtoList.add(semster);
-	        			semDTOArray[0] = semster;
-	        			
-	        		}else if(sem.getSemNameId() == 2) {
-	        			semster.setSemId(sem.getSemId());
-	        			semster.setSemName(SmesterEnum.getSemesterName(2));
-	        			semesterdtoList.add(semster);
-	        			semDTOArray[1] = semster;
-	        			
-	        		}else if(sem.getSemNameId() == 3) {
-	        			semster.setSemId(sem.getSemId());
-	        			semster.setSemName(SmesterEnum.getSemesterName(3));
-	        			semesterdtoList.add(semster);
-	        			semDTOArray[2] = semster;
-	        		}else if(sem.getSemNameId() == 4) {
-	        			semster.setSemId(sem.getSemId());
-	        			semster.setSemName(SmesterEnum.getSemesterName(4));
-	        			semesterdtoList.add(semster);
-	        			semDTOArray[3] = semster;
-	        		}
-	        		
-	        			
-	        	}
-	        	
-	        	
-	        	 
-	        	semesterResponse.setSemesterList(semDTOArray);
-	        list.add(semesterResponse);
-	        list.sort(Comparator.comparingInt(dto -> Integer.parseInt(dto.getYear())));
-	        Collections.reverse(list);
+			System.out.println("Unique Years:");
+			for (String year : uniqueYearsArray) {
 
-	        	
-	        	
-	        }
+				List<Semester> semesterDetailsWithYear = allSemesterDetails.stream()
+						.filter(semester -> semester.getYear().equals(year)).collect(Collectors.toList());
+				GetSemesterResponseDTO semesterResponse = new GetSemesterResponseDTO();
+				semesterResponse.setYear(year);
+				List<SemesterDTO> semesterdtoList = new ArrayList<SemesterDTO>();
+				SemesterDTO[] semDTOArray = new SemesterDTO[4];
+				for (Semester sem : semesterDetailsWithYear) {
+					SemesterDTO semster = new SemesterDTO();
+					if (sem.getSemNameId() == 1) {
+						semster.setSemId(sem.getSemId());
+						semster.setSemName(SmesterEnum.getSemesterName(1));
+						semesterdtoList.add(semster);
+						semDTOArray[0] = semster;
+
+					} else if (sem.getSemNameId() == 2) {
+						semster.setSemId(sem.getSemId());
+						semster.setSemName(SmesterEnum.getSemesterName(2));
+						semesterdtoList.add(semster);
+						semDTOArray[1] = semster;
+
+					} else if (sem.getSemNameId() == 3) {
+						semster.setSemId(sem.getSemId());
+						semster.setSemName(SmesterEnum.getSemesterName(3));
+						semesterdtoList.add(semster);
+						semDTOArray[2] = semster;
+					} else if (sem.getSemNameId() == 4) {
+						semster.setSemId(sem.getSemId());
+						semster.setSemName(SmesterEnum.getSemesterName(4));
+						semesterdtoList.add(semster);
+						semDTOArray[3] = semster;
+					}
+
+				}
+
+				semesterResponse.setSemesterList(semDTOArray);
+				list.add(semesterResponse);
+				list.sort(Comparator.comparingInt(dto -> Integer.parseInt(dto.getYear())));
+				Collections.reverse(list);
+
+			}
 			return list;
-			
-		}catch(Exception ex) {
-			System.out.println("Exception saving fetching semester response "+ex);
+
+		} catch (Exception ex) {
+			System.out.println("Exception saving fetching semester response " + ex);
 		}
 		return null;
 	}
 
 	@Override
 	public void testSaveSemester() {
-		
+
 		Semester sem = new Semester();
-		
+
 		sem.setSemNameId(1);
 		sem.setYear("2025");
 		semesterRepository.save(sem);
 		System.out.println(sem.getSemId());
-		
-		
+
 	}
 
 	@Override
 	public void copySemester(CopySemesterRequestDTO coursedetails) {
-		
+
 		try {
 			System.out.println("start of copying sem");
-			List<CourseSemesterMapping> oldCourseSemMappingList = courseSemesterMappingService.findBySemesterId(coursedetails.getOldSemId());
-			
-			for(CourseSemesterMapping oldCourseSemMapping: oldCourseSemMappingList) {
-				
-				CourseSemesterMapping newCourseSemMapping  = new CourseSemesterMapping();
+			List<CourseSemesterMapping> oldCourseSemMappingList = courseSemesterMappingService
+					.findBySemesterId(coursedetails.getOldSemId());
+
+			for (CourseSemesterMapping oldCourseSemMapping : oldCourseSemMappingList) {
+
+				CourseSemesterMapping newCourseSemMapping = new CourseSemesterMapping();
 				newCourseSemMapping.setCourseId(oldCourseSemMapping.getCourseId());
 				newCourseSemMapping.setSemesterId(coursedetails.getNewSemId());
 				newCourseSemMapping.setTenure(oldCourseSemMapping.getTenure());
 				courseSemesterMappingService.saveCourseSemesterMapping(newCourseSemMapping);
-				System.out.println("new semester id "+newCourseSemMapping.getCourseSemesterMappingId());
-				List<Section> OldSectionList = sectionService.findByCourseSemesterMappingId(oldCourseSemMapping.getCourseSemesterMappingId());
-				for(Section oldSection:OldSectionList){
-					
+				System.out.println("new semester id " + newCourseSemMapping.getCourseSemesterMappingId());
+				List<Section> OldSectionList = sectionService
+						.findByCourseSemesterMappingId(oldCourseSemMapping.getCourseSemesterMappingId());
+				for (Section oldSection : OldSectionList) {
+
 					Section newSection = new Section();
 					newSection.setSectionNo(oldSection.getSectionNo());
 					newSection.setCapacity(oldSection.getCapacity());
@@ -189,44 +182,43 @@ public class SemesterServiceImpl implements SemesterService{
 					newSection.setCrossSectionId(oldSection.getCrossSectionId());
 					newSection.setCourseSemesterMappingId(newCourseSemMapping.getCourseSemesterMappingId());
 					sectionService.saveSection(newSection);
-					System.out.println("get new section id "+newSection.getSectionId());
-					List<SectionSchedule> oldSectionSceduleList = sectionScheduleService.findBySectionId(oldSection.getSectionId());
-					
-					for(SectionSchedule oldSectionSchedule: oldSectionSceduleList){
-						
+					System.out.println("get new section id " + newSection.getSectionId());
+					List<SectionSchedule> oldSectionSceduleList = sectionScheduleService
+							.findBySectionId(oldSection.getSectionId());
+
+					for (SectionSchedule oldSectionSchedule : oldSectionSceduleList) {
+
 						SectionSchedule newSectionSchedule = new SectionSchedule();
 						newSectionSchedule.setSectionId(newSection.getSectionId());
 						newSectionSchedule.setWeekDay(oldSectionSchedule.getWeekDay());
 						newSectionSchedule.setStartTime(oldSectionSchedule.getEndTime());
 						newSectionSchedule.setEndTime(oldSectionSchedule.getEndTime());
 						sectionScheduleService.saveSectionSchedule(newSectionSchedule);
-						
-						
+
 					}
 				}
-				
+
 			}
 			System.out.println("end of copying sem");
-		}catch(Exception ex){
-			System.out.println("error while copying sem"+ex);
+		} catch (Exception ex) {
+			System.out.println("error while copying sem" + ex);
 			ex.printStackTrace();
 		}
-		
-		
+
 	}
 
 	@Override
 	public boolean createNewSemester(CreateNewSemesterRequestDTO createnEWSmesterRequestDTO) {
-		try{
-			
+		try {
+
 			Semester newSemester = new Semester();
 			newSemester.setSemNameId(createnEWSmesterRequestDTO.getSemNameId());
-			newSemester.setYear(createnEWSmesterRequestDTO.getYear()+"");
+			newSemester.setYear(createnEWSmesterRequestDTO.getYear() + "");
 			semesterRepository.save(newSemester);
 			return true;
-			
-		}catch(Exception ex) {
-			System.out.println("excpetion while creating new semester"+ex);
+
+		} catch (Exception ex) {
+			System.out.println("excpetion while creating new semester" + ex);
 		}
 		return false;
 	}
@@ -256,7 +248,7 @@ public class SemesterServiceImpl implements SemesterService{
 					SectionListDTO sectionListDTO = new SectionListDTO();
 					sectionListDTO.setSectionId(section.getSectionId());
 					sectionListDTO.setSectionNo(section.getSectionNo());
-					
+
 					ProfessorDetails professorDetails = professorService.findByProfessorId(section.getProfessorId());
 					sectionListDTO.setProfessorName(professorDetails.getName());
 					List<SectionSchedule> sectionSceduleList = sectionScheduleService
@@ -302,17 +294,18 @@ public class SemesterServiceImpl implements SemesterService{
 		PreviousSemesterListDTO previoussemList = new PreviousSemesterListDTO();
 		List<PreviousSemesterDTO> list = new ArrayList<PreviousSemesterDTO>();
 		List<Semester> allSemesters = semesterRepository.findAll();
-		List<Semester> finalSemesterList = allSemesters.stream().filter(sem->sem.getSemId() != previousSemesterListRequestDTO.getCurrentSemId()).collect(Collectors.toList());
-	      for(Semester semester:finalSemesterList) {
-	    	  PreviousSemesterDTO previousSemesterDTO = new PreviousSemesterDTO();
-	    	  previousSemesterDTO.setSemId(semester.getSemId());
-	    	  previousSemesterDTO.setSemName(semester.getYear()+"-"+SmesterEnum.getSemesterName(semester.getSemNameId()));
-	    	  list.add(previousSemesterDTO);
-	      }
-	      previoussemList.setPreviousSemList(list);
+		List<Semester> finalSemesterList = allSemesters.stream()
+				.filter(sem -> sem.getSemId() != previousSemesterListRequestDTO.getCurrentSemId())
+				.collect(Collectors.toList());
+		for (Semester semester : finalSemesterList) {
+			PreviousSemesterDTO previousSemesterDTO = new PreviousSemesterDTO();
+			previousSemesterDTO.setSemId(semester.getSemId());
+			previousSemesterDTO
+					.setSemName(semester.getYear() + "-" + SmesterEnum.getSemesterName(semester.getSemNameId()));
+			list.add(previousSemesterDTO);
+		}
+		previoussemList.setPreviousSemList(list);
 		return previoussemList;
 	}
-
-	
 
 }

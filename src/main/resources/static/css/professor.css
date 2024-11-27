@@ -64,25 +64,17 @@ label {
 
 .secondary-nav-container {
     margin-top: 20px;
-    /* Gap between the main and secondary nav */
     text-align: center;
     padding: 10px 15px;
-    /* Padding around the navigation for spacing */
     border: 2px solid white;
-    /* Hollow look with white border */
     border-radius: 15px;
-    /* Curved edges */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /* Subtle shadow for depth */
     background-color: transparent;
-    /* Transparent background */
 }
 
 .secondary-navbar-custom {
     background-color: transparent;
-    /* Ensure navbar itself has a transparent background */
     justify-content: center;
-    /* Center navbar items */
 }
 
 .secondary-navbar-custom .navbar-nav .nav-link {

@@ -97,11 +97,18 @@ label {
   transition: transform 0.3s ease; /* Smooth rotation transition */
 }
 
-.course-item .arrow-icon {
-  transform: rotate(0deg); /* Default state */
+
+.expanded>.course-name>.arrow-icon {
+  transform: rotate(180deg);
 }
 
-/* Rotate the arrow when the course is expanded */
+.course-details {
+  padding: 10px 0;
+  border-top: 1px solid #ddd;
+  margin-top: 10px;
+}
+
+/* CSS for rotating the arrow */
 .course-item.expanded .arrow-icon {
   transform: rotate(180deg);
 }

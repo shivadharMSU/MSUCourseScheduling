@@ -13,7 +13,7 @@ function setupSuggestionBoxHiding(inputFieldId, suggestionBoxId) {
     "mouseenter",
     () => (isMouseOverSuggestionBox = true)
   );
-  suggestionBox.addEventListener(
+  suggestionBox.addEventListener( 
     "mouseleave",
     () => (isMouseOverSuggestionBox = false)
   );
@@ -161,12 +161,6 @@ function editCourse(index) {
 function getProfessorNameById(professorId) {
   const professor = allProfessors.find((p) => p.professorId === professorId);
   return professor ? professor.name : "Unknown";
-}
-
-// Toggle course details display
-function toggleCourseDetails(index) {
-  const details = document.getElementById(`course-details-${index}`);
-  details.style.display = details.style.display === "none" ? "block" : "none";
 }
 
 // Search for courses
