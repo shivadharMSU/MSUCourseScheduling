@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.msu.DTO.APIResponseDTO;
 import com.msu.DTO.CreateNewSemesterRequestDTO;
@@ -18,10 +20,8 @@ import com.msu.DTO.GetCourseAndSemesterListRequest;
 import com.msu.DTO.GetSemesterResponseDTO;
 import com.msu.DTO.PreviousSemesterListDTO;
 import com.msu.DTO.PreviousSemesterListRequestDTO;
-import com.msu.DTO.getProfessorResponseDTO;
 import com.msu.Enums.SmesterEnum;
 import com.msu.entities.CopySemesterRequestDTO;
-import com.msu.entities.CourseDetails;
 import com.msu.entities.Semester;
 import com.msu.services.SemesterService;
 
@@ -31,7 +31,6 @@ public class SemesterController {
 	@Autowired
 	private SemesterService semesterService;
 
-
 	@GetMapping("/getSemesterDetails")
 	public ResponseEntity<List<GetSemesterResponseDTO>> getSemeserDetails() {
 		try {
@@ -40,8 +39,7 @@ public class SemesterController {
 
 		} catch (Exception ex) {
 			System.out.println("Exception in GetSemesterResponseDTO controller: " + ex.getMessage());
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(Collections.emptyList()); // HTTP 500 Internal Server Error for failure
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
 		}
 	}
 
@@ -55,7 +53,6 @@ public class SemesterController {
 			System.out.println("exception in GetSemesterResponseDTO controller");
 		}
 
-
 	}
 
 	@PostMapping("/copySemester")
@@ -68,7 +65,8 @@ public class SemesterController {
 	}
 
 	@PostMapping("/createSemester")
-	public ResponseEntity<APIResponseDTO> createSemester(@RequestBody CreateNewSemesterRequestDTO createNewSemesterRequestDTO) {
+	public ResponseEntity<APIResponseDTO> createSemester(
+			@RequestBody CreateNewSemesterRequestDTO createNewSemesterRequestDTO) {
 		try {
 			APIResponseDTO response = new APIResponseDTO();
 			semesterService.createNewSemester(createNewSemesterRequestDTO);
@@ -84,33 +82,36 @@ public class SemesterController {
 	}
 
 	@PostMapping("/getCourseAndSemesterList")
-	public ResponseEntity<List<DisplayCourseAndSectionResponseDTO>> getCourseAndSemesterList(@RequestBody GetCourseAndSemesterListRequest courseAndSemesterList) {
+	public ResponseEntity<List<DisplayCourseAndSectionResponseDTO>> getCourseAndSemesterList(
+			@RequestBody GetCourseAndSemesterListRequest courseAndSemesterList) {
 		try {
-			List<DisplayCourseAndSectionResponseDTO> fetchCourseAndSemesterDetails = semesterService.fetchCourseAndSemesterDetails(courseAndSemesterList.getSemId());
+			List<DisplayCourseAndSectionResponseDTO> fetchCourseAndSemesterDetails = semesterService
+					.fetchCourseAndSemesterDetails(courseAndSemesterList.getSemId());
 			return ResponseEntity.ok(fetchCourseAndSemesterDetails); // HTTP 200 OK for success
 
 		} catch (Exception ex) {
 			System.out.println("Exception in GetSemesterResponseDTO controller: " + ex.getMessage());
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); // HTTP 500 Internal Server Error for failure
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 	}
 
 	@PostMapping("/getPreviousSemList")
-	public ResponseEntity<PreviousSemesterListDTO> fetchPreviousSemester(@RequestBody PreviousSemesterListRequestDTO previousSemesterListRequestDTO) {
+	public ResponseEntity<PreviousSemesterListDTO> fetchPreviousSemester(
+			@RequestBody PreviousSemesterListRequestDTO previousSemesterListRequestDTO) {
 		try {
-			PreviousSemesterListDTO previoussemDetails = semesterService.getPrevioussemDetails(previousSemesterListRequestDTO);
+			PreviousSemesterListDTO previoussemDetails = semesterService
+					.getPrevioussemDetails(previousSemesterListRequestDTO);
 			return ResponseEntity.ok(previoussemDetails); // HTTP 200 OK for success
 
 		} catch (Exception ex) {
 			System.out.println("Exception in GetSemesterResponseDTO controller: " + ex.getMessage());
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null); // HTTP 500 Internal Server Error for failure
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 		}
 
 	}
 
 	@GetMapping("/getSemesterDropDown")
 	public ResponseEntity<HashMap<Integer, String>> getSemesterDropDown() {
-
 
 		HashMap<Integer, String> map = new HashMap<Integer, String>();
 		List<Semester> semesterList = semesterService.findAll();
@@ -121,7 +122,4 @@ public class SemesterController {
 		return ResponseEntity.ok(map);
 	}
 
-//deleteSectionSchedule
-	
-	
 }

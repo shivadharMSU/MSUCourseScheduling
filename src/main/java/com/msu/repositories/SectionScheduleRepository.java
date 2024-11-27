@@ -10,11 +10,11 @@ import org.springframework.data.repository.query.Param;
 import com.msu.entities.SectionSchedule;
 import org.springframework.transaction.annotation.Transactional;
 
-public interface SectionScheduleRepository extends JpaRepository<SectionSchedule, Long>  {
-	
-	public List<SectionSchedule> findBySectionId(Long sectionId);   
-	public SectionSchedule findBySectionScheduledId(Long semNameId);
+public interface SectionScheduleRepository extends JpaRepository<SectionSchedule, Long> {
 
+	public List<SectionSchedule> findBySectionId(Long sectionId);
+
+	public SectionSchedule findBySectionScheduledId(Long semNameId);
 
 	@Modifying
 	@Transactional
@@ -25,7 +25,5 @@ public interface SectionScheduleRepository extends JpaRepository<SectionSchedule
 	@Transactional
 	@Query("DELETE FROM SectionSchedule s WHERE s.sectionScheduledId = :sectionScheduledId")
 	void deleteBySectionScheduledId(@Param("sectionScheduledId") Long sectionScheduledId);
-	
- 
-	
+
 }
