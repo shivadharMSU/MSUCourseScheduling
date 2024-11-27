@@ -516,6 +516,7 @@ function toggleDetails(index) {
     detailsDiv.style.display = "block";
     headerDiv.classList.add("expanded");
   }
+  updateArrowIcons();
 }
 
 // Function to make details editable
