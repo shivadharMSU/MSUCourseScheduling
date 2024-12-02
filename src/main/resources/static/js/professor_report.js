@@ -99,6 +99,7 @@ function displayProfessorSchedule(professorId, professors) {
     }
 }
 
+ HEAD
 // Export to PDF
 document.getElementById('export-pdf').addEventListener('click', function () {
     const { jsPDF } = window.jspdf;
@@ -117,3 +118,13 @@ document.getElementById('export-pdf').addEventListener('click', function () {
 
     doc.save('professor-report.pdf');
 });
+        // If no occupied entries were found, show a "no data" message
+        if (reportContent.rows.length === 0) {
+            reportContent.innerHTML = '<tr><td colspan="3">No occupied schedule available for this professor.</td></tr>';
+        }
+    } else {
+        console.log('No matching professor found for ID or no schedule available:', professorId);
+        reportContent.innerHTML = '<tr><td colspan="3">No data available for this professor.</td></tr>';
+    }
+
+
