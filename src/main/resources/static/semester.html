@@ -40,7 +40,30 @@
         .navbar-toggler {
             border-color: rgba(255, 255, 255, 0.1);
         }
+        .header-title {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #C8102E;
+            margin-top: 10px;
+        }
 
+        .btn-create-sem {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        color: white;
+        background-color: #C8102E !important; /* Override Bootstrap */
+        border: none;
+        border-radius: 5px;
+        margin-right: 120px; 
+        text-decoration: none;
+    }
+
+    .btn-create-sem:hover {
+        background-color: #A00F2A !important;
+    }
         /* .navbar-toggler-icon {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255, 255, 255, 0.5)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
         } */
@@ -49,7 +72,9 @@
     <link rel="stylesheet" type="text/css" href="./css/semester.css">
 </head>
 <body>
-    <h1></h1>
+    <div class="header-title">
+        MSU Course Scheduling
+    </div>
     <nav class="navbar navbar-expand-lg navbar-custom">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
             aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,33 +91,15 @@
                 <li class="nav-item">
                     <a class="nav-link" href="./reports.html">Reports</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Dropdown link
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </li>
             </ul>
         </div>
     </nav>
-    <div class="secondary-nav-container">
-        <nav class="navbar navbar-expand secondary-navbar-custom">
-            <div class="navbar-nav mx-auto">
-                <a class="nav-link active" href="./professor.html">Professor</a>
-                <a class="nav-link" href="./courses.html">Courses</a>
-                <a class="nav-link" href="./class_rooms.html">Class Rooms</a>
-            </div>
-        </nav>
-    </div>
+   <br><br>
 	<div class="text-right mb-3">
-            <a href="createSemester.html" class="btn btn-primary">Create New Sem</a>
-        </div>
-    <div class="container"
+        <a href="createSemester.html" class="btn-create-sem">Create New Sem</a>
+    </div>
+    
+    <div class="container">
        
         <div id="semester-details" class="row"></div>
     </div>

@@ -3,6 +3,7 @@ package com.msu.servicesImpl;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -256,11 +257,15 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 	public SuggestionsResponseDTO getSuggestions(SuggestionRequestDTO suggestionsRequestDTO) {
 
 		SuggestionsResponseDTO suggestionsRequest = new SuggestionsResponseDTO();
+		List<SectionSchedule> fetchProfessorConflctsData = null;
+		List<SectionSchedule> fetchRoomConflctsData= null;;
 		ConflictDTO conflictDTO = new ConflictDTO();
-
-		List<SectionSchedule> fetchProfessorConflctsData = fetchProfessorConflctsData(suggestionsRequestDTO);
+         if(suggestionsRequestDTO.getProfessorId() != null) 
+		 fetchProfessorConflctsData = fetchProfessorConflctsData(suggestionsRequestDTO);
+         
 		List<SectionSchedule> fetchCourseConflctsData = fetchCourseConflctsData(suggestionsRequestDTO);
-		List<SectionSchedule> fetchRoomConflctsData = fetchRoomConflctsData(suggestionsRequestDTO);
+        if(suggestionsRequestDTO.getRoomId() != null) 
+		 fetchRoomConflctsData = fetchRoomConflctsData(suggestionsRequestDTO);
 		List<String> professorConflictList = new ArrayList<>();
 
 		if (suggestionsRequestDTO.getProfessorId() != null) {
@@ -335,10 +340,17 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 				}
 			}
 		}
-
-		conflictDTO.setProfessorCnflict(professorConflictList.toString());
-		conflictDTO.setCourseConflict(courseConflictList.toString());
-		conflictDTO.setClassRoomConflcit(roomConflictList.toString());
+		professorConflictList.toString()
+                .replaceAll("[\\[\\]]", "") // Removes brackets
+                .replace(", ", "\n");
+		
+		conflictDTO.setProfessorCnflict(professorConflictList.toString()
+                .replaceAll("[\\[\\]]", "") // Removes brackets
+                .replace(", ", "\n"));
+		conflictDTO.setCourseConflict(courseConflictList.toString().replaceAll("[\\[\\]]", "") // Removes brackets
+                .replace(", ", "\n"));
+		conflictDTO.setClassRoomConflcit(roomConflictList.toString().replaceAll("[\\[\\]]", "") // Removes brackets
+                .replace(", ", "\n"));
 		suggestionsRequest.setConflictDTO(conflictDTO);
 		SuggestionDTO suggestion = new SuggestionDTO();
 		suggestion.setSuggestions("suggestions here");
@@ -348,70 +360,58 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 
 	@Override
 	public List<SectionSchedule> fetchProfessorConflctsData(SuggestionRequestDTO suggestionsRequest) {
-		TimeSlotsDTO[] timeSlots = suggestionsRequest.getTimeSlots();
+	    TimeSlotsDTO[] timeSlots = suggestionsRequest.getTimeSlots();
 
-		for (TimeSlotsDTO timeSlotsDTO : timeSlots) {
+	    for (TimeSlotsDTO timeSlotsDTO : timeSlots) {
 
-			List<CourseSemesterMapping> courseSemesterMappingList = courseSemesterMapping.findAll();
-			List<CourseSemesterMapping> filteredCourseSemesterMappingList = courseSemesterMappingList.stream()
-					.filter(csm -> csm.getSemesterId().equals(suggestionsRequest.getSemId()))
-					.collect(Collectors.toList());
+	        List<CourseSemesterMapping> courseSemesterMappingList = courseSemesterMapping.findAll();
+	        List<CourseSemesterMapping> filteredCourseSemesterMappingList = courseSemesterMappingList.stream()
+	                .filter(csm -> csm.getSemesterId().equals(suggestionsRequest.getSemId()))
+	                .collect(Collectors.toList());
 
-			for (CourseSemesterMapping courseSemesterMapping : filteredCourseSemesterMappingList) {
+	        for (CourseSemesterMapping courseSemesterMapping : filteredCourseSemesterMappingList) {
+	            List<Section> filterSections = new ArrayList<>();
+	            try {
+	                filterSections = sectionService.findAll().stream()
+	                        .filter(section -> section.getProfessorId().equals(suggestionsRequest.getProfessorId())) // Use `.equals()` to avoid primitive comparison issues.
+	                        .filter(section -> section.getCourseSemesterMappingId().equals(courseSemesterMapping.getCourseSemesterMappingId()))
+	                        .collect(Collectors.toList());
+	            } catch (Exception e) {
+	                // Handle the exception: log it and return an empty list or rethrow if necessary.
+	                System.err.println("Error fetching or filtering sections: " + e.getMessage());
+	                e.printStackTrace();
+	                return Collections.emptyList(); // Returning an empty list to indicate no results on error.
+	            }
 
-				List<Section> filterSections = sectionService.findAll().stream()
-						.filter(section -> section.getProfessorId() == suggestionsRequest.getProfessorId())
-						.filter(section -> section.getCourseSemesterMappingId() == courseSemesterMapping
-								.getCourseSemesterMappingId())
-						.collect(Collectors.toList());
-				if (!filterSections.isEmpty()) {
-					List<SectionSchedule> finalList = new ArrayList<SectionSchedule>();
-					for (Section section : filterSections) {
-						List<SectionSchedule> sectionSecheduleList = sectionScheduleRepository.findAll().stream()
-								.filter(sr -> {
-									if (sr.getSectionId().equals(section.getSectionId())) {
+	            if (!filterSections.isEmpty()) {
+	                List<SectionSchedule> finalList = new ArrayList<>();
+	                for (Section section : filterSections) {
+	                    List<SectionSchedule> sectionSecheduleList = sectionScheduleRepository.findAll().stream()
+	                            .filter(sr -> {
+	                                if (sr.getSectionId().equals(section.getSectionId())) {
+	                                    for (String day : timeSlotsDTO.getDays()) {
+	                                        if (day.equalsIgnoreCase(WeekEnum.getWeekByValue(sr.getWeekDay()))) {
+	                                            boolean isStartTimeInRange = (timeSlotsDTO.getStartTime().equals(sr.getStartTime())
+	                                                    || (timeSlotsDTO.getStartTime().isAfter(sr.getStartTime()) && timeSlotsDTO.getStartTime().isBefore(sr.getEndTime())));
 
-										for (String day : timeSlotsDTO.getDays()) {
-											if (day.equalsIgnoreCase(WeekEnum.getWeekByValue(sr.getWeekDay()))) {
+	                                            boolean isEndTimeInRange = (timeSlotsDTO.getEndTime().equals(sr.getEndTime())
+	                                                    || (timeSlotsDTO.getEndTime().isAfter(sr.getStartTime()) && timeSlotsDTO.getEndTime().isBefore(sr.getEndTime())));
 
-												// Check if the start time of timeSlotsDTO is equal to sr's start time
-												// or if timeSlotsDTO's start time is between sr's start and end time
-												boolean isStartTimeInRange = (timeSlotsDTO.getStartTime()
-														.equals(sr.getStartTime())
-														|| (timeSlotsDTO.getStartTime().isAfter(sr.getStartTime())
-																&& timeSlotsDTO.getStartTime()
-																		.isBefore(sr.getEndTime())));
-
-												// Check if the end time of timeSlotsDTO is equal to sr's start time
-												// or if timeSlotsDTO's end time is between sr's start and end time
-												boolean isEndTimeInRange = (timeSlotsDTO.getEndTime()
-														.equals(sr.getEndTime())
-														|| (timeSlotsDTO.getEndTime().isAfter(sr.getStartTime())
-																&& timeSlotsDTO.getEndTime()
-																		.isBefore(sr.getEndTime())));
-
-												// If both start and end times of timeSlotsDTO are within sr's time
-												// range, return true
-												return isStartTimeInRange && isEndTimeInRange;
-
-											}
-										}
-
-									}
-									return false;
-								}).collect(Collectors.toList());
-						finalList.addAll(sectionSecheduleList);
-					}
-					return finalList;
-
-				}
-
-			}
-
-		}
-
-		return null;
+	                                            return isStartTimeInRange && isEndTimeInRange;
+	                                        }
+	                                    }
+	                                }
+	                                return false;
+	                            }).collect(Collectors.toList());
+	                    finalList.addAll(sectionSecheduleList);
+	                }
+	                return finalList;
+	            }
+	        }
+	    }
+	    return null;
 	}
+
 
 	@Override
 	public List<SectionSchedule> fetchCourseConflctsData(SuggestionRequestDTO suggestionsRequest) {
