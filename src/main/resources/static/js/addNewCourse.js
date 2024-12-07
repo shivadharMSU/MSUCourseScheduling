@@ -1,4 +1,8 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
+    const selectCourse = document.getElementById("selectCourse");
+    const tenureInput = document.getElementById("tenure");
+    const submitButton = document.querySelector("button[type='submit']");
+
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const semId = urlParams.get('semId');
@@ -8,43 +12,41 @@ document.addEventListener("DOMContentLoaded", function() {
         method: 'GET',
     })
     .then(response => {
-        // Check if the response is OK and if the content-type is JSON
         if (!response.ok) {
             throw new Error(`Error fetching course list: ${response.statusText}`);
         }
-        const contentType = response.headers.get('content-type');
-        if (contentType && contentType.includes('application/json')) {
-            return response.json();
-        } else {
-            throw new Error('Response is not in JSON format');
-        }
+        return response.json();
     })
     .then(data => {
-        const selectSemester = document.getElementById("selectCourse");
-        if (data && data.courseDropDownForSemester && Array.isArray(data.courseDropDownForSemester)) {
-            data.courseDropDownForSemester.forEach(sem => {
+        if (data.courseDropDownForSemester && Array.isArray(data.courseDropDownForSemester)) {
+            data.courseDropDownForSemester.forEach(course => {
                 const option = document.createElement("option");
-                option.value = sem.courseId;
-                option.textContent = sem.courseName;
-                selectSemester.appendChild(option);
+                option.value = course.courseId;
+                option.textContent = course.courseName;
+                selectCourse.appendChild(option);
             });
-        } else {
-            console.error('Unexpected data format:', data);
         }
     })
-    .catch(error => console.error('Error fetching semester list:', error));
+    .catch(error => console.error('Error fetching course list:', error));
+
+    // Enable submit button when both fields are filled
+    function checkFormValidity() {
+        submitButton.disabled = !(selectCourse.value && tenureInput.value.trim());
+    }
+
+    selectCourse.addEventListener("change", checkFormValidity);
+    tenureInput.addEventListener("input", checkFormValidity);
 
     // Form submission handler
-    const copySemesterForm = document.getElementById("copySemesterForm");
-    copySemesterForm.addEventListener("submit", function(event) {
+    const addNewCourseForm = document.getElementById("addNewCourseForm");
+    addNewCourseForm.addEventListener("submit", function (event) {
         event.preventDefault();
-        
-        const courseId = document.getElementById("selectCourse").value;
-        const tenure = document.getElementById("tenure").value;
-         console.log(tenure);
-        // Check if fields are filled properly
+
+        const courseId = selectCourse.value;
+        const tenure = tenureInput.value.trim();
+
         if (!courseId || !tenure) {
-            alert('Please select a course and enter tenure.');
+            alert('Please select a course and enter the tenure.');
             return;
         }
 
@@ -54,7 +56,6 @@ document.addEventListener("DOMContentLoaded", function() {
             tenure: tenure
         };
 
-        // Post request to save course for the semester
         fetch('http://localhost:8080/saveCourseForSemester', {
             method: 'POST',
             headers: {
@@ -67,9 +68,9 @@ document.addEventListener("DOMContentLoaded", function() {
             if (data.responseMessage === "success") {
                 window.location.href = `courseAndsectionList.html?semId=${semId}`;
             } else {
-                alert("Copy Semester failed. Please try again.");
+                alert("Save Course failed. Please try again.");
             }
         })
-        .catch(error => console.error('Error copying semester:', error));
+        .catch(error => console.error('Error saving course:', error));
     });
 });

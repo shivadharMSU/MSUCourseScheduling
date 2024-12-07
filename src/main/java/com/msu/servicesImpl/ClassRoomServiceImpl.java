@@ -67,7 +67,7 @@ public class ClassRoomServiceImpl implements ClassRomService {
 	@Override
 	public ClassRoom findByRoomId(Integer roomId) {
 
-		return ((ClassRomService) classRoomRepository).findByRoomId(roomId);
+		return classRoomRepository.findByRoomId(roomId);
 	}
 
 	@Override

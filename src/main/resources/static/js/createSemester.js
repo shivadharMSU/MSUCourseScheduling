@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
   var yearSelect = document.getElementById("year");
+  var semesterSelect = document.getElementById("semester");
+  var submitButton = document.querySelector("button[type='submit']");
+
   var currentYear = new Date().getFullYear();
 
   // Populating years from current year to next 5 years
@@ -10,13 +13,23 @@ document.addEventListener("DOMContentLoaded", function () {
     yearSelect.appendChild(option);
   }
 
+  function validateForm() {
+    var yearSelected = yearSelect.value !== "";
+    var semesterSelected = semesterSelect.value !== "";
+    submitButton.disabled = !(yearSelected && semesterSelected);
+  }
+
+  // Validate form on dropdown changes
+  yearSelect.addEventListener("change", validateForm);
+  semesterSelect.addEventListener("change", validateForm);
+
   var form = document.getElementById("semesterForm");
 
   form.addEventListener("submit", function (event) {
     event.preventDefault();
 
-    var year = document.getElementById("year").value;
-    var semester = document.getElementById("semester").value;
+    var year = yearSelect.value;
+    var semester = semesterSelect.value;
 
     var data = {
       year: parseInt(year),

@@ -21,6 +21,7 @@ import com.msu.DTO.SectionListDTO;
 import com.msu.DTO.SemesterDTO;
 import com.msu.Enums.SmesterEnum;
 import com.msu.Enums.WeekEnum;
+import com.msu.entities.ClassRoom;
 import com.msu.entities.CopySemesterRequestDTO;
 import com.msu.entities.CourseDetails;
 import com.msu.entities.CourseSemesterMapping;
@@ -28,6 +29,7 @@ import com.msu.entities.ProfessorDetails;
 import com.msu.entities.Section;
 import com.msu.entities.SectionSchedule;
 import com.msu.entities.Semester;
+import com.msu.repositories.ClassRoomRepository;
 import com.msu.repositories.SemesterRepository;
 import com.msu.services.CourseDetailsService;
 import com.msu.services.CourseSemesterMappingService;
@@ -56,6 +58,9 @@ public class SemesterServiceImpl implements SemesterService {
 
 	@Autowired
 	private ProfessorService professorService;
+	
+	@Autowired
+    private ClassRoomRepository classRoomRepo;
 
 	@Override
 	public List<Semester> findAll() {
@@ -172,12 +177,17 @@ public class SemesterServiceImpl implements SemesterService {
 				List<Section> OldSectionList = sectionService
 						.findByCourseSemesterMappingId(oldCourseSemMapping.getCourseSemesterMappingId());
 				for (Section oldSection : OldSectionList) {
-
+					Long professorId = oldSection.getProfessorId();
+					
 					Section newSection = new Section();
 					newSection.setSectionNo(oldSection.getSectionNo());
 					newSection.setCapacity(oldSection.getCapacity());
 					newSection.setMaxCapacity(oldSection.getCapacity());
+					ProfessorDetails profesor = professorService.findByProfessorId(professorId);
+					
+					if(profesor != null && profesor.getProfStatus())
 					newSection.setProfessorId(oldSection.getProfessorId());
+					
 					newSection.setRoomId(oldSection.getRoomId());
 					newSection.setCrossSectionId(oldSection.getCrossSectionId());
 					newSection.setCourseSemesterMappingId(newCourseSemMapping.getCourseSemesterMappingId());
@@ -191,7 +201,7 @@ public class SemesterServiceImpl implements SemesterService {
 						SectionSchedule newSectionSchedule = new SectionSchedule();
 						newSectionSchedule.setSectionId(newSection.getSectionId());
 						newSectionSchedule.setWeekDay(oldSectionSchedule.getWeekDay());
-						newSectionSchedule.setStartTime(oldSectionSchedule.getEndTime());
+						newSectionSchedule.setStartTime(oldSectionSchedule.getStartTime());
 						newSectionSchedule.setEndTime(oldSectionSchedule.getEndTime());
 						sectionScheduleService.saveSectionSchedule(newSectionSchedule);
 
@@ -248,9 +258,18 @@ public class SemesterServiceImpl implements SemesterService {
 					SectionListDTO sectionListDTO = new SectionListDTO();
 					sectionListDTO.setSectionId(section.getSectionId());
 					sectionListDTO.setSectionNo(section.getSectionNo());
-
+					ClassRoom classsRoom = classRoomRepo.findByRoomId(section.getRoomId());
+					if(classsRoom != null)
+					sectionListDTO.setClassRoomName(classsRoom.getRoomName());
+					
 					ProfessorDetails professorDetails = professorService.findByProfessorId(section.getProfessorId());
-					sectionListDTO.setProfessorName(professorDetails.getName());
+					if(professorDetails != null && professorDetails.getProfStatus()) {
+						sectionListDTO.setStatus(true);
+						sectionListDTO.setProfessorName(professorDetails.getName());
+					}else {
+						sectionListDTO.setStatus(false);
+					}
+					
 					List<SectionSchedule> sectionSceduleList = sectionScheduleService
 							.findBySectionId(section.getSectionId());
 					String time = "";

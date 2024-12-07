@@ -52,6 +52,36 @@ document.addEventListener("DOMContentLoaded", function() {
         console.log(data.timeSlots);
     }
 
+    function populateCrossSectionDara(data) {
+        console.log(data);
+        
+        document.getElementById("capacity").value = data.capacity;
+        document.getElementById("maxCapacity").value = data.maxCapacity;
+       
+        document.getElementById("professor").value = data.professorId;
+        document.getElementById("roomId").value = data.roomId;
+
+        const fieldsToDisable = ["capacity", "maxCapacity", "professor", "roomId"];
+    fieldsToDisable.forEach(fieldId => {
+        document.getElementById(fieldId).disabled = true;
+    });
+
+
+
+        // Clear existing time slots, then populate new ones from data
+        const timeSlotsContainer = document.getElementById("timeSlotsContainer");
+        timeSlotsContainer.innerHTML = ''; // Clear existing slots
+        console.log("inside populateForm");
+        console.log("inside populateForm");
+        // Populate time slo
+        data.timeSlots.forEach((slot) => {
+            console.log("inside forlop",slot);
+            addTimeSlotTwo(slot);  
+            console.log("after forlop",slot);// Add each time slot using the data from the API
+        });
+        console.log(data.timeSlots);
+    }
+
     function addTimeSlotTwo(slot = {}) {
         console.log("inside addTimeSlotTwo",);
         const timeSlotsContainer = document.getElementById("timeSlotsContainer");
@@ -287,6 +317,13 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(data => {
             const roomDropdown = document.getElementById("roomId");
             roomDropdown.innerHTML = ""; // Clear existing options
+
+            const defaultOption = document.createElement("option");
+           defaultOption.value = "";
+           defaultOption.textContent = "Select";
+           roomDropdown.appendChild(defaultOption);
+
+
             data.forEach(room => {
                 const option = document.createElement("option");
                 option.value = room.id;
@@ -312,6 +349,12 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(data => {
             const professorDropdown = document.getElementById("professor");
             professorDropdown.innerHTML = ""; // Clear existing options
+
+            const defaultOption = document.createElement("option");
+        defaultOption.value = "";
+        defaultOption.textContent = "Select";
+        professorDropdown.appendChild(defaultOption);
+
             data.forEach(professor => {
                 const option = document.createElement("option");
                 option.value = professor.proffessorId;
@@ -351,6 +394,17 @@ document.addEventListener("DOMContentLoaded", function() {
         fetchSuggestion();
     });
 
+    document.getElementById("crossSectionId").addEventListener("change", function() {
+        const sectionId = this.value; // Get selected section ID
+        if (sectionId) {
+            fetch(`http://localhost:8080/getSectionSchedule/${sectionId}`)
+                .then(response => response.json())
+                .then(data => populateCrossSectionDara(data))
+                .catch(error => console.error("Error fetching cross section schedule:", error));
+        }
+    });
+    
+
     document.getElementById("roomId").addEventListener("change", function() {
        
         
@@ -369,6 +423,11 @@ document.addEventListener("DOMContentLoaded", function() {
           
             const crossSectionDropDown = document.getElementById("crossSectionId");
             crossSectionDropDown.innerHTML = ""; // Clear existing options
+            const defaultOption = document.createElement("option");
+            defaultOption.value = "";
+            defaultOption.textContent = "Select";
+            crossSectionDropDown.appendChild(defaultOption);
+
             data.corsssSectionDropDownList.forEach(crossSection => {
                 const option = document.createElement("option");
                 option.value = crossSection.id;
@@ -408,7 +467,7 @@ document.addEventListener("DOMContentLoaded", function() {
             suggestionBox.innerHTML = ""; // Clear previous content
         
             const conflictDTO = data.conflictDTO;
-        
+              console.log(conflictDTO);
             // Check if there are any conflicts
             if (conflictDTO) {
                 for (const conflictType in conflictDTO) {
@@ -417,9 +476,9 @@ document.addEventListener("DOMContentLoaded", function() {
                     if (conflictMessages && conflictMessages.length > 0) {
                         // Map conflictType to display name
                         let headingText;
-                        if (conflictType === 'professorConflict') {
+                        if (conflictType === 'professorCnflict') {
                             headingText = "Professor Conflict";
-                        } else if (conflictType === 'classRoomConflict') {
+                        } else if (conflictType === 'classRoomConflcit') {
                             headingText = "Class Room Conflict";
                         } else if (conflictType === 'courseConflict') {
                             headingText = "Course Conflict";
@@ -430,6 +489,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         // Create heading for each conflict type
                         const heading = document.createElement("h3");
                         heading.textContent = headingText;
+                        heading.style.color = "blue";
                         suggestionBox.appendChild(heading);
             
                         // Create list to display conflict messages
@@ -437,12 +497,14 @@ document.addEventListener("DOMContentLoaded", function() {
                         if (typeof conflictMessages === 'string') {
                             const listItem = document.createElement("li");
                             listItem.textContent = conflictMessages;
+                            listItem.style.color = "red";
                             list.appendChild(listItem);
                         } else {
                             // Assume it's an array and iterate over it
                             conflictMessages.forEach(message => {
                                 const listItem = document.createElement("li");
                                 listItem.textContent = message;
+                                listItem.style.color = "red";
                                 list.appendChild(listItem);
                             });
                         }
@@ -466,6 +528,8 @@ document.addEventListener("DOMContentLoaded", function() {
             document.querySelector(".card").style.display = "none";
         });
     }
+
+    
     function fetchData() {
             const queryString = window.location.search;
             const urlParams = new URLSearchParams(queryString);

@@ -6,6 +6,10 @@ public class SectionListDTO {
 	private String sectionNo;
 	private String professorName;
 	private String dayAndTime;
+	private boolean status;
+	private String classRoomName;
+	
+	
 	public Long getSectionId() {
 		return sectionId;
 	}
@@ -30,6 +34,21 @@ public class SectionListDTO {
 	public void setDayAndTime(String dayAndTime) {
 		this.dayAndTime = dayAndTime;
 	}
+	
+	public boolean isStatus() {
+		return status;
+	}
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
+	public String getClassRoomName() {
+		return classRoomName;
+	}
+	public void setClassRoomName(String classRoomName) {
+		this.classRoomName = classRoomName;
+	}
+	
+	
 	
 	
 	

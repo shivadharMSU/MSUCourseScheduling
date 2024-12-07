@@ -70,7 +70,9 @@ public class SectionSchduleController {
 		
 		return ResponseEntity.ok(suggestions);
 		}catch(Exception ex) {
-	        System.out.println("getClassListForDropDown: " + ex.getMessage());
+			
+	        System.out.println("getClassListForDropDown: " );
+	        ex.printStackTrace();
 
 		}
 		return null;
@@ -109,6 +111,8 @@ public class SectionSchduleController {
 	@PostMapping("/saveSctionSchedule")
 	public ResponseEntity<String> saveSctionSchedule(@RequestBody SectionScheduleSaveDTO sectionScheduleSaveDTO){
 		try {
+			String response = validateFields(sectionScheduleSaveDTO);
+			if(response != null) return ResponseEntity.ok(response);
 			 sectionScheduleService.saveSectionSchedule(sectionScheduleSaveDTO);
 			return ResponseEntity.ok("success");
 		}catch(Exception ex) {
@@ -116,6 +120,44 @@ public class SectionSchduleController {
 		}
 		return null;
 
+	}
+	
+	
+
+
+	public String validateFields(SectionScheduleSaveDTO dto) {
+	    StringBuilder errors = new StringBuilder();
+
+	    if (dto.getCourseSemesterMappingId() == null) {
+	        errors.append("Course Semester Mapping ID is required.\n");
+	    }
+	    if (dto.getCourseId() == null) {
+	        errors.append("Course ID is required.\n");
+	    }
+	    if (dto.getSectionId() == null) {
+	        errors.append("Section ID is required.\n");
+	    }
+	    if (dto.getProfessorId() == null) {
+	        errors.append("Professor ID is required.\n");
+	    }
+	    if (dto.getRoomId() == null || dto.getRoomId() <= 0) {
+	        errors.append("Valid Room ID is required.\n");
+	    }
+	    if (dto.getCapacity() == null || dto.getCapacity() <= 0) {
+	        errors.append("Capacity must be greater than 0.\n");
+	    }
+	    if (dto.getMaxCapacity() == null || dto.getMaxCapacity() < dto.getCapacity()) {
+	        errors.append("Max Capacity must be greater than or equal to Capacity.\n");
+	    }
+	    if (dto.getSectionNo() == null || dto.getSectionNo().trim().isEmpty()) {
+	        errors.append("Section Number is required.\n");
+	    }
+	    
+	    if (dto.getTimeSlots() == null || dto.getTimeSlots().length == 0) {
+	        errors.append("At least one Time Slot is required.\n");
+	    }
+
+	    return errors.length() > 0 ? errors.toString().trim() : null;
 	}
 
 
