@@ -96,21 +96,28 @@ public class ClassRoomServiceImpl implements ClassRomService {
 							.findById(section.getCourseSemesterMappingId()).orElse(null);
 
 					String courseName = "Unknown";
+					int courseId = 0;
+					int courseNumber = 0;
 					if (courseMapping != null && courseMapping.getCourseId() != null) {
-						CourseDetails courseDetails = coursedetailsRepository.findById(courseMapping.getCourseId())
-								.orElse(null);
-						courseName = (courseDetails != null) ? courseDetails.getCourseName() : "Unknown";
-					}
+					    CourseDetails courseDetails = coursedetailsRepository.findById(courseMapping.getCourseId())
+					            .orElse(null);
 
+					    courseName = (courseDetails != null) ? courseDetails.getCourseName() : "Unknown";
+					    courseId = (int) ((courseDetails != null) ? courseDetails.getCourseId() : 0); // Assuming courseId is an int
+					    courseNumber = (courseDetails != null) ? courseDetails.getCourseNumber() : 0; // Assuming courseNumber is an int
+					}
+					
 					// Fetch professor details
+					Long professorId = null;
 					ProfessorDetails professor = professorDetailsRepository.findById(section.getProfessorId())
 							.orElse(null);
 					String professorName = (professor != null) ? professor.getName() : "Unknown";
+					professorId = professor.getProfessorId();
 
 					// Create ScheduleDTO
 					return new ClassroomReportResponseDTO.ScheduleDTO(schedule.getWeekDay().toString(),
-							schedule.getStartTime(), schedule.getEndTime(), courseName, section.getSectionNo(),
-							professorName);
+							schedule.getStartTime(), schedule.getEndTime(), courseId, courseNumber, courseName, section.getSectionNo(),
+							professorId, professorName);
 				});
 			}).collect(Collectors.toList());
 
