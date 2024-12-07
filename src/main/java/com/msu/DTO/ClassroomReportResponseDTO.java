@@ -75,18 +75,24 @@ public class ClassroomReportResponseDTO {
         private String weekDay;
         private LocalTime startTime;
         private LocalTime endTime;
+        private int courseId;
+        private int	courseNumber;
         private String courseName;
         private String sectionNo;
+        private Long professorId;
         private String professorName;
 
         // Constructor
-        public ScheduleDTO(String weekDay, LocalTime startTime, LocalTime endTime,
-                           String courseName, String sectionNo, String professorName) {
+        public ScheduleDTO(String weekDay, LocalTime startTime, LocalTime endTime, int courseId, int courseNumber,
+                           String courseName, String sectionNo, Long professorId, String professorName) {
             this.weekDay = weekDay;
             this.startTime = startTime;
             this.endTime = endTime;
+            this.courseId = courseId;
+            this.courseNumber = courseNumber;
             this.courseName = courseName;
             this.sectionNo = sectionNo;
+            this.professorId = professorId;
             this.professorName = professorName;
         }
 
@@ -114,6 +120,22 @@ public class ClassroomReportResponseDTO {
         public void setEndTime(LocalTime endTime) {
             this.endTime = endTime;
         }
+        
+        public int getCourseId() {
+        	return courseId;
+        }
+        
+        public void setCourseId(int courseId) {
+        	this.courseId = courseId;
+        }
+        
+        public int getCourseNumber() {
+        	return courseNumber;
+        }
+        
+        public void setCourseNumber(int courseNumber) {
+        	this.courseNumber = courseNumber;
+        }
 
         public String getCourseName() {
             return courseName;
@@ -129,6 +151,14 @@ public class ClassroomReportResponseDTO {
 
         public void setSectionNo(String sectionNo) {
             this.sectionNo = sectionNo;
+        }
+        
+        public Long getProfessorId() {
+        	return professorId;
+        }
+        
+        public void setProfessorId(Long professorId) {
+        	this.professorId = professorId;
         }
 
         public String getProfessorName() {
