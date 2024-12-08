@@ -290,6 +290,30 @@ function selectProfessor(professor) {
   updateSelectedCoursesDisplay();
 }
 
+function updateSelectedCoursesDisplay() {
+  const container = document.getElementById("selectedCoursesContainer");
+  container.innerHTML = ""; // Clear previous selections
+
+  selectedCourses.forEach((course, index) => {
+    const courseDiv = document.createElement("div");
+    courseDiv.classList.add(
+      "badge",
+      "badge-primary",
+      "p-2",
+      "mr-2",
+      "d-inline-flex",
+      "align-items-center"
+    );
+
+    courseDiv.innerHTML = `
+      ${course.courseDetails.courseName}
+      <button type="button" class="ml-2 btn btn-sm btn-danger" onclick="removeCourse(${index})">X</button>
+    `;
+
+    container.appendChild(courseDiv);
+  });
+}
+
 function populateAvailabilities(availabilities) {
   const timeSlotsDiv = document.getElementById("timeSlotsContainer");
   timeSlotsDiv.innerHTML = ""; // Clear existing slots
@@ -516,7 +540,7 @@ function toggleDetails(index) {
     detailsDiv.style.display = "block";
     headerDiv.classList.add("expanded");
   }
-  updateArrowIcons();
+  // updateArrowIcons();
 }
 
 // Function to make details editable
