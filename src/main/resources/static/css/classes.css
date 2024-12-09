@@ -1,41 +1,3 @@
-
-/* secondary navigation */
-
-.secondary-nav-container {
-    margin-top: 20px; /* Gap between the main and secondary nav */
-    text-align: center;
-    padding: 10px 15px; /* Padding around the navigation for spacing */
-    border: 2px solid white; /* Hollow look with white border */
-    border-radius: 15px; /* Curved edges */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    background-color: transparent; /* Transparent background */
-}
-
-.secondary-navbar-custom {
-    background-color: transparent; /* Ensure navbar itself has a transparent background */
-    justify-content: center; /* Center navbar items */
-}
-
-.secondary-navbar-custom .navbar-nav .nav-link {
-    color: #C8102E; /* White text for contrast */
-    margin: 0 15px; /* Spacing between links */
-    transition: background-color 0.3s, color 0.3s; /* Smooth transition for background and color */
-    padding: 5px 10px; /* Padding for the links */
-    border-radius: 10px; /* Curved edges for individual links */
-}
-
-.secondary-navbar-custom .navbar-nav .nav-link:hover,
-.secondary-navbar-custom .navbar-nav .nav-link:focus {
-    background-color: #C8102E; /* Montclair red background on hover/focus for highlight */
-    color: white; /* Maintain white text for readability */
-}
-
-/* Additional style for active or clicked state */
-.secondary-navbar-custom .navbar-nav .nav-link.active {
-    background-color: #C8102E; /* Even darker shade for the active state */
-    color: white;
-}
-
 body {
     font-family: 'Arial', sans-serif;
     background-color: #f8f9fa;
@@ -45,20 +7,32 @@ body {
     background-color: #fff;
     padding: 20px;
     border-radius: 5px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    /* Adds a subtle shadow to lift the container from the background */
 }
 
-.btn-primary {
+.btn-primary,
+.btn-success {
     background-color: #C8102E;
     border-color: #C8102E;
 }
 
-.btn-primary:hover {
+.btn-primary:hover,
+.btn-success:hover {
     background-color: #a00f2a;
     border-color: #a00f2a;
 }
 
-/* Suggestion Box */
+.form-control {
+    border-radius: 0;
+    border-color: #ced4da;
+}
+
+label {
+    font-weight: bold;
+    color: #343a40;
+}
+
 #suggestionBox {
     background-color: #fff;
     border: 1px solid #ced4da;
@@ -80,7 +54,42 @@ body {
     color: white;
 }
 
-/* Classroom List Styling */
+/* secondary navigation */
+.secondary-nav-container {
+    margin-top: 20px;
+    text-align: center;
+    padding: 10px 15px;
+    border: 2px solid white;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: transparent;
+}
+
+.secondary-navbar-custom {
+    background-color: transparent;
+    justify-content: center;
+}
+
+.secondary-navbar-custom .navbar-nav .nav-link {
+    color: #C8102E;
+    margin: 0 15px;
+    transition: background-color 0.3s, color 0.3s;
+    padding: 5px 10px;
+    border-radius: 10px;
+}
+
+.secondary-navbar-custom .navbar-nav .nav-link:hover,
+.secondary-navbar-custom .navbar-nav .nav-link:focus {
+    background-color: #C8102E;
+    color: white;
+}
+
+.secondary-navbar-custom .navbar-nav .nav-link.active {
+    background-color: #C8102E;
+    color: white;
+}
+
+/* Classroom Item Styling */
 .classroom-item {
     border: 1px solid #ddd;
     margin-bottom: 10px;
@@ -90,10 +99,9 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.classroom-details {
-    padding: 10px 0;
-    border-top: 1px solid #ddd;
-    margin-top: 10px;
+.classroom-name {
+    user-select: none;
+    cursor: pointer;
 }
 
 .arrow-icon {
@@ -109,4 +117,64 @@ body {
     transform: rotate(180deg);
 }
 
-/* end of secondary navigation */
+.classroom-details {
+    padding: 10px 0;
+    border-top: 1px solid #ddd;
+    margin-top: 10px;
+}
+
+/* Toggle Switch Styling */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 32px;
+}
+
+.toggle-input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-label {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ddd;
+    border-radius: 34px;
+    transition: 0.4s;
+}
+
+.toggle-label::before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+.toggle-input:checked+.toggle-label {
+    background-color: #C8102E;
+}
+
+.toggle-input:checked+.toggle-label::before {
+    transform: translateX(26px);
+}
+
+/* Classroom-specific active state */
+.inactive-classroom {
+    background-color: #C8102E;
+    color: white;
+}
+
+.classroom-controls {
+    text-align: right;
+}

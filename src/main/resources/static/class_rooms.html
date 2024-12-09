@@ -22,7 +22,6 @@
             color: #FFFFFF;
         }
 
-
         .navbar-nav .nav-item.dropdown .dropdown-menu {
             background-color: #C8102E;
         }
@@ -40,9 +39,27 @@
         .navbar-toggler {
             border-color: rgba(255, 255, 255, 0.1);
         }
+
+        #suggestionBox {
+            background-color: #fff;
+            border: 1px solid #ced4da;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+            max-height: 150px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .list-group-item {
+            cursor: pointer;
+        }
+
+        .list-group-item:hover {
+            background-color: #C8102E;
+            color: white;
+        }
     </style>
-    <link rel="stylesheet" href="./css/classes.css">
     <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/classes.css">
 </head>
 
 <body>
@@ -81,23 +98,23 @@
             <div class="row mb-3 align-items-center">
                 <label for="classroomName" class="col-sm-3 col-form-label">Classroom Name:</label>
                 <div class="col-sm-9">
-                    <input type="text" class="form-control" id="classroomName" onclick="searchClassrooms()">
+                    <input type="text" class="form-control" id="classroomName" oninput="searchClassrooms()">
                     <input type="hidden" id="classroomId">
                     <div id="suggestionBox" class="list-group" style="display: none;"></div>
                 </div>
             </div>
             <div class="classroom-controls">
-                <button type="submit" class="btn btn-primary" onclick="clearFields()">Clear</button>
+                <button type="button" class="btn btn-primary" onclick="clearFields()">Clear</button>
                 <button type="submit" class="btn btn-primary" onclick="submitClassroomDetails(event)">Submit</button>
             </div>
         </form>
     </div>
 
-
     <div class="container">
         <h2 class="mb-4">Classroom List</h2>
         <div id="classroomContainer"></div>
     </div>
+
     <script src="./js/jquery-3.7.1.min.js"></script>
     <script src="./js/bootstrap.bundle.min.js"></script>
     <script src="./js/class_room.js"></script>
