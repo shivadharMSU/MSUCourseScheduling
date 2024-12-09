@@ -1,278 +1,140 @@
-// Dummy JSON data with classroom names and schedules, organized by semester
-const data = {
-    "semesters": [
-        {"id": "fall-2024", "name": "Fall 2024"},
-        {"id": "spring-2024", "name": "Spring 2024"},
-        {"id": "summer-2024", "name": "Summer 2024"}
-    ],
-    "classrooms": {
-        "fall-2024": [
-            {
-                "id": "classroom-101",
-                "name": "Classroom 101",
-                "schedule": {
-                    "Mon": {
-                        "occupied": "Java - 10:00AM - 1:00PM",
-                        "unoccupied": "8:00AM - 10:00AM, 1:00PM - 2:00PM"
-                    },
-                    "Tues": {
-                        "occupied": "Python - 4:00PM - 6:00PM",
-                        "unoccupied": "10:00AM - 12:00PM, 3:00PM - 5:00PM"
-                    },
-                    "Wed": {
-                        "occupied": "Database - 11:00AM - 2:00PM, Web Security - 1:00PM - 5:00PM",
-                        "unoccupied": ""
-                    },
-                    "Thurs": {
-                        "occupied": "Java - 10:00AM - 1:00PM",
-                        "unoccupied": ""
-                    },
-                    "Fri": {
-                        "occupied": "",
-                        "unoccupied": ""
-                    }
-                }
-            },
-            {
-                "id": "classroom-102",
-                "name": "Classroom 102",
-                "schedule": {
-                    "Mon": {
-                        "occupied": "Python - 8:00AM - 11:00AM",
-                        "unoccupied": ""
-                    },
-                    "Tues": {
-                        "occupied": "Database - 4:00PM - 7:00PM",
-                        "unoccupied": ""
-                    },
-                    "Wed": {
-                        "occupied": "",
-                        "unoccupied": ""
-                    },
-                    "Thurs": {
-                        "occupied": "",
-                        "unoccupied": ""
-                    },
-                    "Fri": {
-                        "occupied": "",
-                        "unoccupied": ""
-                    }
-                }
-            }
-        ],
-        "spring-2024": [
-            {
-                "id": "classroom-201",
-                "name": "Classroom 201",
-                "schedule": {
-                    "Mon": {
-                        "occupied": "Algorithms - 9:00AM - 12:00PM",
-                        "unoccupied": "12:00PM - 1:00PM"
-                    },
-                    "Tues": {
-                        "occupied": "Data Structures - 2:00PM - 4:00PM",
-                        "unoccupied": ""
-                    },
-                    "Wed": {
-                        "occupied": "Operating Systems - 11:00AM - 2:00PM",
-                        "unoccupied": ""
-                    },
-                    "Thurs": {
-                        "occupied": "Networking - 10:00AM - 1:00PM",
-                        "unoccupied": ""
-                    },
-                    "Fri": {
-                        "occupied": "",
-                        "unoccupied": ""
-                    }
-                }
-            },
-            {
-                "id": "classroom-202",
-                "name": "Classroom 202",
-                "schedule": {
-                    "Mon": {
-                        "occupied": "Software Engineering - 10:00AM - 12:00PM",
-                        "unoccupied": ""
-                    },
-                    "Tues": {
-                        "occupied": "Artificial Intelligence - 1:00PM - 3:00PM",
-                        "unoccupied": "3:00PM - 5:00PM"
-                    },
-                    "Wed": {
-                        "occupied": "Machine Learning - 10:00AM - 12:00PM",
-                        "unoccupied": ""
-                    },
-                    "Thurs": {
-                        "occupied": "Deep Learning - 11:00AM - 2:00PM",
-                        "unoccupied": ""
-                    },
-                    "Fri": {
-                        "occupied": "",
-                        "unoccupied": ""
-                    }
-                }
-            }
-        ],
-        "summer-2024": [
-            {
-                "id": "classroom-301",
-                "name": "Classroom 301",
-                "schedule": {
-                    "Mon": {
-                        "occupied": "Advanced Java - 9:00AM - 12:00PM",
-                        "unoccupied": ""
-                    },
-                    "Tues": {
-                        "occupied": "Python - 1:00PM - 3:00PM",
-                        "unoccupied": ""
-                    },
-                    "Wed": {
-                        "occupied": "Database Systems - 10:00AM - 1:00PM",
-                        "unoccupied": ""
-                    },
-                    "Thurs": {
-                        "occupied": "",
-                        "unoccupied": ""
-                    },
-                    "Fri": {
-                        "occupied": "",
-                        "unoccupied": ""
-                    }
-                }
-            },
-            {
-                "id": "classroom-302",
-                "name": "Classroom 302",
-                "schedule": {
-                    "Mon": {
-                        "occupied": "Data Mining - 8:00AM - 11:00AM",
-                        "unoccupied": ""
-                    },
-                    "Tues": {
-                        "occupied": "Big Data - 2:00PM - 4:00PM",
-                        "unoccupied": ""
-                    },
-                    "Wed": {
-                        "occupied": "Cloud Computing - 9:00AM - 12:00PM",
-                        "unoccupied": ""
-                    },
-                    "Thurs": {
-                        "occupied": "Cybersecurity - 10:00AM - 12:00PM",
-                        "unoccupied": ""
-                    },
-                    "Fri": {
-                        "occupied": "",
-                        "unoccupied": ""
-                    }
-                }
-            }
-        ]
-    }
+document.addEventListener('DOMContentLoaded', function () {
+    populateSemesters();
+});
+
+// Day mapping: numbers to day names
+const dayMapping = {
+    1: 'Monday',
+    2: 'Tuesday',
+    3: 'Wednesday',
+    4: 'Thursday',
+    5: 'Friday',
+    6: 'Saturday',
+    7: 'Sunday',
 };
 
-// Function to populate dropdowns
-function populateDropdowns() {
+// Fetch and populate the semester dropdown
+async function populateSemesters() {
     const semesterSelect = document.getElementById('semester-select');
+    semesterSelect.innerHTML = '<option value="">Select</option>';
+
+    try {
+        const response = await fetch('http://localhost:8080/getSemesterDropDown');
+        if (!response.ok) throw new Error('Failed to fetch semesters');
+        const semesters = await response.json();
+
+        // Populate the semester dropdown
+        Object.entries(semesters).forEach(([key, value]) => {
+            const option = document.createElement('option');
+            option.value = key;
+            option.textContent = value;
+            semesterSelect.appendChild(option);
+        });
+
+        // Fetch classrooms when a semester is selected
+        semesterSelect.addEventListener('change', function () {
+            if (semesterSelect.value) {
+                populateClassrooms(semesterSelect.value);
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching semesters:', error);
+    }
+}
+
+// Fetch and display classrooms for the selected semester
+async function populateClassrooms(semesterId) {
+    const reportContent = document.getElementById('report-content');
     const classroomSelect = document.getElementById('classroom-select');
     const searchInput = document.getElementById('search');
+    classroomSelect.innerHTML = '<option value="">Select</option>'; // Reset classroom dropdown
+    reportContent.innerHTML = ''; // Clear the table content
 
-    // Populate Semester Dropdown
-    data.semesters.forEach(semester => {
-        const option = document.createElement('option');
-        option.value = semester.id;
-        option.textContent = semester.name;
-        semesterSelect.appendChild(option);
-    });
+    try {
+        const response = await fetch(`http://localhost:8080/classrooms/report/${semesterId}`);
+        if (!response.ok) throw new Error('Failed to fetch classrooms');
+        const { classrooms } = await response.json();
 
-    // Add event listener to update the classroom dropdown based on selected semester
-    semesterSelect.addEventListener('change', function () {
-        const selectedSemester = this.value;
-        populateClassrooms(selectedSemester, searchInput.value);
-    });
+        console.log('Fetched Classrooms:', classrooms);
 
-    // Add event listener for the search input
-    searchInput.addEventListener('input', function () {
-        const selectedSemester = semesterSelect.value;
-        populateClassrooms(selectedSemester, this.value);
-    });
+        // Populate the classroom dropdown
+        classrooms.forEach(classroom => {
+            const option = document.createElement('option');
+            option.value = classroom.roomId;
+            option.textContent = classroom.roomName;
+            classroomSelect.appendChild(option);
+        });
+
+        // Display all classrooms initially
+        displayClassrooms(classrooms);
+
+        // Filter classrooms based on the search input
+        searchInput.addEventListener('input', function () {
+            const query = searchInput.value.toLowerCase();
+            const filteredClassrooms = classrooms.filter(classroom =>
+                classroom.roomName.toLowerCase().includes(query)
+            );
+            displayClassrooms(filteredClassrooms);
+        });
+
+        // Filter classrooms based on selected classroom
+        classroomSelect.addEventListener('change', function () {
+            const selectedClassroomId = classroomSelect.value;
+            if (selectedClassroomId) {
+                const filteredClassrooms = classrooms.filter(classroom =>
+                    classroom.roomId.toString() === selectedClassroomId
+                );
+                displayClassrooms(filteredClassrooms);
+            } else {
+                displayClassrooms(classrooms); // Show all classrooms if "Select" is chosen
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching classrooms:', error);
+    }
 }
 
-// Function to populate classroom dropdown based on selected semester and search query
-function populateClassrooms(semesterId, searchQuery) {
-    const classroomSelect = document.getElementById('classroom-select');
-    classroomSelect.innerHTML = '<option value="">Select</option>'; // Clear previous options
-
-    const classrooms = data.classrooms[semesterId];
-    if (!classrooms) {
-        console.log('No classrooms available for this semester.');
-        return;
-    }
+// Display classrooms in the table
+function displayClassrooms(classrooms) {
+    const reportContent = document.getElementById('report-content');
+    reportContent.innerHTML = ''; // Clear previous rows
 
     classrooms.forEach(classroom => {
-        if (classroom.name.toLowerCase().includes(searchQuery.toLowerCase())) {
-            const option = document.createElement('option');
-            option.value = classroom.id;
-            option.textContent = classroom.name;
-            classroomSelect.appendChild(option);
+        if (classroom.schedule && classroom.schedule.length > 0) {
+            classroom.schedule.forEach(schedule => {
+                const row = reportContent.insertRow();
+                row.insertCell().textContent = classroom.roomName || 'N/A';
+                row.insertCell().textContent = dayMapping[schedule.day] || 'N/A'; // Map day number to day name
+                row.insertCell().textContent = `${schedule.startTime || 'N/A'} - ${schedule.endTime || 'N/A'}`; // Occupied times
+                row.insertCell().textContent = schedule.professorName || 'N/A';
+                row.insertCell().textContent = `${schedule.courseName || 'N/A'}_${schedule.sectionNo || 'N/A'}`;
+            });
+        } else {
+            const row = reportContent.insertRow();
+            row.insertCell().textContent = classroom.roomName || 'N/A';
+            row.insertCell().textContent = 'N/A'; // Day
+            row.insertCell().textContent = 'No schedule available'; // Occupied
+            row.insertCell().textContent = 'N/A'; // Professor's Name
+            row.insertCell().textContent = 'N/A'; // Course
         }
-    });
-
-    console.log('Classrooms found:', classroomSelect.length > 1 ? 'Yes' : 'No classrooms found');
-
-    // If there's only one classroom found and no option selected yet, auto-select that classroom
-    if (classroomSelect.length === 2) {
-        classroomSelect.selectedIndex = 1;
-        displayClassroomSchedule(semesterId, classroomSelect.value);
-    }
-
-    // Add event listener to display schedule when a classroom is selected
-    classroomSelect.addEventListener('change', function () {
-        displayClassroomSchedule(semesterId, this.value);
     });
 }
 
-// Function to display classroom's schedule for the selected semester
-function displayClassroomSchedule(semesterId, classroomId) {
-    const classrooms = data.classrooms[semesterId];
-    const classroom = classrooms.find(room => room.id === classroomId);
-    const reportContent = document.getElementById('report-content');
-    reportContent.innerHTML = ''; // Clear previous content
+// Export the classroom report to PDF
+document.getElementById('export-pdf').addEventListener('click', function () {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
 
-    if (classroom) {
-        console.log('Selected Classroom:', classroom.name);
-        let firstRow = true; // For handling rowspan in the first column
-        for (const [day, schedule] of Object.entries(classroom.schedule)) {
-            const row = document.createElement('tr');
-            
-            // Classroom name only appears in the first row and spans all rows for this classroom
-            if (firstRow) {
-                const classroomCell = document.createElement('td');
-                classroomCell.textContent = classroom.name;
-                classroomCell.rowSpan = Object.keys(classroom.schedule).length;
-                row.appendChild(classroomCell);
-                firstRow = false;
-            }
-            
-            const dayCell = document.createElement('td');
-            dayCell.textContent = day;
-            row.appendChild(dayCell);
+    doc.setFontSize(18);
+    doc.text('Classroom Report', 10, 10);
 
-            const occupiedCell = document.createElement('td');
-            occupiedCell.textContent = schedule.occupied || 'N/A';
-            row.appendChild(occupiedCell);
+    doc.autoTable({
+        head: [['Classroom Name', 'Day', 'Occupied', 'Professor Name', 'Course']],
+        body: Array.from(document.querySelectorAll('#report-content tr')).map(row =>
+            Array.from(row.cells).map(cell => cell.innerText)
+        ),
+        startY: 20,
+    });
 
-            const unoccupiedCell = document.createElement('td');
-            unoccupiedCell.textContent = schedule.unoccupied || 'N/A';
-            row.appendChild(unoccupiedCell);
-
-            reportContent.appendChild(row);
-        }
-    } else {
-        console.log('No matching classroom found for ID:', classroomId);
-        reportContent.innerHTML = '<tr><td colspan="4">No data available for this classroom.</td></tr>';
-    }
-}
-
-// Call the function to populate the dropdowns when the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', populateDropdowns);
+    doc.save('classroom-report.pdf');
+});

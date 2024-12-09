@@ -11,7 +11,7 @@ async function populateSemesters() {
         const response = await fetch('http://localhost:8080/getSemesterDropDown');
         if (!response.ok) throw new Error('Network response was not ok');
         const semesters = await response.json();
-        
+
         Object.entries(semesters).forEach(([key, value]) => {
             const option = document.createElement('option');
             option.value = key;
@@ -65,18 +65,42 @@ async function populateProfessors(semesterId) {
 // Display all professors' schedules for the selected semester
 function displayAllProfessors(professors) {
     const reportContent = document.getElementById('report-content');
-    reportContent.innerHTML = '';
+    reportContent.innerHTML = ''; // Clear previous rows
 
     professors.forEach(professor => {
-        if (professor.schedule) {
-            Object.entries(professor.schedule).forEach(([day, schedule]) => {
+        if (professor.schedule && Object.keys(professor.schedule).length > 0) {
+            let firstRow = true; // Track the first row for rowspan
+            const scheduleEntries = Object.entries(professor.schedule);
+
+            scheduleEntries.forEach(([day, schedule]) => {
                 if (schedule && schedule.occupied) {
                     const row = reportContent.insertRow();
-                    row.insertCell().textContent = professor.name;
-                    row.insertCell().textContent = day;
-                    row.insertCell().textContent = schedule.occupied;
+
+                    // Only add the professor's name in the first row and span across their schedule rows
+                    if (firstRow) {
+                        const nameCell = document.createElement('td');
+                        nameCell.textContent = professor.name;
+                        nameCell.rowSpan = scheduleEntries.length; // Span across all rows for this professor
+                        row.appendChild(nameCell);
+                        firstRow = false;
+                    }
+
+                    // Add day and occupied columns
+                    const dayCell = document.createElement('td');
+                    dayCell.textContent = day || 'N/A';
+                    row.appendChild(dayCell);
+
+                    const occupiedCell = document.createElement('td');
+                    occupiedCell.textContent = schedule.occupied || 'N/A';
+                    row.appendChild(occupiedCell);
                 }
             });
+        } else {
+            const row = reportContent.insertRow();
+            const nameCell = document.createElement('td');
+            nameCell.textContent = professor.name;
+            nameCell.colSpan = 3;
+            row.appendChild(nameCell);
         }
     });
 }
@@ -84,20 +108,37 @@ function displayAllProfessors(professors) {
 // Display a single professor's schedule
 function displayProfessorSchedule(professorId, professors) {
     const reportContent = document.getElementById('report-content');
-    reportContent.innerHTML = '';
+    reportContent.innerHTML = ''; // Clear previous rows
 
     const professor = professors.find(prof => prof.id == professorId);
     if (professor && professor.schedule) {
-        Object.entries(professor.schedule).forEach(([day, schedule]) => {
+        let firstRow = true;
+        const scheduleEntries = Object.entries(professor.schedule);
+
+        scheduleEntries.forEach(([day, schedule]) => {
             if (schedule && schedule.occupied) {
                 const row = reportContent.insertRow();
-                row.insertCell().textContent = professor.name;
-                row.insertCell().textContent = day;
-                row.insertCell().textContent = schedule.occupied;
+
+                // Add professor's name only in the first row
+                if (firstRow) {
+                    const nameCell = document.createElement('td');
+                    nameCell.textContent = professor.name;
+                    nameCell.rowSpan = scheduleEntries.length; // Span across all rows
+                    row.appendChild(nameCell);
+                    firstRow = false;
+                }
+
+                // Add day and occupied columns
+                const dayCell = document.createElement('td');
+                dayCell.textContent = day || 'N/A';
+                row.appendChild(dayCell);
+
+                const occupiedCell = document.createElement('td');
+                occupiedCell.textContent = schedule.occupied || 'N/A';
+                row.appendChild(occupiedCell);
             }
         });
     } else {
-        console.log('No matching professor found for ID or no schedule available:', professorId);
         reportContent.innerHTML = '<tr><td colspan="3">No data available for this professor.</td></tr>';
     }
 }
@@ -105,20 +146,49 @@ function displayProfessorSchedule(professorId, professors) {
 // Export to PDF
 document.getElementById('export-pdf').addEventListener('click', function () {
     const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
+    const doc = new jsPDF({ orientation: 'landscape' }); // Ensure landscape orientation
 
     doc.setFontSize(18);
     doc.text("Professor's Report", 10, 10);
 
-    doc.autoTable({
-        head: [['Professor Name', 'Day', 'Occupied']],
-        body: Array.from(document.querySelectorAll('#report-content tr')).map(row => 
-            Array.from(row.cells).map(cell => cell.innerText)
-        ),
-        startY: 20
+    // Capture table content
+    const tableData = [];
+    const table = document.querySelector('#report-content');
+    const rows = table.querySelectorAll('tr');
+
+    rows.forEach(row => {
+        const columns = row.querySelectorAll('td');
+        const rowData = [];
+        columns.forEach(column => {
+            rowData.push(column.textContent);
+        });
+        tableData.push(rowData);
     });
 
-    doc.save('professor-report.pdf');
+    // Define the table header
+    const headers = [['Professor Name', 'Day', 'Occupied']];
+
+    // Add autoTable to the PDF
+    doc.autoTable({
+        head: headers,
+        body: tableData,
+        startY: 20,
+        theme: 'grid',
+        headStyles: {
+            fillColor: [200, 16, 46], // RGB for #C8102E
+            textColor: [255, 255, 255] // White text
+        },
+        styles: {
+            fontSize: 10,
+            overflow: 'linebreak',
+        },
+        columnStyles: {
+            0: { cellWidth: 80 }, // Adjusted column width for Professor Name
+            1: { cellWidth: 40 }, // Adjusted column width for Day
+            2: { cellWidth: 140 }, // Adjusted column width for Occupied
+        },
+    });
+
+    // Save the PDF
+    doc.save('professor-report-landscape.pdf');
 });
-
-
