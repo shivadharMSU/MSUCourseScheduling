@@ -13,7 +13,7 @@ function setupSuggestionBoxHiding(inputFieldId, suggestionBoxId) {
     "mouseenter",
     () => (isMouseOverSuggestionBox = true)
   );
-  suggestionBox.addEventListener( 
+  suggestionBox.addEventListener(
     "mouseleave",
     () => (isMouseOverSuggestionBox = false)
   );
@@ -107,10 +107,6 @@ function displayCourses() {
     )
     .join("");
 }
-
-//   <div>Tenure: ${course.semesterMappings
-//     .map((m) => m.tenure)
-//     .join(", ")}</div>
 
 function toggleCourseDetails(index) {
   // Get all course details and headers
@@ -294,17 +290,36 @@ function removeProfessor(index) {
 function submitCourseDetails(event) {
   event.preventDefault();
 
+  const courseId = document.getElementById("courseId").value.trim();
+  const courseName = document.getElementById("courseInput").value.trim();
+  const courseNumber = document.getElementById("courseNumber").value.trim();
+  const credits = document.getElementById("credits").value.trim();
+  const computerRequired = document.getElementById("computerRequired").checked;
+
+  if (!courseName || !courseNumber) {
+    alert("Course name and course number cannot be empty!");
+    return;
+  }
+
+  // Validate course number for duplicates
+  // Validate course number for duplicates
+  for (let i = 0; i < allCourses.length; i++) {
+    if (allCourses[i].courseDetails.courseNumber == courseNumber) {
+      alert("Course number already exists. Please use a different number.");
+      return; // Exit immediately
+    }
+  }
+
   const courseData = {
-    courseId: document.getElementById("courseId").value || null,
-    courseName: document.getElementById("courseInput").value,
-    courseNumber: document.getElementById("courseNumber").value,
-    credits: document.getElementById("credits").value,
-    computerRequired: document.getElementById("computerRequired").checked,
-    // tenure: document.getElementById("tenure").value,
+    courseId: courseId || null,
+    courseName,
+    courseNumber,
+    credits: parseFloat(credits),
+    computerRequired,
     professors: selectedProfessors.map((p) => p.professorId),
   };
 
-  console.log("Submitting course details: ", courseData);
+  console.log("Submitting course details:", courseData);
 
   fetch("http://localhost:8080/coursedetails/savecourse", {
     method: "POST",
@@ -313,20 +328,24 @@ function submitCourseDetails(event) {
   })
     .then((response) => {
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        return response.text().then((errorText) => {
+          throw new Error(errorText || `HTTP error! Status: ${response.status}`);
+        });
       }
-      return response.json(); // Only parse JSON if the response is valid
+      return response.json();
     })
     .then((data) => {
-      alert(data.message || "Course saved successfully");
+      alert(data.message || "Course saved successfully.");
       fetchAllCourses(); // Refresh the course list
-      clearFields(); // Clear fields after successful save
+      clearFields(); // Clear fields after saving
     })
     .catch((error) => {
-      console.error("Error saving course: ", error);
+      console.error("Error saving course:", error);
       alert("Error saving course: " + error.message);
     });
 }
+
+
 
 function clearFields() {
   // Clear course-related fields
