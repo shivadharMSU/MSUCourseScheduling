@@ -73,7 +73,7 @@ function displayCourses() {
       <div class="course-item" data-index="${index}">
         <div class="course-name" onclick="toggleCourseDetails(${index})">
           <span class="arrow-icon">&#9660;</span> 
-          ${course.courseDetails.courseName} (${
+          ${course.courseDetails.courseName} (CSIT - ${
         course.courseDetails.courseNumber
       })
         </div>
@@ -304,7 +304,11 @@ function submitCourseDetails(event) {
   // Validate course number for duplicates
   // Validate course number for duplicates
   for (let i = 0; i < allCourses.length; i++) {
-    if (allCourses[i].courseDetails.courseNumber == courseNumber) {
+    const currentCourse = allCourses[i];
+    if (
+      currentCourse.courseDetails.courseNumber === courseNumber && // Check if the number matches
+      currentCourse.courseDetails.id !== courseId // Allow if the ID matches (update case)
+    ) {
       alert("Course number already exists. Please use a different number.");
       return; // Exit immediately
     }
