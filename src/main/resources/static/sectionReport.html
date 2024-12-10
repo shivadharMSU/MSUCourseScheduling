@@ -1,114 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Section Report</title>
     <style>
-        .navbar-custom {
-            background-color: #C8102E;
-            border-radius: 0;
-        }
+      .navbar-custom {
+        background-color: #c8102e;
+        border-radius: 0;
+      }
 
-        .navbar-nav .nav-link {
-            color: white;
-            transition: background-color 0.3s, color 0.3s;
-        }
+      .navbar-nav .nav-link {
+        color: white;
+        transition: background-color 0.3s, color 0.3s;
+      }
 
-        .navbar-nav .nav-item.active .nav-link,
-        .navbar-nav .nav-item:focus .nav-link,
-        .navbar-nav .nav-item:hover .nav-link {
-            background-color: #A00F2A;
-            color: #FFFFFF;
-        }
+      .navbar-nav .nav-item.active .nav-link,
+      .navbar-nav .nav-item:focus .nav-link,
+      .navbar-nav .nav-item:hover .nav-link {
+        background-color: #a00f2a;
+        color: #ffffff;
+      }
 
-        .navbar-nav .nav-item.dropdown .dropdown-menu {
-            background-color: #C8102E;
-        }
+      .navbar-nav .nav-item.dropdown .dropdown-menu {
+        background-color: #c8102e;
+      }
 
-        .dropdown-item {
-            color: white;
-        }
+      .dropdown-item {
+        color: white;
+      }
 
-        .dropdown-item:hover,
-        .dropdown-item:focus {
-            background-color: #A00F2A;
-            color: white;
-        }
+      .dropdown-item:hover,
+      .dropdown-item:focus {
+        background-color: #a00f2a;
+        color: white;
+      }
 
-        .navbar-toggler {
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-        
-        .header-title {
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            color: #C8102E;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
+      .navbar-toggler {
+        border-color: rgba(255, 255, 255, 0.1);
+      }
 
+      .header-title {
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        color: #c8102e;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
     </style>
-    <link rel="stylesheet" href="./css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="./css/sectionReport.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script> <!-- Load jsPDF -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.2.9/purify.min.js"></script> <!-- Load dompurify -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script> <!-- Load html2canvas -->
-</head>
-<body>
-    <div class="header-title">
-        MSU Course Scheduling
-    </div>
+    <link rel="stylesheet" href="./css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="./css/sectionReport.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <!-- Load jsPDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/2.2.9/purify.min.js"></script>
+    <!-- Load dompurify -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- Load html2canvas -->
+  </head>
+  <body>
+    <div class="header-title">MSU Course Scheduling</div>
     <div class="container mt-4">
-        <h2 class="text-center">Report</h2>
-        <div class="row my-3">
-            <div class="col-md-3">
-                <label for="semesterDropdown">Semester</label>
-                <select class="form-control" id="semesterDropdown">
-                    <option value="">Select Semester</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label for="courseDropdown">Course Name</label>
-                <select class="form-control" id="courseDropdown">
-                    <option value="">Select Course</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label for="professorDropdown">Professor Name</label>
-                <select class="form-control" id="professorDropdown">
-                    <option value="">Select Professor</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label for="classRoomDropdown">Classroom</label>
-                <select class="form-control" id="classRoomDropdown">
-                    <option value="">Select Classroom</option>
-                </select>
-            </div>
-            <button class="btn btn-primary mt-3" onclick="generatePDF()">Generate Report</button>
-
+      <h2 class="text-center">Report</h2>
+      <div class="row my-3">
+        <div class="col-md-3">
+          <label for="semesterDropdown">Semester</label>
+          <select class="form-control" id="semesterDropdown">
+            <option value="">Select Semester</option>
+          </select>
         </div>
+        <div class="col-md-3">
+          <label for="courseDropdown">Course Name</label>
+          <select class="form-control" id="courseDropdown">
+            <option value="">Select Course</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="professorDropdown">Professor Name</label>
+          <select class="form-control" id="professorDropdown">
+            <option value="">Select Professor</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label for="classRoomDropdown">Classroom</label>
+          <select class="form-control" id="classRoomDropdown">
+            <option value="">Select Classroom</option>
+          </select>
+        </div>
+        <button class="btn btn-primary mt-3" onclick="generatePDF()">
+          Generate Report
+        </button>
+      </div>
 
-        <table class="table table-bordered mt-4" id="reportTable">
-            <thead class="thead-dark">
-                <tr>
-                    <th>Course Name</th>
-                    <th>Section No</th>
-                    <th>Professor Name</th>
-                    <th>Time</th>
-                    <th>Classroom</th>
-                </tr>
-            </thead>
-            <tbody id="reportTableBody">
-                <tr><td colspan="5" class="text-center">Select a semester to view the report</td></tr>
-            </tbody>
-        </table>
-
-    
+      <table class="table table-bordered mt-4" id="reportTable">
+        <thead class="thead-dark">
+          <tr>
+            <th>Course Name</th>
+            <th>Section No</th>
+            <th>Professor Name</th>
+            <th>Time</th>
+            <th>Classroom</th>
+          </tr>
+        </thead>
+        <tbody id="reportTableBody">
+          <tr>
+            <td colspan="5" class="text-center">
+              Select a semester to view the report
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
     <script src="./js/sectionReport.js"></script>
-</body>
+  </body>
 </html>

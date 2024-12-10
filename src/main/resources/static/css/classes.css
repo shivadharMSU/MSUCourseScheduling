@@ -1,180 +1,179 @@
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f8f9fa;
+  font-family: "Arial", sans-serif;
+  background-color: #f8f9fa;
 }
 
 .container {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    /* Adds a subtle shadow to lift the container from the background */
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
 .btn-primary,
 .btn-success {
-    background-color: #C8102E;
-    border-color: #C8102E;
+  background-color: #c8102e;
+  border-color: #c8102e;
 }
 
 .btn-primary:hover,
 .btn-success:hover {
-    background-color: #a00f2a;
-    border-color: #a00f2a;
+  background-color: #a00f2a;
+  border-color: #a00f2a;
 }
 
 .form-control {
-    border-radius: 0;
-    border-color: #ced4da;
+  border-radius: 0;
+  border-color: #ced4da;
 }
 
 label {
-    font-weight: bold;
-    color: #343a40;
+  font-weight: bold;
+  color: #343a40;
 }
 
 #suggestionBox {
-    background-color: #fff;
-    border: 1px solid #ced4da;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
+  background-color: #fff;
+  border: 1px solid #ced4da;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 .list-group-item {
-    color: #495057;
+  color: #495057;
 }
 
 .list-group-item:hover {
-    background-color: #C8102E;
-    color: white;
+  background-color: #c8102e;
+  color: white;
 }
 
 .list-group-item.active {
-    background-color: #C8102E;
-    border-color: #C8102E;
-    color: white;
+  background-color: #c8102e;
+  border-color: #c8102e;
+  color: white;
 }
 
 /* secondary navigation */
 .secondary-nav-container {
-    margin-top: 20px;
-    text-align: center;
-    padding: 10px 15px;
-    border: 2px solid white;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: transparent;
+  margin-top: 20px;
+  text-align: center;
+  padding: 10px 15px;
+  border: 2px solid white;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: transparent;
 }
 
 .secondary-navbar-custom {
-    background-color: transparent;
-    justify-content: center;
+  background-color: transparent;
+  justify-content: center;
 }
 
 .secondary-navbar-custom .navbar-nav .nav-link {
-    color: #C8102E;
-    margin: 0 15px;
-    transition: background-color 0.3s, color 0.3s;
-    padding: 5px 10px;
-    border-radius: 10px;
+  color: #c8102e;
+  margin: 0 15px;
+  transition: background-color 0.3s, color 0.3s;
+  padding: 5px 10px;
+  border-radius: 10px;
 }
 
 .secondary-navbar-custom .navbar-nav .nav-link:hover,
 .secondary-navbar-custom .navbar-nav .nav-link:focus {
-    background-color: #C8102E;
-    color: white;
+  background-color: #c8102e;
+  color: white;
 }
 
 .secondary-navbar-custom .navbar-nav .nav-link.active {
-    background-color: #C8102E;
-    color: white;
+  background-color: #c8102e;
+  color: white;
 }
 
 /* Classroom Item Styling */
 .classroom-item {
-    border: 1px solid #ddd;
-    margin-bottom: 10px;
-    padding: 10px;
-    border-radius: 5px;
-    background-color: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border: 1px solid #ddd;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .classroom-name {
-    user-select: none;
-    cursor: pointer;
+  user-select: none;
+  cursor: pointer;
 }
 
 .arrow-icon {
-    display: inline-block;
-    transition: transform 0.3s;
+  display: inline-block;
+  transition: transform 0.3s;
 }
 
 .classroom-item .arrow-icon {
-    transform: rotate(0deg);
+  transform: rotate(0deg);
 }
 
 .classroom-item.expanded .arrow-icon {
-    transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 
 .classroom-details {
-    padding: 10px 0;
-    border-top: 1px solid #ddd;
-    margin-top: 10px;
+  padding: 10px 0;
+  border-top: 1px solid #ddd;
+  margin-top: 10px;
 }
 
 /* Toggle Switch Styling */
 .toggle-switch {
-    position: relative;
-    display: inline-block;
-    width: 50px;
-    height: 32px;
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 32px;
 }
 
 .toggle-input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
 .toggle-label {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ddd;
-    border-radius: 34px;
-    transition: 0.4s;
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ddd;
+  border-radius: 34px;
+  transition: 0.4s;
 }
 
 .toggle-label::before {
-    position: absolute;
-    content: "";
-    height: 18px;
-    width: 18px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    transition: 0.4s;
-    border-radius: 50%;
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
 }
 
-.toggle-input:checked+.toggle-label {
-    background-color: #C8102E;
+.toggle-input:checked + .toggle-label {
+  background-color: #c8102e;
 }
 
-.toggle-input:checked+.toggle-label::before {
-    transform: translateX(26px);
+.toggle-input:checked + .toggle-label::before {
+  transform: translateX(26px);
 }
 
 /* Classroom-specific active state */
 .inactive-classroom {
-    background-color: #C8102E;
-    color: white;
+  background-color: #c8102e;
+  color: white;
 }
 
 .classroom-controls {
-    text-align: right;
+  text-align: right;
 }

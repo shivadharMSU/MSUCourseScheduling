@@ -33,28 +33,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
     var data = {
       year: parseInt(year),
-      semNameId: parseInt(semester)
+      semNameId: parseInt(semester),
     };
 
-    fetch('http://localhost:8080/createSemester', {
-      method: 'POST',
+    fetch("http://localhost:8080/createSemester", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(data),
     })
-    .then(response => response.json())
-    .then(data => {
-      console.log('Success:', data);
-      if (data.responseMessage === "success") {
-        window.location.href = "semester.html"; // Redirect to semester.html if success
-      } else {
-        alert("Failure: Request was unsuccessful!"); // Show alert if response is failure
-      }
-    })
-    .catch((error) => {
-      console.error('Error:', error);
-      alert("Error: Request failed!"); // Show alert if there's an error
-    });
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success:", data);
+        if (data.responseMessage === "success") {
+          window.location.href = "semester.html"; // Redirect to semester.html if success
+        } else {
+          alert("Failure: Request was unsuccessful!"); // Show alert if response is failure
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("Error: Request failed!"); // Show alert if there's an error
+      });
   });
 });

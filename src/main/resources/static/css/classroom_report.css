@@ -38,7 +38,8 @@ h2 {
 .label-container {
     display: flex;
     align-items: center;
-    gap: 8px; /* Space between label and input */
+    gap: 8px;
+    /* Space between label and input */
 }
 
 label {
@@ -53,8 +54,10 @@ label {
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    width: auto; /* Adjust width to fit content */
-    min-width: 200px; /* Ensure minimum size for dropdowns and inputs */
+    width: auto;
+    /* Adjust width to fit content */
+    min-width: 200px;
+    /* Ensure minimum size for dropdowns and inputs */
 }
 
 .controls button {
@@ -83,8 +86,10 @@ td {
     padding: 10px;
     text-align: left;
     border: 1px solid #ccc;
-    word-wrap: break-word; /* Ensure long text wraps inside the cell */
-    max-width: 300px; /* Limit cell width for better responsiveness */
+    word-wrap: break-word;
+    /* Ensure long text wraps inside the cell */
+    max-width: 300px;
+    /* Limit cell width for better responsiveness */
 }
 
 th {
@@ -101,12 +106,14 @@ td {
 
 @media (max-width: 768px) {
     .controls {
-        flex-direction: column; /* Stack controls vertically on smaller screens */
+        flex-direction: column;
+        /* Stack controls vertically on smaller screens */
         align-items: flex-start;
         gap: 10px;
     }
 
     table {
-        font-size: 12px; /* Adjust font size for smaller screens */
+        font-size: 12px;
+        /* Adjust font size for smaller screens */
     }
 }

@@ -1,154 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Courses Report</title>
-    <link rel="stylesheet" href="./css/courses_report.css">
+    <link rel="stylesheet" href="./css/courses_report.css" />
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f8f9fa;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f8f9fa;
+      }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
 
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+      h2 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
 
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            gap: 10px;
-        }
+      .controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        gap: 10px;
+      }
 
-        .controls select {
-            padding: 6px;
-            font-size: 14px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            width: 150px;
-        }
+      .controls select {
+        padding: 6px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width: 150px;
+      }
 
-        .controls button {
-            padding: 6px 10px;
-            font-size: 14px;
-            color: #fff;
-            background-color: #C8102E;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
+      .controls button {
+        padding: 6px 10px;
+        font-size: 14px;
+        color: #fff;
+        background-color: #c8102e;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
 
-        .controls button:hover {
-            background-color: #A00F2A;
-        }
+      .controls button:hover {
+        background-color: #a00f2a;
+      }
 
-        .label-container {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
+      .label-container {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
 
-        .label-container span {
-            font-size: 14px;
-            font-weight: bold;
-        }
+      .label-container span {
+        font-size: 14px;
+        font-weight: bold;
+      }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
 
-        th,
-        td {
-            padding: 10px;
-            text-align: left;
-            border: 1px solid #ccc;
-        }
+      th,
+      td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ccc;
+      }
 
-        th {
-            background-color: #C8102E;
-            color: white;
-        }
+      th {
+        background-color: #c8102e;
+        color: white;
+      }
 
-        td {
-            vertical-align: top;
-        }
+      td {
+        vertical-align: top;
+      }
 
-        .header-title {
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            color: #C8102E;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-
+      .header-title {
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        color: #c8102e;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="container">
-        <div class="header-title">
-            MSU Course Scheduling
-        </div>
-        <h2>Courses</h2>
+      <div class="header-title">MSU Course Scheduling</div>
+      <h2>Courses</h2>
 
-        <div class="controls">
-            <div class="label-container">
-                <span>Semester:</span>
-                <select id="semester-select"></select>
-            </div>
-
-            <div class="label-container">
-                <span>Day:</span>
-                <select id="day-select">
-                    <option value="">Select Day</option>
-                    <option value="1">Monday</option>
-                    <option value="2">Tuesday</option>
-                    <option value="3">Wednesday</option>
-                    <option value="4">Thursday</option>
-                    <option value="5">Friday</option>
-                    <option value="6">Saturday</option>
-                    <option value="7">Sunday</option>
-                </select>
-            </div>
-
-            <button id="export-pdf">Export PDF</button>
+      <div class="controls">
+        <div class="label-container">
+          <span>Semester:</span>
+          <select id="semester-select"></select>
         </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Course Number</th>
-                    <th>CRN</th>
-                    <th>Course Name</th>
-                    <th>Credits</th>
-                    <th>Computer Required</th>
-                </tr>
-            </thead>
-            <tbody id="report-content">
-                <!-- Content will be dynamically generated -->
-            </tbody>
-        </table>
+        <div class="label-container">
+          <span>Day:</span>
+          <select id="day-select">
+            <option value="">Select Day</option>
+            <option value="1">Monday</option>
+            <option value="2">Tuesday</option>
+            <option value="3">Wednesday</option>
+            <option value="4">Thursday</option>
+            <option value="5">Friday</option>
+            <option value="6">Saturday</option>
+            <option value="7">Sunday</option>
+          </select>
+        </div>
+
+        <button id="export-pdf">Export PDF</button>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Course Number</th>
+            <th>CRN</th>
+            <th>Course Name</th>
+            <th>Credits</th>
+            <th>Computer Required</th>
+          </tr>
+        </thead>
+        <tbody id="report-content">
+          <!-- Content will be dynamically generated -->
+        </tbody>
+      </table>
     </div>
 
     <script src="./js/courses_report.js"></script>
-</body>
-
+  </body>
 </html>

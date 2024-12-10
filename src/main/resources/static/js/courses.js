@@ -329,7 +329,9 @@ function submitCourseDetails(event) {
     .then((response) => {
       if (!response.ok) {
         return response.text().then((errorText) => {
-          throw new Error(errorText || `HTTP error! Status: ${response.status}`);
+          throw new Error(
+            errorText || `HTTP error! Status: ${response.status}`
+          );
         });
       }
       return response.json();
@@ -344,8 +346,6 @@ function submitCourseDetails(event) {
       alert("Error saving course: " + error.message);
     });
 }
-
-
 
 function clearFields() {
   // Clear course-related fields
