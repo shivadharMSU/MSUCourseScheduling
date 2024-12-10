@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.msu.DTO.ClassroomDTO;
 import com.msu.DTO.ClassroomReportResponseDTO;
 import com.msu.entities.ClassRoom;
 import com.msu.entities.CourseDetails;
@@ -99,14 +100,18 @@ public class ClassRoomServiceImpl implements ClassRomService {
 					int courseId = 0;
 					int courseNumber = 0;
 					if (courseMapping != null && courseMapping.getCourseId() != null) {
-					    CourseDetails courseDetails = coursedetailsRepository.findById(courseMapping.getCourseId())
-					            .orElse(null);
+						CourseDetails courseDetails = coursedetailsRepository.findById(courseMapping.getCourseId())
+								.orElse(null);
 
-					    courseName = (courseDetails != null) ? courseDetails.getCourseName() : "Unknown";
-					    courseId = (int) ((courseDetails != null) ? courseDetails.getCourseId() : 0); // Assuming courseId is an int
-					    courseNumber = (courseDetails != null) ? courseDetails.getCourseNumber() : 0; // Assuming courseNumber is an int
+						courseName = (courseDetails != null) ? courseDetails.getCourseName() : "Unknown";
+						courseId = (int) ((courseDetails != null) ? courseDetails.getCourseId() : 0); // Assuming
+																										// courseId is
+																										// an int
+						courseNumber = (courseDetails != null) ? courseDetails.getCourseNumber() : 0; // Assuming
+																										// courseNumber
+																										// is an int
 					}
-					
+
 					// Fetch professor details
 					Long professorId = null;
 					ProfessorDetails professor = professorDetailsRepository.findById(section.getProfessorId())
@@ -116,8 +121,8 @@ public class ClassRoomServiceImpl implements ClassRomService {
 
 					// Create ScheduleDTO
 					return new ClassroomReportResponseDTO.ScheduleDTO(schedule.getWeekDay().toString(),
-							schedule.getStartTime(), schedule.getEndTime(), courseId, courseNumber, courseName, section.getSectionNo(),
-							professorId, professorName);
+							schedule.getStartTime(), schedule.getEndTime(), courseId, courseNumber, courseName,
+							section.getSectionNo(), professorId, professorName);
 				});
 			}).collect(Collectors.toList());
 
@@ -131,5 +136,26 @@ public class ClassRoomServiceImpl implements ClassRomService {
 		// Build the final response DTO
 		return new ClassroomReportResponseDTO(semesterId, classroomDTOList);
 	}
+
+	@Override
+	public List<ClassroomDTO> getAllClassrooms() {
+		List<ClassRoom> classrooms = classRoomRepository.findAll();
+		return classrooms.stream().map(classroom -> new ClassroomDTO(classroom.getRoomId(), classroom.getRoomName()))
+				.collect(Collectors.toList());
+	}
+
+	@Override
+    public void saveClassroom(ClassroomDTO classroomDTO) {
+        if (classroomDTO.getId() == null || classroomDTO.getId() == 0) {
+            ClassRoom newClassroom = new ClassRoom();
+            newClassroom.setRoomName(classroomDTO.getRoomName());
+            classRoomRepository.save(newClassroom);
+        } else {
+            ClassRoom existingClassroom = classRoomRepository.findById(classroomDTO.getId())
+                    .orElseThrow(() -> new RuntimeException("Classroom not found with ID: " + classroomDTO.getId()));
+            existingClassroom.setRoomName(classroomDTO.getRoomName());
+            classRoomRepository.save(existingClassroom);
+        }
+    }
 
 }

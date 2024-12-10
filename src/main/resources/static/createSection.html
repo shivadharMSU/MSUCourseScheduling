@@ -1,182 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Create Section Form</title>
     <style>
-        .navbar-custom {
-            background-color: #C8102E;
-            border-radius: 0;
-        }
+      .navbar-custom {
+        background-color: #c8102e;
+        border-radius: 0;
+      }
 
-        .navbar-nav .nav-link {
-            color: white;
-            transition: background-color 0.3s, color 0.3s;
-        }
+      .navbar-nav .nav-link {
+        color: white;
+        transition: background-color 0.3s, color 0.3s;
+      }
 
-        .navbar-nav .nav-item.active .nav-link,
-        .navbar-nav .nav-item:focus .nav-link,
-        .navbar-nav .nav-item:hover .nav-link {
-            background-color: #A00F2A;
-            color: #FFFFFF;
-        }
+      .navbar-nav .nav-item.active .nav-link,
+      .navbar-nav .nav-item:focus .nav-link,
+      .navbar-nav .nav-item:hover .nav-link {
+        background-color: #a00f2a;
+        color: #ffffff;
+      }
 
+      .navbar-nav .nav-item.dropdown .dropdown-menu {
+        background-color: #c8102e;
+      }
 
-        .navbar-nav .nav-item.dropdown .dropdown-menu {
-            background-color: #C8102E;
-        }
+      .dropdown-item {
+        color: white;
+      }
 
-        .dropdown-item {
-            color: white;
-        }
+      .dropdown-item:hover,
+      .dropdown-item:focus {
+        background-color: #a00f2a;
+        color: white;
+      }
 
-        .dropdown-item:hover,
-        .dropdown-item:focus {
-            background-color: #A00F2A;
-            color: white;
-        }
+      .navbar-toggler {
+        border-color: rgba(255, 255, 255, 0.1);
+      }
 
-        .navbar-toggler {
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .header-title {
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            color: #C8102E;
-            margin-top: 10px;
-        }
-
-        /* .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255, 255, 255, 0.5)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-        } */
+      .header-title {
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        color: #c8102e;
+        margin-top: 10px;
+        margin-buttom: 10px;
+      }
     </style>
-    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/bootstrap.min.css" />
     <script src="./js/createSection.js"></script>
-</head>
-<body>
-    <div class="header-title">
-        MSU Course Scheduling
-    </div>
-      <nav class="navbar navbar-expand-lg navbar-custom">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="./index.html">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="./professor.html">Professors</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="./courses.html">Courses <span class="sr-only">(current)</span></a>
-                </li>
-              
-            </ul>
-        </div>
+  </head>
+
+  <body>
+    <div class="header-title">MSU Course Scheduling</div>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="./index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./professor.html">Professors</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./courses.html"
+              >Courses <span class="sr-only">(current)</span></a
+            >
+          </li>
+        </ul>
+      </div>
     </nav>
     <div class="secondary-nav-container">
-        <nav class="navbar navbar-expand secondary-navbar-custom">
-            <div class="navbar-nav mx-auto">
-                <a class="nav-link active" href="./professor.html">Professor</a>
-                <a class="nav-link" href="./courses.html">Courses</a>
-                <a class="nav-link" href="./class_rooms.html">Class Rooms</a>
-            </div>
-        </nav>
+      <nav class="navbar navbar-expand secondary-navbar-custom">
+        <div class="navbar-nav mx-auto">
+          <a class="nav-link active" href="./professor.html">Professor</a>
+          <a class="nav-link" href="./courses.html">Courses</a>
+          <a class="nav-link" href="./class_rooms.html">Class Rooms</a>
+        </div>
+      </nav>
     </div>
     <div class="container">
-        <h2>Create Section Form</h2>
-        <form id="sectionForm">
-            <div class="row">
-                <div class="col">
-                    <div class="form-group">
-                        <label for="sectionNo">Section No:</label>
-                        <input type="text" class="form-control" id="sectionNo" required>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-group">
-                        <label for="crossSectionId">Cross Section ID:</label>
-                        <select class="form-control" id="crossSectionId" >
-                            <!-- Populate options dynamically with JavaScript -->
-                        </select>
-                        <small class="form-text text-muted">Optional</small>
-                    </div>
-                </div>
+      <h2>Create Section Form</h2>
+      <form id="sectionForm">
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label for="sectionNo">Section No:</label>
+              <input type="text" class="form-control" id="sectionNo" required />
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <label for="crossSectionId">Cross Section ID:</label>
+              <select class="form-control" id="crossSectionId">
+                <!-- Populate options dynamically with JavaScript -->
+              </select>
+              <small class="form-text text-muted">Optional</small>
+            </div>
+          </div>
+        </div>
 
-                 
-            
+        <div class="row">
+          <div class="mb-3">
+            <div class="row mb-3 align-items-center">
+              <label class="col-sm-3 col-form-label"
+                >Professor Availability:</label
+              >
+              <div class="col-sm-9">
+                <button type="button" id="onAvailable" class="btn btn-success">
+                  Add Time Slot
+                </button>
+              </div>
             </div>
+            <div id="timeSlotsContainer" class="my-3">
+              <div class="row align-items-center mb-3"></div>
+            </div>
+          </div>
+        </div>
 
-            <div class="row">
-                <div class="mb-3">
-                    <div class="row mb-3 align-items-center">
-                        <label class="col-sm-3 col-form-label">Professor Availability:</label>
-                        <div class="col-sm-9">
-                            <button type="button" id ="onAvailable" class="btn btn-success" >Add Time
-                                Slot</button>
-                        </div>
-                    </div>
-                    <div id="timeSlotsContainer" class="my-3">
-                        <div class="row align-items-center mb-3">
-                        </div>
-                    </div>
-                </div>
-                 
-            
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label for="roomId">Room ID:</label>
+              <select class="form-control" id="roomId" required>
+                <!-- Populate options dynamically with JavaScript -->
+              </select>
             </div>
+          </div>
 
-
-            <div class="row">
-                   
-           
-                <div class="col">
-                    <div class="form-group">
-                        <label for="roomId">Room ID:</label>
-                        <select class="form-control" id="roomId" required>
-                            <!-- Populate options dynamically with JavaScript -->
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="col">
-                    <div class="form-group">
-                        <label for="professor">Professor:</label>
-                        <select class="form-control" id="professor" required>
-                            <!-- Populate options dynamically with JavaScript -->
-                        </select>
-                    </div>
-                </div>
+          <div class="col">
+            <div class="form-group">
+              <label for="professor">Professor:</label>
+              <select class="form-control" id="professor" required>
+                <!-- Populate options dynamically with JavaScript -->
+              </select>
             </div>
-            <div class="row">
-                <div class="col">
-                    <div class="form-group">
-                        <label for="maxCapacity">Max Capacity:</label>
-                        <input type="number" class="form-control" id="maxCapacity" required>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="form-group">
-                        <label for="capacity">Capacity:</label>
-                        <input type="number" class="form-control" id="capacity" required>
-                    </div>
-                </div>
-                
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="form-group">
+              <label for="maxCapacity">Max Capacity:</label>
+              <input
+                type="number"
+                class="form-control"
+                id="maxCapacity"
+                required
+              />
             </div>
-            <button type="submit" class="btn btn-primary" id="submitButton">Submit</button>
-             <div class="card mt-4" style="display: none;">
-                <div class="card-header">
-                    Suggestions
-                </div>
-                <div class="card-body" id="suggestionBox">
-                </div>
+          </div>
+          <div class="col">
+            <div class="form-group">
+              <label for="capacity">Capacity:</label>
+              <input
+                type="number"
+                class="form-control"
+                id="capacity"
+                required
+              />
             </div>
-        </form>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary" id="submitButton">
+          Submit
+        </button>
+        <div class="card mt-4" style="display: none">
+          <div class="card-header">Suggestions</div>
+          <div class="card-body" id="suggestionBox"></div>
+        </div>
+      </form>
     </div>
     <!-- <script src="./js/createSection.js"></script> -->
-</body>
+  </body>
 </html>

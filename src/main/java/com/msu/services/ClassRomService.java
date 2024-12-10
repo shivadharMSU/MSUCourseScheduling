@@ -2,6 +2,7 @@ package com.msu.services;
 
 import java.util.List;
 
+import com.msu.DTO.ClassroomDTO;
 import com.msu.DTO.ClassroomReportResponseDTO;
 import com.msu.entities.ClassRoom;
 
@@ -16,5 +17,9 @@ public interface ClassRomService {
 	public ClassRoom findByRoomName(String roomName);
 
 	public ClassroomReportResponseDTO getClassroomReportResponse(int semesterId);
+
+	public List<ClassroomDTO> getAllClassrooms();
+
+	public void saveClassroom(ClassroomDTO classroomDTO);
 
 }

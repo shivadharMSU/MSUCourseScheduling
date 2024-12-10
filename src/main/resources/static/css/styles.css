@@ -1,7 +1,7 @@
 .button-group {
     display: flex;
     align-items: center;
-    gap: 10px; /* Adjust the gap between buttons as needed */
+    gap: 10px;
 }
 
 .button-group button {

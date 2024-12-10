@@ -1,145 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Professor's Report</title>
-    <link rel="stylesheet" href="./css/professor_report.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/professor_report.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css"
+    />
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f8f9fa;
-        }
+      .navbar-custom {
+        background-color: #c8102e;
+        border-radius: 0;
+      }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+      .navbar-nav .nav-link {
+        color: white;
+        transition: background-color 0.3s, color 0.3s;
+      }
 
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
+      .navbar-nav .nav-item.active .nav-link,
+      .navbar-nav .nav-item:focus .nav-link,
+      .navbar-nav .nav-item:hover .nav-link {
+        background-color: #a00f2a;
+        color: #ffffff;
+      }
 
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            gap: 10px;
-        }
+      .navbar-nav .nav-item.dropdown .dropdown-menu {
+        background-color: #c8102e;
+      }
 
-        .controls select,
-        .controls input[type="text"] {
-            padding: 6px;
-            font-size: 14px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            width: 150px;
-        }
+      .dropdown-item {
+        color: white;
+      }
 
-        .controls button {
-            padding: 6px 10px;
-            font-size: 14px;
-            color: #fff;
-            background-color: #C8102E; /* Red color */
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
+      .dropdown-item:hover,
+      .dropdown-item:focus {
+        background-color: #a00f2a;
+        color: white;
+      }
 
-        .controls button:hover {
-            background-color: #A00F2A; /* Darker red on hover */
-        }
+      .navbar-toggler {
+        border-color: rgba(255, 255, 255, 0.1);
+      }
 
-        .label-container {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background-color: #f8f9fa;
+      }
 
-        .label-container span {
-            font-size: 14px;
-            font-weight: bold;
-        }
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
+      h2 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
 
-        th,
-        td {
-            padding: 10px;
-            text-align: left;
-            border: 1px solid #ccc;
-        }
+      .controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        gap: 10px;
+      }
 
-        th {
-            background-color: #C8102E; /* Red color for table header */
-            color: white;
-        }
+      .controls select,
+      .controls input[type="text"] {
+        padding: 6px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width: 150px;
+      }
 
-        td {
-            vertical-align: top;
-        }
+      .controls button {
+        padding: 6px 10px;
+        font-size: 14px;
+        color: #fff;
+        background-color: #c8102e; /* Red color */
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .controls button:hover {
+        background-color: #a00f2a; /* Darker red on hover */
+      }
+
+      .label-container {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .label-container span {
+        font-size: 14px;
+        font-weight: bold;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+
+      th,
+      td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ccc;
+      }
+
+      th {
+        background-color: #c8102e; /* Red color for table header */
+        color: white;
+      }
+
+      td {
+        vertical-align: top;
+      }
+
+      .header-title {
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        color: #c8102e;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
+    <div class="header-title">MSU Course Scheduling</div>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="./semester.html">Home </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./professor.html">Details</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="./reports.html">Reports</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
     <div class="container">
-        <h2 id="professor-title">Professor's Report</h2>
+      <h2 id="professor-title">Professor's Report</h2>
 
-        <div class="controls">
-            <div class="label-container">
-                <span>Semester:</span>
-                <select id="semester-select"></select>
-            </div>
-
-            <div class="label-container">
-                <span>Professor:</span>
-                <select id="professor-select">
-                    <option value="">Select</option>
-                </select>
-            </div>
-
-            <div class="label-container">
-                <span>Day:</span>
-                <select id="day-select">
-                    <option value="">Select Day</option>
-                    <option value="1">Monday</option>
-                    <option value="2">Tuesday</option>
-                    <option value="3">Wednesday</option>
-                    <option value="4">Thursday</option>
-                    <option value="5">Friday</option>
-                    <option value="6">Saturday</option>
-                    <option value="7">Sunday</option>
-                </select>
-            </div>
-
-            <button id="export-pdf">Export PDF</button>
+      <div class="controls">
+        <div class="label-container">
+          <span>Semester:</span>
+          <select id="semester-select"></select>
         </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Professor Name</th>
-                    <th>Day</th>
-                    <th>Occupied</th>
-                </tr>
-            </thead>
-            <tbody id="report-content">
-                <!-- Content will be dynamically generated -->
-            </tbody>
-        </table>
+        <div class="label-container">
+          <span>Professor:</span>
+          <select id="professor-select">
+            <option value="">Select</option>
+          </select>
+        </div>
+
+        <div class="label-container">
+          <span>Day:</span>
+          <select id="day-select">
+            <option value="">Select Day</option>
+            <option value="1">Monday</option>
+            <option value="2">Tuesday</option>
+            <option value="3">Wednesday</option>
+            <option value="4">Thursday</option>
+            <option value="5">Friday</option>
+            <option value="6">Saturday</option>
+            <option value="7">Sunday</option>
+          </select>
+        </div>
+
+        <button id="export-pdf">Export PDF</button>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Professor Name</th>
+            <th>Day</th>
+            <th>Occupied</th>
+          </tr>
+        </thead>
+        <tbody id="report-content">
+          <!-- Content will be dynamically generated -->
+        </tbody>
+      </table>
     </div>
 
     <!-- Include jsPDF and jsPDF AutoTable Libraries -->
@@ -148,6 +221,5 @@
 
     <!-- Link to JavaScript -->
     <script src="./js/professor_report.js"></script>
-</body>
-
+  </body>
 </html>

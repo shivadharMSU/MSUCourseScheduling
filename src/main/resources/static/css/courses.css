@@ -37,9 +37,9 @@ label {
 #courseSuggestionBox {
   position: absolute;
   z-index: 1000;
-  width: 100%; 
+  width: 100%;
   max-height: 200px;
-  overflow-y: auto; 
+  overflow-y: auto;
   background-color: white;
   border: 1px solid #ced4da;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
@@ -94,7 +94,8 @@ label {
 /* Toggle arrow icon rotation */
 .arrow-icon {
   display: inline-block;
-  transition: transform 0.3s ease; /* Smooth rotation transition */
+  transition: transform 0.3s ease;
+  /* Smooth rotation transition */
 }
 
 
@@ -158,11 +159,11 @@ label {
   transition: 0.4s;
 }
 
-.toggle-input:checked + .toggle-label {
+.toggle-input:checked+.toggle-label {
   background-color: #C8102E;
 }
 
-.toggle-input:checked + .toggle-label::before {
+.toggle-input:checked+.toggle-label::before {
   transform: translateX(26px);
 }
 
@@ -223,4 +224,3 @@ label {
   padding: 0 5px;
   font-size: 12px;
 }
-
