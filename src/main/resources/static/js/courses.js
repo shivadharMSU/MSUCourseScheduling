@@ -73,7 +73,7 @@ function displayCourses() {
       <div class="course-item" data-index="${index}">
         <div class="course-name" onclick="toggleCourseDetails(${index})">
           <span class="arrow-icon">&#9660;</span> 
-          ${course.courseDetails.courseName} (CSIT - ${
+          ${course.courseDetails.courseName} (CSIT ${
         course.courseDetails.courseNumber
       })
         </div>
