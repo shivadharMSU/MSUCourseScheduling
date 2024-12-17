@@ -373,8 +373,8 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 	            List<Section> filterSections = new ArrayList<>();
 	            try {
 	                filterSections = sectionService.findAll().stream()
-	                        .filter(section -> section.getProfessorId().equals(suggestionsRequest.getProfessorId())) // Use `.equals()` to avoid primitive comparison issues.
-	                        .filter(section -> section.getCourseSemesterMappingId().equals(courseSemesterMapping.getCourseSemesterMappingId()))
+	                        .filter(section -> section.getProfessorId() != null && section.getProfessorId().equals(suggestionsRequest.getProfessorId())) // Use `.equals()` to avoid primitive comparison issues.
+	                        .filter(section -> section.getCourseSemesterMappingId() != null && section.getCourseSemesterMappingId().equals(courseSemesterMapping.getCourseSemesterMappingId()))
 	                        .collect(Collectors.toList());
 	            } catch (Exception e) {
 	                // Handle the exception: log it and return an empty list or rethrow if necessary.
@@ -494,8 +494,8 @@ public class SectionScheduleServiceImpl implements SectionScheduleService {
 
 					List<Section> filterSections = sectionService.findAll().stream()
 							.filter(section -> section.getRoomId() == roomByRoomId.getRoomId())
-							.filter(section -> section.getCourseSemesterMappingId() == courseSemesterMapping
-									.getCourseSemesterMappingId())
+							.filter(section -> section.getCourseSemesterMappingId().equals(courseSemesterMapping
+									.getCourseSemesterMappingId()))
 							.collect(Collectors.toList());
 					if (!filterSections.isEmpty()) {
 						Section section = filterSections.get(0);
