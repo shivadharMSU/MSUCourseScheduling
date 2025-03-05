@@ -111,8 +111,7 @@ public class SectionSchduleController {
 	@PostMapping("/saveSctionSchedule")
 	public ResponseEntity<String> saveSctionSchedule(@RequestBody SectionScheduleSaveDTO sectionScheduleSaveDTO){
 		try {
-			String response = validateFields(sectionScheduleSaveDTO);
-			if(response != null) return ResponseEntity.ok(response);
+			
 			 sectionScheduleService.saveSectionSchedule(sectionScheduleSaveDTO);
 			return ResponseEntity.ok("success");
 		}catch(Exception ex) {

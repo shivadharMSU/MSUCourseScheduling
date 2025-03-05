@@ -11,33 +11,27 @@
         background-color: #c8102e;
         border-radius: 0;
       }
-
       .navbar-nav .nav-link {
         color: white;
         transition: background-color 0.3s, color 0.3s;
       }
-
       .navbar-nav .nav-item.active .nav-link,
       .navbar-nav .nav-item:focus .nav-link,
       .navbar-nav .nav-item:hover .nav-link {
         background-color: #a00f2a;
         color: #ffffff;
       }
-
       .navbar-nav .nav-item.dropdown .dropdown-menu {
         background-color: #c8102e;
       }
-
       .dropdown-item {
         color: white;
       }
-
       .dropdown-item:hover,
       .dropdown-item:focus {
         background-color: #a00f2a;
         color: white;
       }
-
       .navbar-toggler {
         border-color: rgba(255, 255, 255, 0.1);
       }
@@ -108,8 +102,11 @@
           <select class="form-control" id="selectCourse">
             <option value="" selected disabled>Select Course</option>
           </select>
+
           <label for="tenure">Course Tenure:</label>
-          <input type="text" id="tenure" placeholder="Enter course tenure" />
+          <select class="form-control" id="tenure">
+            <option value="" selected disabled>Select Tenure</option>
+          </select>
         </div>
         <button type="submit" class="btn btn-primary" disabled>
           Save Course

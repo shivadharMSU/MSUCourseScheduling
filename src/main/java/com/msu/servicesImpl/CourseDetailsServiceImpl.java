@@ -11,12 +11,18 @@ import com.msu.DTO.CourseFullDetailsDTO;
 import com.msu.DTO.CourseProfessorMappingDTO;
 import com.msu.DTO.CourseResponseDto;
 import com.msu.DTO.CourseSemesterMappingDTO;
+import com.msu.DTO.SemesterTenureDTO;
 import com.msu.entities.CourseDetails;
 import com.msu.entities.CourseProfessorMapping;
 import com.msu.entities.CourseSemesterMapping;
+import com.msu.entities.Semester;
+import com.msu.entities.SemesterName;
+import com.msu.entities.SemesterTenure;
 import com.msu.repositories.CourseProfessorMappingRepository;
 import com.msu.repositories.CourseSemesterMappingRepository;
 import com.msu.repositories.CoursedetailsRepository;
+import com.msu.repositories.SemesterRepository;
+import com.msu.repositories.SemesterTenureRepository;
 import com.msu.services.CourseDetailsService;
 
 @Service
@@ -33,6 +39,9 @@ public class CourseDetailsServiceImpl implements CourseDetailsService {
 
     @Autowired
     private CourseProfessorMappingServiceImpl courseProfessorMappingServiceImpl;
+    
+    @Autowired
+    private SemesterTenureRepository semesterTenureRepository;
 
 	@Override
 	public List<CourseDetails> getcourselist() {
@@ -138,6 +147,21 @@ public class CourseDetailsServiceImpl implements CourseDetailsService {
 	@Override
 	public CourseDetails findCourseDetailsByCourseId(Long courseId) {
 		return coursedetailsRepository.findCourseDetailsByCourseId(courseId);
+		
+	}
+
+	@Override
+	public List<SemesterTenureDTO> getSemesterTenureList() {
+		List<SemesterTenure> semesterTenureList = semesterTenureRepository.findAll();
+		 List<SemesterTenureDTO> semesterDtoList = new ArrayList<SemesterTenureDTO>();
+		 for(SemesterTenure semesterList: semesterTenureList) {
+			 SemesterTenureDTO semesterDto = new SemesterTenureDTO();
+			 semesterDto.setTenureId(semesterList.getTenureId());
+			 semesterDto.setWeeklyTenure(semesterList.getWeeklyTenure()+" weeks");
+			 semesterDtoList.add(semesterDto);
+			 
+		 }
+		 return semesterDtoList;
 		
 	}
 

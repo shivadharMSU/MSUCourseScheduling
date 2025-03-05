@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   const selectCourse = document.getElementById("selectCourse");
-  const tenureInput = document.getElementById("tenure");
+  const tenureSelect = document.getElementById("tenure");
   const submitButton = document.querySelector("button[type='submit']");
 
   const queryString = window.location.search;
@@ -35,13 +35,33 @@ document.addEventListener("DOMContentLoaded", function () {
     })
     .catch((error) => console.error("Error fetching course list:", error));
 
+  // Fetch tenure options
+  fetch("http://localhost:8080/coursedetails/getSemesterTenure", {
+    method: "POST",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Error fetching tenure list: ${response.statusText}`);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      data.forEach((tenure) => {
+        const option = document.createElement("option");
+        option.value = tenure.tenureId;
+        option.textContent = tenure.weeklyTenure;
+        tenureSelect.appendChild(option);
+      });
+    })
+    .catch((error) => console.error("Error fetching tenure list:", error));
+
   // Enable submit button when both fields are filled
   function checkFormValidity() {
-    submitButton.disabled = !(selectCourse.value && tenureInput.value.trim());
+    submitButton.disabled = !(selectCourse.value && tenureSelect.value);
   }
 
   selectCourse.addEventListener("change", checkFormValidity);
-  tenureInput.addEventListener("input", checkFormValidity);
+  tenureSelect.addEventListener("change", checkFormValidity);
 
   // Form submission handler
   const addNewCourseForm = document.getElementById("addNewCourseForm");
@@ -49,17 +69,17 @@ document.addEventListener("DOMContentLoaded", function () {
     event.preventDefault();
 
     const courseId = selectCourse.value;
-    const tenure = tenureInput.value.trim();
-
-    if (!courseId || !tenure) {
-      alert("Please select a course and enter the tenure.");
+    const tenureId = tenureSelect.value;
+      console.log(tenureId);
+    if (!courseId || !tenureId) {
+      alert("Please select a course and tenure.");
       return;
     }
 
     const data = {
       courseId: courseId,
       semId: semId,
-      tenure: tenure,
+      tenure: tenureId,
     };
 
     fetch("http://localhost:8080/saveCourseForSemester", {

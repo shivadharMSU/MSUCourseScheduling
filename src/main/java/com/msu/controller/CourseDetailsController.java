@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.msu.DTO.CourseFullDetailsDTO;
 import com.msu.DTO.CourseResponseDto;
+import com.msu.DTO.SemesterTenureDTO;
 import com.msu.entities.CourseDetails;
 import com.msu.services.CourseDetailsService;
 import com.msu.servicesImpl.DatabasePDFService;
@@ -68,6 +69,16 @@ public class CourseDetailsController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                                  .body(Map.of("error", "Failed to save course"));
         }
+    }
+    
+    
+    
+    @PostMapping("/getSemesterTenure")
+    public ResponseEntity<List<SemesterTenureDTO>> getSemesterTenure() {
+       
+            List<SemesterTenureDTO> semesterTenureList = coursedetailservice.getSemesterTenureList();
+            return ResponseEntity.ok(semesterTenureList);
+        
     }
 
 }

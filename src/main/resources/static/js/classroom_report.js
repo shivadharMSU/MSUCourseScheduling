@@ -55,6 +55,7 @@ async function populateClassrooms(semesterId) {
       `http://localhost:8080/classrooms/report/${semesterId}`
     );
     if (!response.ok) throw new Error("Failed to fetch classrooms");
+    console.log(response);
     const { classrooms } = await response.json();
 
     console.log("Fetched Classrooms:", classrooms);
@@ -106,7 +107,7 @@ function displayClassrooms(classrooms) {
       classroom.schedule.forEach((schedule) => {
         const row = reportContent.insertRow();
         row.insertCell().textContent = classroom.roomName || "N/A";
-        row.insertCell().textContent = dayMapping[schedule.day] || "N/A"; // Map day number to day name
+        row.insertCell().textContent = dayMapping[schedule.weekDay] || "N/A"; // Map day number to day name
         row.insertCell().textContent = `${schedule.startTime || "N/A"} - ${
           schedule.endTime || "N/A"
         }`; // Occupied times
