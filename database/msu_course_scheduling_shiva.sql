@@ -17,7 +17,7 @@
 
 --
 -- Table structure for table `class_room`
---
+-- ewdfrfrf
 
 DROP TABLE IF EXISTS `class_room`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
